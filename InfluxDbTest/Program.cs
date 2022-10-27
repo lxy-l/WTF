@@ -1,4 +1,6 @@
-﻿using InfluxDB.Client;
+﻿using System.Diagnostics;
+
+using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Core;
 using InfluxDB.Client.Writes;
@@ -9,43 +11,70 @@ const string org = "roy";
 
 using var client = InfluxDBClientFactory.Create("http://localhost:49153", token);
 
+//using (var writeApi = client.GetWriteApi())
+//{
+//    //var point = new PointData
+//    //          .Measurement("data3")
+//    //          .Tag("host", "host2")
+//    //          .Field("value", i)
+//    //          .Timestamp(DateTime.UtcNow.AddMilliseconds(i), WritePrecision.Ns);
 
-const string data = "mem,host=host1 used_percent=23.43234543";
+//    //writeApi.WritePoint(point, bucket, org);
+//}
+
+//using (var writeApi = client.GetWriteApi())
+//{
+//    for (int i = 0; i < 1000000; i++)
+//    {
+//        string data = $"mem,host=host6 value={i}";
+
+//        writeApi.WriteRecord(bucket, WritePrecision.Ns, data, org);
+
+//    }
+//}
+//Console.WriteLine("OK");
+
 using (var writeApi = client.GetWriteApi())
 {
-    writeApi.WriteRecord(bucket, WritePrecision.Ns, data, org);
+    List<Mem?> mems = new List<Mem?>();
+    try
+    {
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        for (int i = 0; i < 10000; i++)
+        {
+            var mem = new Mem { Host = "host1", Value = i, Time = DateTime.UtcNow.AddMilliseconds(i) };
+            mems.Add(mem);
+            //writeApi.WriteMeasurement(mem, WritePrecision.Ms, bucket, org);
+        }
+
+        writeApi.WriteMeasurements(mems, WritePrecision.Ms, bucket, org);
+        stopwatch.Stop();
+        Console.WriteLine("插入耗时：" + stopwatch.ElapsedMilliseconds);
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+        throw;
+    }
 }
 
-var point = PointData
-  .Measurement("mem")
-  .Tag("host", "host1")
-  .Field("used_percent", 23.43234543)
-  .Timestamp(DateTime.UtcNow, WritePrecision.Ns);
+var query = "from(bucket: \"database\") " +
+    "|> range(start: -1h) " +
+    "|> filter(fn: (r) => r[\"_measurement\"] == \"data\") " +
+    "|> filter(fn: (r) => r[\"_field\"] == \"value\")";
 
-using (var writeApi = client.GetWriteApi())
-{
-    writeApi.WritePoint(point,bucket, org);
-}
 
-var mem = new Mem { Host = "host1", UsedPercent = 23.43234543, Time = DateTime.UtcNow };
-
-using (var writeApi = client.GetWriteApi())
-{
-    writeApi.WriteMeasurement(mem,  WritePrecision.Ns,bucket,org);
-}
-
-var query = "from(bucket: \"database\") |> range(start: -1h)";
 var tables = await client.GetQueryApi().QueryAsync(query, org);
 
-foreach (var record in tables.SelectMany(table => table.Records))
-{
-    Console.WriteLine($"{record}");
-}
+//foreach (var record in tables.SelectMany(table => table.Records))
+//{
+//    Console.WriteLine($"{record.Values.Values}");
+//}
 
-[Measurement("mem")]
+[Measurement("data2")]
 class Mem
 {
-    [Column("host", IsTag = true)] public string Host { get; set; }
-    [Column("used_percent")] public double? UsedPercent { get; set; }
+    [Column("host", IsTag = true)] public string? Host { get; set; }
+    [Column("value")] public long Value { get; set; }
     [Column(IsTimestamp = true)] public DateTime Time { get; set; }
 }
