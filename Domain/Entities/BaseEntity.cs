@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities
 {
+    [Index(nameof(CreateTime),IsUnique =false)]
+    [Index(nameof(ModifyTime),IsUnique =false)]
     public class BaseEntity
     {
         [Key]

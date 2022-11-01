@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Domain.Entities;
 using Domain.Repository;
 
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace Infrastructure.Repository
     /// <summary>
     /// 基础仓储实现
     /// </summary>
-    public class RepositoryAsync<TEntity, Tkey> : IRepositoryAsync<TEntity, Tkey> where TEntity : class
+    public class RepositoryAsync<TEntity, Tkey> : IRepositoryAsync<TEntity, Tkey> where TEntity : BaseEntity
     {
         /// <summary>
         /// 数据上下文

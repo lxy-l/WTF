@@ -1,3 +1,5 @@
+using Application.ApplicationServices;
+
 using Domain.Repository;
 
 using Infrastructure.Context;
@@ -11,15 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContextPool<UserDbContext>(options =>
+builder.Services.AddDbContextPool<DbContext,UserDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
-
-builder.Services.AddDbContext<DbContext, UserDbContext>();
 
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
+
+// TODO: 后续改为程序集注入
+builder.Services.AddTransient<IUserService,UserService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
