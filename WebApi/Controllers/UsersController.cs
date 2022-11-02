@@ -1,11 +1,7 @@
-﻿using System.Net;
-
-using Application.ApplicationServices;
+﻿using Application.ApplicationServices;
 
 using Domain.Entities;
-using Domain.Repository;
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -29,6 +25,18 @@ namespace WebApi.Controllers
         public async Task<List<User>> Get()
         {
             return await _userService.GetUsers();
+        }
+
+        /// <summary>
+        /// 新增一千万用户
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("InsertList")]
+        public async Task<IActionResult> Add()
+        {
+            await _userService.InsertRangAsync();
+            return Ok();
         }
 
         /// <summary>

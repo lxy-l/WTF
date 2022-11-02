@@ -21,6 +21,13 @@ namespace Domain.Repository
         Task InsertAsync(TEntity entity);
 
         /// <summary>
+        /// 批量添加
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        Task InsertRangAsync(List<TEntity> entities);
+
+        /// <summary>
         /// 删除
         /// </summary>
         /// <param name="entity"></param>

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.Repository;
 
+using EFCore.BulkExtensions;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository
@@ -64,6 +66,17 @@ namespace Infrastructure.Repository
         }
 
         /// <summary>
+        /// 批量添加
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public virtual async Task InsertRangAsync(List<TEntity> entities)
+        {
+            await _dbContext.BulkInsertAsync(entities);
+            await _dbContext.BulkSaveChangesAsync();
+        }
+
+        /// <summary>
         /// 修改
         /// </summary>
         /// <param name="entity"></param>
@@ -80,7 +93,7 @@ namespace Infrastructure.Repository
         /// <returns></returns>
         public async Task<List<TEntity>> GetListAsync()
         {
-            return await Table.AsNoTracking().ToListAsync();
+            return await Table.AsNoTracking().OrderByDescending(x=>x.CreateTime).Take(10).ToListAsync();
         }
 
         protected virtual void Dispose(bool disposing)

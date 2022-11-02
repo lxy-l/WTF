@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using System;
+
+using Domain.Entities;
 using Domain.Repository;
 
 namespace Application.ApplicationServices
@@ -54,6 +56,16 @@ namespace Application.ApplicationServices
             await _userRep.UpdateAsync(user);
             await _unitOfWork.Commit();
             return model;
+        }
+
+        public async Task InsertRangAsync()
+        {
+            List<User> users = Enumerable.Range(31564003, 10000000)
+                .Select(index => new User("Name_" + index, DateTimeOffset.Now))
+                .ToList();
+
+            await _userRep.InsertRangAsync(users);
+            users.Clear();
         }
     }
 }

@@ -17,5 +17,7 @@ namespace Application.ApplicationServices
         Task<User> DeleteUser(int id);
 
         Task<User> EditUser(User model);
+
+        Task InsertRangAsync();
     }
 }
