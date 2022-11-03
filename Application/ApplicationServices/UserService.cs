@@ -60,7 +60,7 @@ namespace Application.ApplicationServices
 
         public async Task InsertRangAsync()
         {
-            List<User> users = Enumerable.Range(31564003, 10000000)
+            List<User> users = Enumerable.Range(1, 10000000)
                 .Select(index => new User("Name_" + index, DateTimeOffset.Now))
                 .ToList();
 
