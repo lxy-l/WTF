@@ -14,14 +14,14 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContextPool<DbContext,UserDbContext>(options =>
-    options.UseSqlServer(connectionString)
+	options.UseSqlServer(connectionString)
 );
 
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
 
-// TODO: ºóÐø¸ÄÎª³ÌÐò¼¯×¢Èë
+// TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½
 builder.Services.AddTransient<IUserService,UserService>();
 
 builder.Services.AddControllers();
@@ -33,8 +33,8 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
-    app.UseStatusCodePagesWithReExecute("/Log/{0}");
+	app.UseDeveloperExceptionPage();
+	app.UseStatusCodePagesWithReExecute("/Log/{0}");
 }
 
 app.UseSwagger();
