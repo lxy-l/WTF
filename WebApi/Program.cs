@@ -51,7 +51,7 @@ builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
 
-// TODO: ºóÐø¸ÄÎª³ÌÐò¼¯×¢Èë
+// TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½
 builder.Services.AddTransient<IUserService,UserService>();
 
 

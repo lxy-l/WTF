@@ -7,6 +7,9 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'WebApi-Development' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'WebApi-Staging' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'WebApi-Production' " />
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Network" Version="6.0.4" />
     <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="6.0.4" />
