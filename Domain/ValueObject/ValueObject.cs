@@ -6,7 +6,7 @@ namespace Domain.ValueObject
     /// </summary>
     public abstract class ValueObject<T> where T : ValueObject<T>
     {
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var valueObject = obj as T;
             return !ReferenceEquals(valueObject, null) && EqualsCore(valueObject);
