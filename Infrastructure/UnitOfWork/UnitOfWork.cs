@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Domain.Entities;
 using Domain.Repository;
+
+using EFCore.BulkExtensions;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -16,8 +19,6 @@ namespace Infrastructure.UnitOfWork
     /// </summary>
     public class UnitOfWork : IUnitOfWork
     {
-        private bool disposedValue;
-
         private readonly DbContext dbContext;
 
         public UnitOfWork(DbContext context)
@@ -30,39 +31,14 @@ namespace Infrastructure.UnitOfWork
             return await dbContext.SaveChangesAsync(cancellationToken);
         }
 
+        public async Task BulkCommit()
+        {
+            await dbContext.BulkSaveChangesAsync();
+        }
+
         public async Task RollBack()
         {
             await dbContext.Database.RollbackTransactionAsync();
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: 释放托管状态(托管对象)
-                    dbContext.Dispose();
-                }
-
-                // TODO: 释放未托管的资源(未托管的对象)并重写终结器
-                // TODO: 将大型字段设置为 null
-                disposedValue = true;
-            }
-        }
-
-        // // TODO: 仅当“Dispose(bool disposing)”拥有用于释放未托管资源的代码时才替代终结器
-        // ~UnitOfWork()
-        // {
-        //     // 不要更改此代码。请将清理代码放入“Dispose(bool disposing)”方法中
-        //     Dispose(disposing: false);
-        // }
-
-        public void Dispose()
-        {
-            // 不要更改此代码。请将清理代码放入“Dispose(bool disposing)”方法中
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
         }
     }
 }

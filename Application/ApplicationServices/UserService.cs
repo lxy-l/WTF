@@ -60,12 +60,16 @@ namespace Application.ApplicationServices
 
         public async Task InsertRangAsync()
         {
-            List<User> users = Enumerable.Range(1, 10000000)
+
+            var user = await _userRep.GetListAsync();
+            int index = user?.FirstOrDefault()?.Id??0;
+
+            List<User> users = Enumerable.Range(index+ 10000001, 10000000)
                 .Select(index => new User("Name_" + index, DateTimeOffset.Now))
                 .ToList();
 
             await _userRep.InsertRangAsync(users);
-            users.Clear();
+            await _unitOfWork.BulkCommit();
         }
     }
 }

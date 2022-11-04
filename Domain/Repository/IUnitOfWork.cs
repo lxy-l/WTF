@@ -9,7 +9,7 @@ namespace Domain.Repository
     /// <summary>
     /// 工作单元接口
     /// </summary>
-    public interface IUnitOfWork:IDisposable
+    public interface IUnitOfWork
     {
         /// <summary>
         /// 提交更改
@@ -17,6 +17,13 @@ namespace Domain.Repository
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<int> Commit(CancellationToken cancellationToken = default);
+
+
+        /// <summary>
+        /// 批量提交
+        /// </summary>
+        /// <returns></returns>
+        Task BulkCommit();
 
 
         /// <summary>

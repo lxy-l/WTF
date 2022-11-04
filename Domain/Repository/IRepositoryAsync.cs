@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Domain.Entities;
+﻿using Domain.Entities;
 
 namespace Domain.Repository
 {
     /// <summary>
     /// 基础仓储接口
     /// </summary>
-    public interface IRepositoryAsync<TEntity,Tkey>: IDisposable where TEntity : BaseEntity
+    public interface IRepositoryAsync<TEntity,Tkey> where TEntity : BaseEntity
     {
         /// <summary>
         /// 新增
