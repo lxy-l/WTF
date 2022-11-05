@@ -21,7 +21,7 @@ namespace Application.ApplicationServices
 
         public async Task<List<User>> GetUsers()
         {
-            return await _userRep.GetListAsync();
+            return await _userRep.GetListAsync(x=>x.CreateTime>DateTimeOffset.Now.AddDays(-1));
         }
 
         public async Task<User> AddUser(User model)
@@ -38,7 +38,7 @@ namespace Application.ApplicationServices
             {
                 throw new Exception("未找到实体信息！");
             }
-            await _userRep.DeleteAsync(user);
+            _userRep.DeleteAsync(user);
             await _unitOfWork.Commit();
             return user;
         }
@@ -53,7 +53,7 @@ namespace Application.ApplicationServices
             //核心业务逻辑
             user.Edit(model);
             //持久化
-            await _userRep.UpdateAsync(user);
+            _userRep.UpdateAsync(user);
             await _unitOfWork.Commit();
             return model;
         }
@@ -61,14 +61,13 @@ namespace Application.ApplicationServices
         public async Task InsertRangAsync()
         {
 
-            var user = await _userRep.GetListAsync();
-            int index = user?.FirstOrDefault()?.Id??0;
+            var index = _userRep.GetQuery()?.Max(x=>x.Id)??0;
 
             List<User> users = Enumerable.Range(index+ 10000001, 10000000)
                 .Select(index => new User("Name_" + index, DateTimeOffset.Now))
                 .ToList();
 
-            await _userRep.InsertRangAsync(users);
+            await _userRep.BatchInsertAsync(users);
             await _unitOfWork.BulkCommit();
         }
     }

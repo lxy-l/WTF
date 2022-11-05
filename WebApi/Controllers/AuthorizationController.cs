@@ -62,6 +62,9 @@ namespace WebApi.Controllers
         [Route("Registration")]
         public async Task<IActionResult> Registration(RegisterModel model)
         {
+
+            //ModelState.GetEnumerator 
+
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError,
@@ -83,6 +86,9 @@ namespace WebApi.Controllers
                     });
 
             return Ok(new { Status = "Success", Message = "新增用户成功!" });
+
         }
+
+        
     }
 }

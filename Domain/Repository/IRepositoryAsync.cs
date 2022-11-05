@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using System.Linq.Expressions;
+using Domain.Entities;
 
 namespace Domain.Repository
 {
@@ -7,6 +8,67 @@ namespace Domain.Repository
     /// </summary>
     public interface IRepositoryAsync<TEntity,Tkey> where TEntity : BaseEntity
     {
+
+
+        #region 查询
+
+        /// <summary>
+        /// 获取IQuery对象
+        /// </summary>
+        /// <returns></returns>
+        IQueryable<TEntity> GetQuery();
+
+
+        /// <summary>
+        /// 查询列表（根据条件筛选）
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        Task<List<TEntity>> GetListAsync(Expression<Func<TEntity,bool>> expression);
+
+
+        /// <summary>
+        /// 根据主键查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<TEntity?> FindByIdAsync(Tkey id);
+
+        /// <summary>
+        /// 查询单个实体信息（根据条件筛选）
+        /// </summary>
+        /// <remarks>查询不到会抛出异常</remarks>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        Task<TEntity> SingleAsync(Expression<Func<TEntity,bool>> expression);
+
+
+        /// <summary>
+        /// 查询单个实体信息（根据条件筛选）
+        /// </summary>
+        /// <remarks>查询不到返回null</remarks>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity,bool>> expression);
+
+
+        /// <summary>
+        /// 根据条件查询数量
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        Task<long> Count(Expression<Func<TEntity,bool>> expression); 
+
+
+        //TODO 分页条件查询
+
+
+        #endregion
+
+
+        #region 新增
+
+
         /// <summary>
         /// 新增
         /// </summary>
@@ -19,34 +81,54 @@ namespace Domain.Repository
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
-        Task InsertRangAsync(List<TEntity> entities);
+        Task BatchInsertAsync(List<TEntity> entities);
 
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        Task DeleteAsync(TEntity entity);
+        #endregion
+
+
+
+        #region 修改
 
         /// <summary>
         /// 修改
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task UpdateAsync(TEntity entity);
+        void UpdateAsync(TEntity entity);
+
+
+        //TODO 批量更新，根据条件更新
 
         /// <summary>
-        /// 根据主键查询
+        /// 根据条件更新
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="expression"></param>
         /// <returns></returns>
-        Task<TEntity?> FindByIdAsync(Tkey id);
+        //Task<int> BatchUpdateAsync(Expression<Func<TEntity,bool>> expression);
+
+        #endregion
+
+
+        #region 删除
+
 
         /// <summary>
-        /// 查询
+        /// 删除
         /// </summary>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        Task<List<TEntity>> GetListAsync();
+        void DeleteAsync(TEntity entity);
+
+        //TODO 批量删除
+
+        /// <summary>
+        /// 根据条件删除
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        Task<int> DeleteAsync(Expression<Func<TEntity,bool>> expression);
+
+        #endregion
 
 
     }

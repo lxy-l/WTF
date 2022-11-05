@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using System.Linq.Expressions;
+using Domain.Entities;
 using Domain.Repository;
 
 using EFCore.BulkExtensions;
@@ -18,74 +19,89 @@ namespace Infrastructure.Repository
         private readonly DbContext _dbContext;
 
         /// <summary>
-        /// 当前操作对象
+        /// 模型
         /// </summary>
-        public DbSet<TEntity> Table => _dbContext.Set<TEntity>();
+        public virtual DbSet<TEntity> _dbSet => _dbContext.Set<TEntity>();
 
         public RepositoryAsync(DbContext context)
         {
             _dbContext = context;
         }
 
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public virtual Task DeleteAsync(TEntity entity)
+        #region 查询
+
+        public IQueryable<TEntity> GetQuery() => _dbSet.AsQueryable();
+
+        public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> expression)
         {
-            Table.Remove(entity);
-            return Task.CompletedTask;
+            return await GetQuery().Where(expression).ToListAsync();
         }
 
-        /// <summary>
-        /// 根据主键查询
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public virtual async Task<TEntity?> FindByIdAsync(Tkey id)
+        public async Task<TEntity?> FindByIdAsync(Tkey id)
         {
-            return await Table.FindAsync(id);
+            return await _dbSet.FindAsync(id);
         }
 
-        /// <summary>
-        /// 新增
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public virtual async Task InsertAsync(TEntity entity)
+        public async Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression)
         {
-            await Table.AddAsync(entity);
+            return await GetQuery().SingleAsync(expression);
         }
 
-        /// <summary>
-        /// 批量添加
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <returns></returns>
-        public virtual async Task InsertRangAsync(List<TEntity> entities)
+        public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> expression)
         {
-            await _dbContext.BulkInsertAsync(entities);
+            return await GetQuery().FirstOrDefaultAsync(expression);
         }
 
-        /// <summary>
-        /// 修改
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public virtual Task UpdateAsync(TEntity entity)
+        public async Task<long> Count(Expression<Func<TEntity, bool>> expression)
         {
-            Table.Update(entity);
-            return Task.CompletedTask;
+            return await _dbSet.CountAsync(expression);
         }
 
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <returns></returns>
-        public async Task<List<TEntity>> GetListAsync()
+        #endregion
+
+
+        #region 新增
+        public async Task InsertAsync(TEntity entity)
         {
-            return await Table.AsNoTracking().OrderByDescending(x=>x.Id).Take(10).ToListAsync();
+            await _dbSet.AddAsync(entity);
         }
+
+        public async Task BatchInsertAsync(List<TEntity> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+        }
+
+        #endregion
+
+
+        #region 修改
+        public void UpdateAsync(TEntity entity)
+        {
+            _dbSet.Update(entity);
+        }
+
+
+        //public async Task<int> BatchUpdateAsync(Expression<Func<TEntity, bool>> expression)
+        //{
+        //    //return await Entity.BatchUpdateAsync();
+        //}
+
+        #endregion
+
+
+        #region 删除
+
+        public void DeleteAsync(TEntity entity)
+        {
+            _dbSet.Remove(entity);
+        }
+
+        public async Task<int> DeleteAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            return await _dbSet.Where(expression).BatchDeleteAsync();
+        }
+
+
+        #endregion
     }
 }

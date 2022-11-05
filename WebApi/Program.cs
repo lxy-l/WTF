@@ -42,6 +42,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 3;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+});
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, 
@@ -70,12 +79,22 @@ if (app.Environment.IsDevelopment())
     //app.UseMigrationsEndPoint();
     app.UseStatusCodePagesWithReExecute("/Log/{0}");
 }
+else if (app.Environment.IsStaging())
+{
+
+}
+else if(app.Environment.IsProduction())
+{
+
+}
 
 app.UseHealthChecks("/hc",new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
 { 
     Predicate=_=>true,
     ResponseWriter =WriteResponse 
 });
+
+app.UseStaticFiles();
 
 app.UseSwagger();
 app.UseSwaggerUI();

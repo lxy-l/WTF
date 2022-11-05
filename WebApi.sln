@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfluxDbTest", "InfluxDbTest\InfluxDbTest.csproj", "{0623A2CE-3303-4BAD-992F-E305235936CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTest", "TaskTest\TaskTest.csproj", "{722C961A-FAC8-4B73-AD62-6163C979C53A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{0623A2CE-3303-4BAD-992F-E305235936CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0623A2CE-3303-4BAD-992F-E305235936CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0623A2CE-3303-4BAD-992F-E305235936CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{722C961A-FAC8-4B73-AD62-6163C979C53A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{722C961A-FAC8-4B73-AD62-6163C979C53A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{722C961A-FAC8-4B73-AD62-6163C979C53A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{722C961A-FAC8-4B73-AD62-6163C979C53A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{96FD2AF9-B30C-4D1B-923B-E4FDB28BAA66} = {9EC92406-66CA-4103-B03C-293F38C15944}
 		{0623A2CE-3303-4BAD-992F-E305235936CC} = {9EC92406-66CA-4103-B03C-293F38C15944}
+		{722C961A-FAC8-4B73-AD62-6163C979C53A} = {9EC92406-66CA-4103-B03C-293F38C15944}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE7C3459-9161-4393-A320-68F980F4439C}

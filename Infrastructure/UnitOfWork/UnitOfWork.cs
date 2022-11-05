@@ -19,26 +19,26 @@ namespace Infrastructure.UnitOfWork
     /// </summary>
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DbContext dbContext;
+        private readonly DbContext _dbContext;
 
         public UnitOfWork(DbContext context)
         {
-            dbContext = context;
+            _dbContext = context;
         }
 
         public async Task<int> Commit(CancellationToken cancellationToken = default)
         {
-            return await dbContext.SaveChangesAsync(cancellationToken);
+            return await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task BulkCommit()
         {
-            await dbContext.BulkSaveChangesAsync();
+            await _dbContext.BulkSaveChangesAsync();
         }
 
         public async Task RollBack()
         {
-            await dbContext.Database.RollbackTransactionAsync();
+            await _dbContext.Database.RollbackTransactionAsync();
         }
     }
 }

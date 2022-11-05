@@ -33,4 +33,10 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="IdentityConfig\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IdentityConfig\" />
+  </ItemGroup>
 </Project>
