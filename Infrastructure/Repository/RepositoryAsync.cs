@@ -34,7 +34,7 @@ namespace Infrastructure.Repository
 
         public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> expression)
         {
-            return await GetQuery().Where(expression).ToListAsync();
+            return await GetQuery().Where(expression).AsNoTracking().ToListAsync();
         }
 
         public async Task<TEntity?> FindByIdAsync(Tkey id)

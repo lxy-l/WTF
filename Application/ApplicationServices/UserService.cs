@@ -63,7 +63,7 @@ namespace Application.ApplicationServices
 
             var index = _userRep.GetQuery()?.Max(x=>x.Id)??0;
 
-            List<User> users = Enumerable.Range(index+ 10000001, 10000000)
+            List<User> users = Enumerable.Range(index, 1000000)
                 .Select(index => new User("Name_" + index, DateTimeOffset.Now))
                 .ToList();
 
