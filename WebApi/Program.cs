@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using NetCore.AutoRegisterDi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,9 +61,8 @@ builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
 
-// TODO: ������Ϊ����ע��
-builder.Services.AddTransient<IUserService,UserService>();
-
+//builder.Services.AddTransient<IUserService,UserService>();
+builder.Services.RegisterAssemblyPublicNonGenericClasses().Where(x => x.Name.EndsWith("Service")).AsPublicImplementedInterfaces();
 
 
 builder.Services.AddControllers();
