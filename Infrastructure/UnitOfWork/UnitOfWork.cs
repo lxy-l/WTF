@@ -26,18 +26,18 @@ namespace Infrastructure.UnitOfWork
             _dbContext = context;
         }
 
-        public async Task<int> Commit(CancellationToken cancellationToken = default)
+        public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
         {
-            throw new Exception("自定义异常");
+            //throw new Exception("自定义异常");
             return await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task BulkCommit()
+        public async Task BulkCommitAsync()
         {
             await _dbContext.BulkSaveChangesAsync();
         }
 
-        public async Task RollBack()
+        public async Task RollBackAsync()
         {
             await _dbContext.Database.RollbackTransactionAsync();
         }

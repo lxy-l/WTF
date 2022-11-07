@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.ValueObject
 {
-    public class Address : ValueObject<Address>
+    public record Address : ValueObject<Address>
     {
         [StringLength(255)]
         public string Street { get; set; }
@@ -21,11 +21,6 @@ namespace Domain.ValueObject
         [StringLength(255)]
         public string State { get; set; }
 
-
-        public Address()
-        {
-
-        }
 
         public Address(string state,string country,string city,string street)
         {

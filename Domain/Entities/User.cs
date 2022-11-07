@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 using Domain.AggregateRoots;
 using Domain.ValueObject;
@@ -15,12 +16,12 @@ namespace Domain.Entities
 
         public Address Address { get; private set; }
 
-
-        public User(int id=default):base(id)
+        public User(int id = default) : base(id)
         {
-
+            //Address = new Address("","","","");
         }
 
+        [JsonConstructor]
         public User(string? name, DateTimeOffset birthday,Address address, int id = default) : base(id)
         {
             Name = name;

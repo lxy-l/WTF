@@ -13,7 +13,7 @@ namespace Domain.Entities
     public abstract class Entity<TKey>
     {
 
-        //private IValidation 
+        //private IValidation
 
         protected Entity(TKey id)
         {
@@ -37,7 +37,7 @@ namespace Domain.Entities
         /// <summary>
         /// 修改时间
         /// </summary>
-        public DateTimeOffset ModifyTime { get; set; }
+        public DateTimeOffset ModifyTime { get; protected set; }
 
 
         public override bool Equals(object? entity)

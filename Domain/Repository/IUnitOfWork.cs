@@ -16,19 +16,19 @@ namespace Domain.Repository
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<int> Commit(CancellationToken cancellationToken = default);
+        Task<int> CommitAsync(CancellationToken cancellationToken = default);
 
 
         /// <summary>
         /// 批量提交
         /// </summary>
         /// <returns></returns>
-        Task BulkCommit();
+        Task BulkCommitAsync();
 
 
         /// <summary>
         /// 回滚更改
         /// </summary>
-        Task RollBack();
+        Task RollBackAsync();
     }
 }

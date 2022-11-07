@@ -29,7 +29,7 @@ namespace Application.ApplicationServices
         public async Task<User> AddUser(User model)
         {
             await _userRep.InsertAsync(model);
-            await _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
             return model;
         }
 
@@ -41,7 +41,7 @@ namespace Application.ApplicationServices
                 throw new Exception("未找到实体信息！");
             }
             _userRep.DeleteAsync(user);
-            await _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
             return user;
         }
 
@@ -56,8 +56,8 @@ namespace Application.ApplicationServices
             user.Edit(model);
             //持久化
             _userRep.UpdateAsync(user);
-            await _unitOfWork.Commit();
-            return model;
+            await _unitOfWork.CommitAsync();
+            return user;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Domain.ValueObject
     /// <summary>
     /// 值对象
     /// </summary>
-    public abstract class ValueObject<T> where T : ValueObject<T>
+    public abstract record ValueObject<T> where T : ValueObject<T>
     {
         //public override bool Equals(object? obj)
         //{
