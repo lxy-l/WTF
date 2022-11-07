@@ -28,6 +28,7 @@ namespace Infrastructure.UnitOfWork
 
         public async Task<int> Commit(CancellationToken cancellationToken = default)
         {
+            throw new Exception("自定义异常");
             return await _dbContext.SaveChangesAsync(cancellationToken);
         }
 

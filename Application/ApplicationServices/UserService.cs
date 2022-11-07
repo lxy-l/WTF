@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Application.DTO;
+
 using Domain.Entities;
 using Domain.Repository;
 
@@ -11,9 +13,9 @@ namespace Application.ApplicationServices
     public class UserService: IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepositoryAsync<User, int> _userRep;
+        private readonly IUserRepositoryAsync<User,UserViewModel, int> _userRep;
 
-        public UserService(IRepositoryAsync<User, int> userRep, IUnitOfWork unitOfWork)
+        public UserService(IUserRepositoryAsync<User, UserViewModel, int> userRep, IUnitOfWork unitOfWork)
         {
             _userRep = userRep;
             _unitOfWork = unitOfWork;
@@ -56,19 +58,6 @@ namespace Application.ApplicationServices
             _userRep.UpdateAsync(user);
             await _unitOfWork.Commit();
             return model;
-        }
-
-        public async Task InsertRangAsync()
-        {
-
-            var index = _userRep.GetQuery()?.Max(x=>x.Id)??0;
-
-            List<User> users = Enumerable.Range(index, 1000000)
-                .Select(index => new User("Name_" + index, DateTimeOffset.Now))
-                .ToList();
-
-            await _userRep.BatchInsertAsync(users);
-            await _unitOfWork.BulkCommit();
         }
     }
 }

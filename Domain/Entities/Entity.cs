@@ -1,12 +1,15 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities
 {
     /// <summary>
     /// 实体
     /// </summary>
+    [Index(nameof(CreateTime), IsUnique = false)]
+    [Index(nameof(ModifyTime), IsUnique = false)]
     public abstract class Entity<TKey>
     {
 
@@ -22,6 +25,7 @@ namespace Domain.Entities
         /// <summary>
         /// 唯一标识
         /// </summary>
+        [Key]
         [Required]
         public TKey Id { get; private set; }
 

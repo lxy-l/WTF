@@ -1,4 +1,6 @@
 ﻿using System.Linq.Expressions;
+
+using Domain.AggregateRoots;
 using Domain.Entities;
 
 namespace Domain.Repository
@@ -6,7 +8,7 @@ namespace Domain.Repository
     /// <summary>
     /// 基础仓储接口
     /// </summary>
-    public interface IRepositoryAsync<TEntity,Tkey> where TEntity : BaseEntity
+    public interface IRepositoryAsync<TEntity,Tkey> where TEntity : Entity<Tkey>, IAggregateRoot
     {
 
 
@@ -24,7 +26,7 @@ namespace Domain.Repository
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        Task<List<TEntity>> GetListAsync(Expression<Func<TEntity,bool>> expression);
+        Task<List<TEntity>> GetListAsync(Expression<Func<TEntity,bool>>? expression);
 
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace Domain.Repository
         /// <remarks>查询不到会抛出异常</remarks>
         /// <param name="expression"></param>
         /// <returns></returns>
-        Task<TEntity> SingleAsync(Expression<Func<TEntity,bool>> expression);
+        Task<TEntity> SingleAsync(Expression<Func<TEntity,bool>>? expression);
 
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace Domain.Repository
         /// <remarks>查询不到返回null</remarks>
         /// <param name="expression"></param>
         /// <returns></returns>
-        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity,bool>> expression);
+        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity,bool>>? expression);
 
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace Domain.Repository
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        Task<long> Count(Expression<Func<TEntity,bool>> expression); 
+        Task<long> CountAsync(Expression<Func<TEntity,bool>>? expression); 
 
 
         //TODO 分页条件查询

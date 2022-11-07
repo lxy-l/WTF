@@ -35,7 +35,6 @@ namespace WebApi.Controllers
         [Route("InsertList")]
         public async Task<IActionResult> Add()
         {
-            await _userService.InsertRangAsync();
             return Ok();
         }
 

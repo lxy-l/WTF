@@ -16,6 +16,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using NetCore.AutoRegisterDi;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,9 +63,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
+builder.Services.AddTransient(typeof(IUserRepositoryAsync<,,>), typeof(UserRepositoryAsync<,,>));
 
-//builder.Services.AddTransient<IUserService,UserService>();
-builder.Services.RegisterAssemblyPublicNonGenericClasses().Where(x => x.Name.EndsWith("Service")).AsPublicImplementedInterfaces();
+builder.Services
+    .RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(Application.Register)))
+    .Where(x => x.Name.EndsWith("Service"))
+    .AsPublicImplementedInterfaces();
 
 
 builder.Services.AddControllers();
@@ -88,10 +94,14 @@ else if(app.Environment.IsProduction())
 
 }
 
-app.UseHealthChecks("/hc",new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+app.UseHealthChecks("/hc",new HealthCheckOptions
 { 
     Predicate=_=>true,
-    ResponseWriter =WriteResponse 
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+app.MapHealthChecks("/liveness", new HealthCheckOptions
+{
+    Predicate = r => r.Name.Contains("self")
 });
 
 app.UseStaticFiles();
@@ -105,45 +115,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-Task WriteResponse(HttpContext context, HealthReport result)
-{
-    context.Response.ContentType = "application/json; charset=utf-8";
-
-    var options = new JsonWriterOptions
-    {
-        Indented = true
-    };
-
-    using (var stream = new MemoryStream())
-    {
-        using (var writer = new Utf8JsonWriter(stream, options))
-        {
-            writer.WriteStartObject();
-            writer.WriteString("status", result.Status.ToString());
-            writer.WriteStartObject("results");
-            foreach (var entry in result.Entries)
-            {
-                writer.WriteStartObject(entry.Key);
-                writer.WriteString("status", entry.Value.Status.ToString());
-                writer.WriteString("description", entry.Value.Description);
-                writer.WriteStartObject("data");
-                foreach (var item in entry.Value.Data)
-                {
-                    writer.WritePropertyName(item.Key);
-                    JsonSerializer.Serialize(
-                        writer, item.Value, item.Value?.GetType() ??
-                        typeof(object));
-                }
-                writer.WriteEndObject();
-                writer.WriteEndObject();
-            }
-            writer.WriteEndObject();
-            writer.WriteEndObject();
-        }
-
-        var json = Encoding.UTF8.GetString(stream.ToArray());
-
-        return context.Response.WriteAsync(json);
-    }
-}

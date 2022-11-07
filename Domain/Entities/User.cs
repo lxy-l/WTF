@@ -1,8 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Domain.AggregateRoots;
+using Domain.ValueObject;
+
 namespace Domain.Entities
 {
-    public class User: BaseEntity
+    public class User: Entity<int>, IAggregateRoot
     {
         [Required]
         [StringLength(255)]
@@ -10,10 +13,19 @@ namespace Domain.Entities
 
         public DateTimeOffset Birthday { get; set; }
 
-        public User(string? name, DateTimeOffset birthday)
+        public Address Address { get; private set; }
+
+
+        public User(int id=default):base(id)
+        {
+
+        }
+
+        public User(string? name, DateTimeOffset birthday,Address address, int id = default) : base(id)
         {
             Name = name;
             Birthday = birthday;
+            Address = address;
         }
 
         /// <summary>
@@ -25,6 +37,7 @@ namespace Domain.Entities
             Name = user.Name;
             Birthday = user.Birthday;
             ModifyTime = DateTimeOffset.Now;
+            Address = user.Address;
         }
 
 

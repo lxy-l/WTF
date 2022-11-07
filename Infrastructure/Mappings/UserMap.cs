@@ -11,12 +11,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Mappings
 {
-    //public class UserMap : IEntityTypeConfiguration<User>
-    //{
-    //    public void Configure(EntityTypeBuilder<User> builder)
-    //    {
-    //        builder.HasIndex(x => x.CreateTime);
-    //        builder.HasIndex(x => x.ModifyTime);
-    //    }
-    //}
+    public class UserMap : IEntityTypeConfiguration<User>
+    {
+        public void Configure(EntityTypeBuilder<User> builder)
+        {
+            builder.OwnsOne(p => p.Address);
+        }
+    }
 }
