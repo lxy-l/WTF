@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 
 using Domain.AggregateRoots;
 using Domain.Entities;
@@ -13,7 +14,7 @@ namespace Infrastructure.Repository
     /// <summary>
     /// 基础仓储实现
     /// </summary>
-    public class RepositoryAsync<TEntity, Tkey> : IRepositoryAsync<TEntity,Tkey> where TEntity : Entity<Tkey>,IAggregateRoot
+    public class RepositoryAsync<TEntity, Tkey> : IRepositoryAsync<TEntity, Tkey> where TEntity : Entity<Tkey>, IAggregateRoot
     {
         /// <summary>
         /// 数据上下文
@@ -32,15 +33,24 @@ namespace Infrastructure.Repository
 
         #region 查询
 
-        public IQueryable<TEntity> GetQuery() => _dbSet;
+        public IQueryable<TEntity> GetQuery() => _dbSet.AsQueryable();
 
-        public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? expression)
+        public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? expression,int page=1,int pageSize=20)
         {
             if (expression == null)
             {
-                return await GetQuery().AsNoTracking().ToListAsync();
+                return await _dbSet
+                    .OrderByDescending(x => x.CreateTime)
+                    .Page(page,pageSize)
+                    .AsNoTracking()
+                    .ToListAsync();
             }
-            return await GetQuery().Where(expression).AsNoTracking().ToListAsync();
+            return await _dbSet
+                .Where(expression)
+                .OrderByDescending(x=>x.CreateTime)
+                .Page(page,pageSize)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<TEntity?> FindByIdAsync(Tkey id) => await _dbSet.FindAsync(id);

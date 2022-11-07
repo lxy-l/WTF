@@ -29,12 +29,12 @@ namespace Infrastructure.UnitOfWork
         public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
         {
             //throw new Exception("自定义异常");
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            return await _dbContext.SaveChangesAsync(true,cancellationToken);
         }
 
         public async Task BulkCommitAsync()
         {
-            await _dbContext.BulkSaveChangesAsync();
+            await _dbContext.BulkSaveChangesAsync(new BulkConfig { BatchSize=5000});
         }
 
         public async Task RollBackAsync()

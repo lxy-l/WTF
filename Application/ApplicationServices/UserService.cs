@@ -26,11 +26,11 @@ namespace Application.ApplicationServices
             return await _userRep.GetListAsync(x=>x.CreateTime>DateTimeOffset.Now.AddDays(-1));
         }
 
-        public async Task<User> AddUser(User model)
+        public async Task<User> AddUser(User user)
         {
-            await _userRep.InsertAsync(model);
+            await _userRep.InsertAsync(user);
             await _unitOfWork.CommitAsync();
-            return model;
+            return user;
         }
 
         public async Task<User> DeleteUser(int id)

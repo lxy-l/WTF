@@ -44,10 +44,10 @@ namespace WebApi.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Post(User user)
+        public async Task<IActionResult> Post(User model)
         {
-            await _userService.AddUser(user);
-            return Ok();
+            var user = await _userService.AddUser(model);
+            return Ok(user);
         }
 
         /// <summary>

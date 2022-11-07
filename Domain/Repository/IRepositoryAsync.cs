@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 
 using Domain.AggregateRoots;
 using Domain.Entities;
@@ -26,7 +27,7 @@ namespace Domain.Repository
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        Task<List<TEntity>> GetListAsync(Expression<Func<TEntity,bool>>? expression);
+        Task<List<TEntity>> GetListAsync(Expression<Func<TEntity,bool>>? expression, int page = 1, int pageSize = 20);
 
 
         /// <summary>
@@ -59,10 +60,12 @@ namespace Domain.Repository
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        Task<long> CountAsync(Expression<Func<TEntity,bool>>? expression); 
+        Task<long> CountAsync(Expression<Func<TEntity,bool>>? expression);
 
 
         //TODO 分页条件查询
+
+        Task<PagedResult> GetPagedResultAsync();
 
 
         #endregion

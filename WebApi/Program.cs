@@ -1,24 +1,19 @@
-using System.Text.Json;
-using System.Text;
-
-using Application.ApplicationServices;
+using System.Reflection;
 
 using Domain.Repository;
+
+using HealthChecks.UI.Client;
 
 using Infrastructure.Context;
 using Infrastructure.Repository;
 using Infrastructure.UnitOfWork;
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using NetCore.AutoRegisterDi;
-using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using System.Reflection;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
+using NetCore.AutoRegisterDi;
 
 var builder = WebApplication.CreateBuilder(args);
 
