@@ -8,6 +8,7 @@ using Domain.Repository;
 using EFCore.BulkExtensions;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Infrastructure.Repository
 {
@@ -19,10 +20,10 @@ namespace Infrastructure.Repository
         /// <summary>
         /// 数据上下文
         /// </summary>
-        private readonly DbContext _dbContext;
+        protected readonly DbContext _dbContext;
 
         /// <summary>
-        /// 模型
+        /// DbSet
         /// </summary>
         public virtual DbSet<TEntity> _dbSet => _dbContext.Set<TEntity>();
 
@@ -35,22 +36,30 @@ namespace Infrastructure.Repository
 
         public IQueryable<TEntity> GetQuery() => _dbSet.AsQueryable();
 
-        public async Task<List<TEntity>> GetListAsync(int page=1,int pageSize=20, Expression<Func<TEntity, bool>>? expression=null)
+        public async Task<List<TEntity>> GetQueryAsync(
+            Expression<Func<TEntity, bool>>? expression = null, 
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            bool ignoreQueryFilters = false)
         {
-            if (expression == null)
+            IQueryable<TEntity> query = GetQuery().AsNoTracking();
+
+            if (include != null)
             {
-                return await _dbSet
-                    .OrderBy(x => x.CreateTime)
-                    .Page(page,pageSize)
-                    .AsNoTracking()
-                    .ToListAsync();
+                query = include(query);
             }
-            return await _dbSet
-                .Where(expression)
-                .OrderBy(x=>x.CreateTime)
-                .Page(page,pageSize)
-                .AsNoTracking()
-                .ToListAsync();
+
+            if (expression != null)
+            {
+                query = query.Where(expression);
+            }
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            return orderBy != null ? await orderBy(query).ToListAsync() : await query.ToListAsync();
         }
 
         public async Task<TEntity?> FindByIdAsync(Tkey id) => await _dbSet.FindAsync(id);
@@ -73,22 +82,68 @@ namespace Infrastructure.Repository
             _ => await _dbSet.CountAsync(expression)
         };
 
-        public Task<PagedResult<TEntity>> GetPagedResultAsync(int page = 1, int pageSize = 20, Expression<Func<TEntity, bool>>? expression = null)
+        public Task<PagedResult<TEntity>> GetPagedResultAsync(
+            Expression<Func<TEntity, bool>>? expression = null, 
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, 
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, 
+            int page = 1, int pageSize = 20, bool ignoreQueryFilters = false)
         {
-            if (expression==null)
+            IQueryable<TEntity> query = GetQuery().AsNoTracking();
+
+            if (include != null)
             {
-                return Task.FromResult(_dbSet.OrderBy(x => x.CreateTime).PageResult(page, pageSize));
+                query = include(query);
             }
-            return Task.FromResult(_dbSet
-                .Where(expression)
-                .OrderBy(x=>x.CreateTime)
-                .PageResult(page, pageSize));
+
+            if (expression != null)
+            {
+                query = query.Where(expression);
+            }
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            return orderBy != null
+                ? Task.FromResult(orderBy(query).PageResult(page, pageSize))
+                : Task.FromResult(query.PageResult(page, pageSize));
+        }
+
+        public Task<PagedResult<TResult>> GetPagedResultBySelectAsync<TResult>(
+            Expression<Func<TEntity, TResult>> selector,
+            Expression<Func<TEntity, bool>>? expression = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            int page = 0, int pageSize = 20,bool ignoreQueryFilters = false)
+        {
+            IQueryable<TEntity> query = GetQuery().AsNoTracking();
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (expression != null)
+            {
+                query = query.Where(expression);
+            }
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            return orderBy != null
+                ? Task.FromResult(orderBy(query).Select(selector).PageResult(page, pageSize))
+                : Task.FromResult(query.Select(selector).PageResult(page, pageSize));
         }
 
         #endregion
 
 
         #region 新增
+
         public async Task InsertAsync(TEntity entity) => await _dbSet.AddAsync(entity);
 
         public async Task BatchInsertAsync(List<TEntity> entities) => await _dbContext.BulkInsertAsync(entities);
@@ -97,20 +152,17 @@ namespace Infrastructure.Repository
 
 
         #region 修改
-        public void UpdateAsync(TEntity entity) => _dbSet.Update(entity);
 
+        public void Update(TEntity entity) => _dbSet.Update(entity);
 
-        //public async Task<int> BatchUpdateAsync(Expression<Func<TEntity, bool>> expression)
-        //{
-        //    //return await Entity.BatchUpdateAsync();
-        //}
-
+        public async Task UpdateAsync(IList<TEntity> entities) => await _dbContext.BulkUpdateAsync(entities);
+        
         #endregion
 
 
         #region 删除
 
-        public void DeleteAsync(TEntity entity) => _dbSet.Remove(entity);
+        public void Delete(TEntity entity) => _dbSet.Remove(entity);
 
         public async Task<int> DeleteAsync(Expression<Func<TEntity, bool>>? expression) => expression switch
         {
@@ -118,8 +170,7 @@ namespace Infrastructure.Repository
             _ => await _dbSet.Where(expression).BatchDeleteAsync()
         };
 
-
-
+        public async Task DeleteAsync(IList<TEntity> entities) => await _dbContext.BulkDeleteAsync(entities);
 
         #endregion
     }

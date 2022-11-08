@@ -4,6 +4,9 @@ using System.Linq.Expressions;
 using Domain.AggregateRoots;
 using Domain.Entities;
 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+
 namespace Domain.Repository
 {
     /// <summary>
@@ -11,7 +14,6 @@ namespace Domain.Repository
     /// </summary>
     public interface IRepositoryAsync<TEntity,Tkey> where TEntity : Entity<Tkey>, IAggregateRoot
     {
-
 
         #region 查询
 
@@ -26,9 +28,16 @@ namespace Domain.Repository
         /// 查询列表（根据条件筛选）
         /// </summary>
         /// <param name="expression"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="include"></param>
+        /// <param name="disableTracking"></param>
+        /// <param name="ignoreQueryFilters"></param>
         /// <returns></returns>
-        Task<List<TEntity>> GetListAsync(int page = 1, int pageSize = 20, Expression<Func<TEntity, bool>>? expression = null);
-
+        Task<List<TEntity>> GetQueryAsync(
+            Expression<Func<TEntity, bool>>? expression = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            bool ignoreQueryFilters = false);
 
         /// <summary>
         /// 根据主键查询
@@ -61,11 +70,45 @@ namespace Domain.Repository
         /// <param name="expression"></param>
         /// <returns></returns>
         Task<long> CountAsync(Expression<Func<TEntity,bool>>? expression = null);
+        
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="include"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="ignoreQueryFilters"></param>
+        /// <returns></returns>
+        Task<PagedResult<TEntity>> GetPagedResultAsync(
+            Expression<Func<TEntity, bool>>? expression = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            int page = 1,
+            int pageSize = 20,
+            bool ignoreQueryFilters = false);
 
-
-        //TODO 分页条件查询
-
-        Task<PagedResult<TEntity>> GetPagedResultAsync(int page = 1, int pageSize = 20, Expression<Func<TEntity, bool>>? expression = null);
+        /// <summary>
+        /// 分页查询（自定义Select字段）
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="selector"></param>
+        /// <param name="predicate"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="include"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="ignoreQueryFilters"></param>
+        /// <returns></returns>
+        Task<PagedResult<TResult>> GetPagedResultBySelectAsync<TResult>(
+            Expression<Func<TEntity, TResult>> selector,
+            Expression<Func<TEntity, bool>>? expression = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            int page = 1,
+            int pageSize = 20,
+            bool ignoreQueryFilters = false);
 
 
         #endregion
@@ -82,7 +125,7 @@ namespace Domain.Repository
         Task InsertAsync(TEntity entity);
 
         /// <summary>
-        /// 批量添加
+        /// 批量添加(BulkCommit)
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
@@ -99,17 +142,13 @@ namespace Domain.Repository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        void UpdateAsync(TEntity entity);
-
-
-        //TODO 批量更新，根据条件更新
+        void Update(TEntity entity);
 
         /// <summary>
-        /// 根据条件更新
+        /// 批量修改(BulkCommit)
         /// </summary>
-        /// <param name="expression"></param>
-        /// <returns></returns>
-        //Task<int> BatchUpdateAsync(Expression<Func<TEntity,bool>> expression);
+        /// <param name="entities"></param>
+        Task UpdateAsync(IList<TEntity> entities);
 
         #endregion
 
@@ -122,9 +161,14 @@ namespace Domain.Repository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        void DeleteAsync(TEntity entity);
+        void Delete(TEntity entity);
 
-        //TODO 批量删除
+        /// <summary>
+        /// 批量删除(BulkCommit)
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        Task DeleteAsync(IList<TEntity> entities);
 
         /// <summary>
         /// 根据条件删除
