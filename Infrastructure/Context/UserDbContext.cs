@@ -22,6 +22,11 @@ namespace Infrastructure.Context
             base.OnModelCreating(modelBuilder);
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
+
         public override ValueTask DisposeAsync()
         {
             return base.DisposeAsync();

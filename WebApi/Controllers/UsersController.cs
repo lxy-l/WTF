@@ -1,6 +1,12 @@
-﻿using Application.ApplicationServices;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.Linq.Dynamic.Core;
+
+using Application.ApplicationServices;
+using Application.DTO;
 
 using Domain.Entities;
+using Domain.ValueObject;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,9 +28,9 @@ namespace WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<List<User>> Get()
+        public async Task<PagedResult<User>> Get([FromQuery]SeachParams seachParams)
         {
-            return await _userService.GetUsers();
+            return await _userService.GetUsers(seachParams);
         }
 
         /// <summary>
@@ -35,7 +41,20 @@ namespace WebApi.Controllers
         [Route("InsertList")]
         public async Task<IActionResult> Add()
         {
-            return Ok();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            List<User> users = Enumerable.Range(1, 1000_0000)
+                .Select(index => 
+                new User("Name_" + index, DateTimeOffset.Now, new Address("未知", "未知", "未知", "未知"),index))
+                .ToList();
+            stopwatch.Stop();
+            long Time = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+            stopwatch.Start();
+            await _userService.BulkInsertUser(users);
+            stopwatch.Stop();
+            long DataBaseTime = stopwatch.ElapsedMilliseconds;
+            return Ok(new { Time,DataBaseTime});
         }
 
         /// <summary>

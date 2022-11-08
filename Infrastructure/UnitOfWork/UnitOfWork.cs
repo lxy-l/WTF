@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Domain.Entities;
-using Domain.Repository;
+﻿using Domain.Repository;
 
 using EFCore.BulkExtensions;
 
@@ -29,12 +21,12 @@ namespace Infrastructure.UnitOfWork
         public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
         {
             //throw new Exception("自定义异常");
-            return await _dbContext.SaveChangesAsync(true,cancellationToken);
+            return await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task BulkCommitAsync()
+        public async Task BulkCommitAsync(BulkConfig? bulkConfig = null)
         {
-            await _dbContext.BulkSaveChangesAsync(new BulkConfig { BatchSize=5000});
+            await _dbContext.BulkSaveChangesAsync(bulkConfig);
         }
 
         public async Task RollBackAsync()

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using EFCore.BulkExtensions;
+
 namespace Domain.Repository
 {
     /// <summary>
@@ -23,7 +25,7 @@ namespace Domain.Repository
         /// 批量提交
         /// </summary>
         /// <returns></returns>
-        Task BulkCommitAsync();
+        Task BulkCommitAsync(BulkConfig? bulkConfig = null);
 
 
         /// <summary>

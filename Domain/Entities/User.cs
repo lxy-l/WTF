@@ -10,7 +10,7 @@ namespace Domain.Entities
     {
         [Required]
         [StringLength(255)]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         public DateTimeOffset Birthday { get; set; }
 
@@ -24,7 +24,7 @@ namespace Domain.Entities
         }
 
         [JsonConstructor]
-        public User(string? name, DateTimeOffset birthday,Address address, int id = default) : base(id)
+        public User(string name, DateTimeOffset birthday,Address address, int id = default) : base(id)
         {
             Name = name;
             Birthday = birthday;

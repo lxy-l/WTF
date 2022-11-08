@@ -27,7 +27,7 @@ namespace Domain.Repository
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        Task<List<TEntity>> GetListAsync(Expression<Func<TEntity,bool>>? expression, int page = 1, int pageSize = 20);
+        Task<List<TEntity>> GetListAsync(int page = 1, int pageSize = 20, Expression<Func<TEntity, bool>>? expression = null);
 
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Domain.Repository
         /// <remarks>查询不到会抛出异常</remarks>
         /// <param name="expression"></param>
         /// <returns></returns>
-        Task<TEntity> SingleAsync(Expression<Func<TEntity,bool>>? expression);
+        Task<TEntity> SingleAsync(Expression<Func<TEntity,bool>>? expression = null);
 
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Domain.Repository
         /// <remarks>查询不到返回null</remarks>
         /// <param name="expression"></param>
         /// <returns></returns>
-        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity,bool>>? expression);
+        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity,bool>>? expression = null );
 
 
         /// <summary>
@@ -60,12 +60,12 @@ namespace Domain.Repository
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        Task<long> CountAsync(Expression<Func<TEntity,bool>>? expression);
+        Task<long> CountAsync(Expression<Func<TEntity,bool>>? expression = null);
 
 
         //TODO 分页条件查询
 
-        Task<PagedResult> GetPagedResultAsync();
+        Task<PagedResult<TEntity>> GetPagedResultAsync(int page = 1, int pageSize = 20, Expression<Func<TEntity, bool>>? expression = null);
 
 
         #endregion

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq.Dynamic.Core;
 
 using Application.DTO;
 
 using Domain.Entities;
 using Domain.Repository;
+using Domain.ValueObject;
 
 namespace Application.ApplicationServices
 {
@@ -21,9 +23,9 @@ namespace Application.ApplicationServices
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<User>> GetUsers()
+        public async Task<PagedResult<User>> GetUsers(SeachParams seachParams)
         {
-            return await _userRep.GetListAsync(x=>x.CreateTime>DateTimeOffset.Now.AddDays(-1));
+            return await _userRep.GetPagedResultAsync(seachParams.Page,seachParams.PageSize);
         }
 
         public async Task<User> AddUser(User user)
@@ -58,6 +60,12 @@ namespace Application.ApplicationServices
             _userRep.UpdateAsync(user);
             await _unitOfWork.CommitAsync();
             return user;
+        }
+
+        public async Task BulkInsertUser(List<User> users)
+        {
+            await _userRep.BatchInsertAsync(users);
+            await _unitOfWork.BulkCommitAsync(new EFCore.BulkExtensions.BulkConfig { BatchSize=50000});
         }
     }
 }

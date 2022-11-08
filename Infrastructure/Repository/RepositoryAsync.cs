@@ -35,19 +35,19 @@ namespace Infrastructure.Repository
 
         public IQueryable<TEntity> GetQuery() => _dbSet.AsQueryable();
 
-        public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? expression,int page=1,int pageSize=20)
+        public async Task<List<TEntity>> GetListAsync(int page=1,int pageSize=20, Expression<Func<TEntity, bool>>? expression=null)
         {
             if (expression == null)
             {
                 return await _dbSet
-                    .OrderByDescending(x => x.CreateTime)
+                    .OrderBy(x => x.CreateTime)
                     .Page(page,pageSize)
                     .AsNoTracking()
                     .ToListAsync();
             }
             return await _dbSet
                 .Where(expression)
-                .OrderByDescending(x=>x.CreateTime)
+                .OrderBy(x=>x.CreateTime)
                 .Page(page,pageSize)
                 .AsNoTracking()
                 .ToListAsync();
@@ -73,13 +73,25 @@ namespace Infrastructure.Repository
             _ => await _dbSet.CountAsync(expression)
         };
 
+        public Task<PagedResult<TEntity>> GetPagedResultAsync(int page = 1, int pageSize = 20, Expression<Func<TEntity, bool>>? expression = null)
+        {
+            if (expression==null)
+            {
+                return Task.FromResult(_dbSet.OrderBy(x => x.CreateTime).PageResult(page, pageSize));
+            }
+            return Task.FromResult(_dbSet
+                .Where(expression)
+                .OrderBy(x=>x.CreateTime)
+                .PageResult(page, pageSize));
+        }
+
         #endregion
 
 
         #region 新增
         public async Task InsertAsync(TEntity entity) => await _dbSet.AddAsync(entity);
 
-        public async Task BatchInsertAsync(List<TEntity> entities) => await _dbSet.AddRangeAsync(entities);
+        public async Task BatchInsertAsync(List<TEntity> entities) => await _dbContext.BulkInsertAsync(entities);
 
         #endregion
 
@@ -105,6 +117,8 @@ namespace Infrastructure.Repository
             null => await _dbSet.BatchDeleteAsync(),
             _ => await _dbSet.Where(expression).BatchDeleteAsync()
         };
+
+
 
 
         #endregion

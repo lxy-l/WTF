@@ -26,7 +26,6 @@ namespace Domain.Entities
         /// 唯一标识
         /// </summary>
         [Key]
-        [Required]
         public TKey Id { get; private set; }
 
         /// <summary>

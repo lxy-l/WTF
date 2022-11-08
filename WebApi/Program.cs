@@ -28,7 +28,7 @@ builder.Services.AddHealthChecks()
     //.AddRedis("")
     ;
 
-builder.Services.AddDbContextPool<DbContext,UserDbContext>(options =>
+builder.Services.AddDbContextPool<DbContext, UserDbContext>(options =>
     options.UseSqlServer(userSqlServerConnectionString)
 );
 
@@ -55,7 +55,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, 
     options => builder.Configuration.Bind("JwtSettings", options));
 
-builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
 builder.Services.AddTransient(typeof(IUserRepositoryAsync<,,>), typeof(UserRepositoryAsync<,,>));
@@ -67,6 +67,15 @@ builder.Services
 
 
 builder.Services.AddControllers();
+//builder.Services.AddControllers(options =>
+//{
+//    options.RespectBrowserAcceptHeader = true;
+//})
+//.AddJsonOptions(options =>
+//{
+//    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+//}).AddXmlSerializerFormatters();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationInsightsTelemetry();
@@ -79,6 +88,7 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
     //app.UseMigrationsEndPoint();
     app.UseStatusCodePagesWithReExecute("/Log/{0}");
+    //app.UseExceptionHandler("/Error");
 }
 else if (app.Environment.IsStaging())
 {
@@ -86,8 +96,9 @@ else if (app.Environment.IsStaging())
 }
 else if(app.Environment.IsProduction())
 {
-
+    app.UseStatusCodePages();
 }
+
 
 app.UseHealthChecks("/hc",new HealthCheckOptions
 { 
