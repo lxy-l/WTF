@@ -1,15 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Infrastructure.Repository;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Infrastructure.Context;
+﻿using Domain.Entities;
 using Domain.Repository;
-using Domain.Entities;
+
+using Infrastructure.Context;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Infrastructure.Repository.Tests
 {
@@ -22,6 +17,15 @@ namespace Infrastructure.Repository.Tests
 
         IRepositoryAsync<User, int> repository = new RepositoryAsync<User, int>(dbContext);
 
+
+
+        [TestMethod()]
+        public void SingleAsyncTest1()
+        {
+            var user = repository.SingleAsync(x => x.Id == 1).Result;
+            Assert.IsNotNull(user);
+            Assert.ThrowsException<AggregateException>(() => { var a = repository.SingleAsync(x => x.Id == 0).Result; });
+        }
 
         [TestMethod]
         public void GetQueryAsyncTest()
@@ -56,7 +60,7 @@ namespace Infrastructure.Repository.Tests
         [TestMethod()]
         public void BatchInsertAsyncTest()
         {
-             repository.BatchInsertAsync(new List<User>
+            repository.BatchInsertAsync(new List<User>
             {
                 new User("111",DateTimeOffset.Now,new Domain.ValueObject.Address("测试","测试","测试","测试")),
                  new User("222",DateTimeOffset.Now,new Domain.ValueObject.Address("测试","测试","测试","测试")),
@@ -69,19 +73,61 @@ namespace Infrastructure.Repository.Tests
         [TestMethod()]
         public void UpdateAsyncTest()
         {
-            Assert.Fail();
+            var user = repository.SingleAsync(x => x.Id == 1).Result;
+            Assert.IsNotNull(user);
+            user.Name = "修改后";
+            repository.Update(user);
+            unitOfWork.CommitAsync().Wait();
+            var user2 = repository.FindByIdAsync(user.Id).Result;
+            Assert.IsNotNull(user2);
+            Assert.AreEqual(user.Name, user2.Name);
+
+            var users = repository.GetPagedResultAsync(x => x.CreateTime < DateTimeOffset.Now, page: 1, pageSize: 5).Result;
+            Assert.IsNotNull(users.Queryable);
+            Assert.AreEqual(5, users.Queryable.Count());
+            var list = users.Queryable.ToList();
+            foreach (var item in list)
+            {
+                item.Name = "修改后Name";
+                item.Address.Country = "中国";
+            }
+            repository.UpdateAsync(list).Wait();
+            unitOfWork.BulkCommitAsync().Wait();
+            var users2 = repository.GetQueryAsync(x => x.Name == "修改后Name" && x.Address.Country == "中国").Result;
+            Assert.AreEqual(users2.Count, users.Queryable.Count());
         }
 
         [TestMethod()]
         public void DeleteAsyncTest()
         {
-            Assert.Fail();
+            var list = repository.GetQueryAsync(x => x.Address.City == "测试" && x.Name == "修改后Name").Result;
+            Assert.IsNotNull(list);
+            int count = repository.DeleteAsync(x => x.Address.City == "测试" && x.Name == "修改后Name").Result;
+            Assert.AreEqual(list.Count, count);
+            unitOfWork.BulkCommitAsync().Wait();
+            long num = repository.CountAsync(x => x.Address.City == "测试" && x.Name == "修改后Name").Result;
+            Assert.AreEqual(0, num);
         }
 
         [TestMethod()]
         public void DeleteAsyncTest1()
         {
-            Assert.Fail();
+            long count1 = repository.CountAsync().Result;
+            var list = repository.GetQueryAsync(x => x.Name == "修改后Name").Result;
+            Assert.IsNotNull(list);
+            repository.DeleteAsync(list).Wait();
+            unitOfWork.BulkCommitAsync().Wait();
+            long count2 = repository.CountAsync().Result;
+            Assert.AreEqual(count1 - list.Count, count2);
+        }
+
+        [TestMethod()]
+        public void FirstOrDefaultAsyncTest()
+        {
+            var user = repository.FirstOrDefaultAsync().Result;
+            Assert.IsNotNull(user);
+            var user2 = repository.FirstOrDefaultAsync(x=>x.Id==500).Result;
+            Assert.IsNotNull(user2);
         }
     }
 }
