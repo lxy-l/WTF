@@ -44,6 +44,17 @@ namespace WebApi.BaseController
         }
 
         /// <summary>
+        /// 根据主键获取
+        /// </summary>
+        /// <param name="id">主键</param>
+        /// <returns></returns>
+        [HttpGet("GetModelById")]
+        public async Task<TEntity?> GetModelById(TKey id)
+        {
+            return await _service.GetModelById(id);
+        }
+
+        /// <summary>
         /// 新增
         /// </summary>
         /// <param name="model">模型参数</param>

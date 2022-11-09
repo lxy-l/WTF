@@ -45,6 +45,11 @@ namespace Application.ApplicationServices
             return model;
         }
 
+        public async Task<TEntity?> GetModelById(TKey id)
+        {
+            return await _baseRep.FindByIdAsync(id);
+        }
+
         public async Task<PagedResult<TEntity>> GetPagedResult(SeachParams seachParams)
         {
             return await _baseRep.GetPagedResultAsync(page: seachParams.Page, pageSize: seachParams.PageSize);
