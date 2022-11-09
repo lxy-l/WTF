@@ -10,13 +10,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.BaseController
 {
+    /// <summary>
+    /// 通用控制器
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
     [Route("api/[controller]")]
     [ApiController]
     public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity : Entity<TKey>, IAggregateRoot
     {
-
+        /// <summary>
+        /// 通用泛型服务
+        /// </summary>
         protected readonly IBaseService<TEntity,TKey> _service;
 
+        /// <summary>
+        /// 构造
+        /// </summary>
+        /// <param name="service"></param>
         public BaseApiController(IBaseService<TEntity, TKey> service)
         {
             _service = service;
@@ -35,7 +46,7 @@ namespace WebApi.BaseController
         /// <summary>
         /// 新增
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="model">模型参数</param>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Post(TEntity model)
@@ -47,7 +58,7 @@ namespace WebApi.BaseController
         /// <summary>
         /// 修改
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">模型参数</param>
         /// <returns></returns>
         [HttpPut]
         public async Task<IActionResult> Put(TEntity model)
@@ -57,7 +68,7 @@ namespace WebApi.BaseController
         /// <summary>
         /// 删除
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">主键</param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<IActionResult> Delete(TKey id)

@@ -81,7 +81,14 @@ builder.Services.AddControllers();
 //}).AddXmlSerializerFormatters();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(config =>
+{
+    //TODO 后续改为自动获取
+    config.IncludeXmlComments($@"{AppDomain.CurrentDomain.BaseDirectory}\WebApi.xml");
+    config.IncludeXmlComments($@"{AppDomain.CurrentDomain.BaseDirectory}\Domain.xml");
+    config.IncludeXmlComments($@"{AppDomain.CurrentDomain.BaseDirectory}\Application.xml");
+});
+
 builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
