@@ -13,8 +13,10 @@ namespace Domain.Entities
     public abstract class Entity<TKey>
     {
 
-        //private IValidation
-
+        /// <summary>
+        /// 构造
+        /// </summary>
+        /// <param name="id"></param>
         protected Entity(TKey id)
         {
             Id = id;
@@ -38,7 +40,11 @@ namespace Domain.Entities
         /// </summary>
         public DateTimeOffset ModifyTime { get; protected set; }
 
-
+        /// <summary>
+        /// Equals
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public override bool Equals(object? entity)
         {
             if (entity is null)
@@ -52,6 +58,11 @@ namespace Domain.Entities
             return this == (Entity<TKey>)entity;
         }
 
+        /// <summary>
+        /// GetHashCode
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public override int GetHashCode()
         {
             if (Id is null)
@@ -61,6 +72,12 @@ namespace Domain.Entities
             return Id.GetHashCode();
         }
 
+        /// <summary>
+        /// ==
+        /// </summary>
+        /// <param name="entity1"></param>
+        /// <param name="entity2"></param>
+        /// <returns></returns>
         public static bool operator ==(Entity<TKey> entity1, Entity<TKey> entity2)
         {
             if (entity1 is null && entity2 is null)
@@ -74,6 +91,12 @@ namespace Domain.Entities
             return entity1.Id.Equals(entity2.Id);
         }
 
+        /// <summary>
+        /// !=
+        /// </summary>
+        /// <param name="entity1"></param>
+        /// <param name="entity2"></param>
+        /// <returns></returns>
         public static bool operator !=(Entity<TKey> entity1, Entity<TKey> entity2)
         {
             return !(entity1 == entity2);
@@ -81,6 +104,10 @@ namespace Domain.Entities
 
         private StringBuilder? _description;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             _description = new StringBuilder();
@@ -88,10 +115,17 @@ namespace Domain.Entities
             return _description.ToString().TrimEnd().TrimEnd(',');
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected virtual void AddDescriptions()
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="description"></param>
         protected void AddDescription(string description)
         {
             if (string.IsNullOrWhiteSpace(description))
@@ -99,6 +133,12 @@ namespace Domain.Entities
             _description?.Append(description);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         protected void AddDescription<T>(string name, T value)
         {
             if (string.IsNullOrWhiteSpace(value?.ToString()))
