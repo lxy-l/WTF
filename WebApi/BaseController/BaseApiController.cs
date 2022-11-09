@@ -6,6 +6,7 @@ using Application.DTO;
 using Domain.AggregateRoots;
 using Domain.Entities;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.BaseController
@@ -17,6 +18,7 @@ namespace WebApi.BaseController
     /// <typeparam name="TKey"></typeparam>
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity : Entity<TKey>, IAggregateRoot
     {
         /// <summary>

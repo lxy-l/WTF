@@ -72,10 +72,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 #region Cors¿çÓòÅäÖÃ
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MyPolicy",
+    options.AddDefaultPolicy(
         builder =>
         {
-            builder.WithOrigins("http://localhost", "http://localhost:9527")
+            builder.AllowAnyOrigin()
                    .AllowAnyHeader()
                    .WithMethods("GET", "POST", "PUT", "DELETE");
         });
@@ -146,7 +146,6 @@ else if(app.Environment.IsProduction())
     app.UseStatusCodePages();
 }
 
-
 app.UseHealthChecks("/hc",new HealthCheckOptions
 { 
     Predicate=_=>true,
@@ -158,7 +157,7 @@ app.UseStaticFiles();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseCors("MyPolicy");
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

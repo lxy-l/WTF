@@ -2,6 +2,8 @@
 
 using Domain.Entities;
 
+using Microsoft.AspNetCore.Authorization;
+
 using WebApi.BaseController;
 
 namespace WebApi.Controllers
