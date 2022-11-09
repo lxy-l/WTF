@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Infrastructure.Repository;
+using Domain.Entities;
 using Domain.Repository;
 
 using Infrastructure.Context;
@@ -126,8 +127,32 @@ namespace Infrastructure.Repository.Tests
         {
             var user = repository.FirstOrDefaultAsync().Result;
             Assert.IsNotNull(user);
-            var user2 = repository.FirstOrDefaultAsync(x=>x.Id==500).Result;
+            var user2 = repository.FirstOrDefaultAsync(x => x.Id == 500).Result;
             Assert.IsNotNull(user2);
+        }
+
+        [TestMethod()]
+        public void GetQueryAsyncTest1()
+        {
+            var list = repository.GetQueryAsync(w=>w.Id<10,orderBy:x=>x.OrderBy(o=>o.CreateTime)).Result;
+            Assert.IsNotNull(list);
+            Assert.IsTrue(list[0].CreateTime < list[1].CreateTime);
+
+            var list2 = repository.GetQueryAsync(w => w.Id < 10, orderBy: x => x.OrderByDescending(o => o.CreateTime)).Result;
+            Assert.IsNotNull(list2);
+            Assert.IsTrue(list2[0].CreateTime > list2[1].CreateTime);
+        }
+
+        [TestMethod()]
+        public void GetPagedResultAsyncTest1()
+        {
+            var list = repository.GetPagedResultAsync( orderBy: x => x.OrderBy(o => o.CreateTime)).Result;
+            Assert.IsNotNull(list);
+            Assert.IsTrue(list.Queryable.ToList()[0].CreateTime < list.Queryable.ToList()[1].CreateTime);
+
+            var list2 = repository.GetPagedResultAsync(orderBy: x => x.OrderByDescending(o => o.CreateTime)).Result;
+            Assert.IsNotNull(list2);
+            Assert.IsTrue(list2.Queryable.ToList()[0].CreateTime > list2.Queryable.ToList()[1].CreateTime);
         }
     }
 }
