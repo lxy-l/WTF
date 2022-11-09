@@ -17,9 +17,13 @@ using NetCore.AutoRegisterDi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 var userSqlServerConnectionString = builder.Configuration.GetConnectionString("UserSqlServer");
 var authSqlServerConnectionString = builder.Configuration.GetConnectionString("AuthSqlServer");
+
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddSeq(builder.Configuration.GetSection("Seq"));
+});
 
 builder.Services.AddHealthChecks()
     .AddSqlServer(userSqlServerConnectionString,name:"UserSqlServer")

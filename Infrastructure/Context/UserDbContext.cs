@@ -24,7 +24,7 @@ namespace Infrastructure.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=MyDataBase2;User ID=sa;Password=Lxy962921;Persist Security Info=True;MultipleActiveResultSets=True;Connect Timeout=15");
+            //optionsBuilder.UseSqlServer("Server=localhost;Database=MyDataBase2;User ID=sa;Password=Lxy962921;Persist Security Info=True;MultipleActiveResultSets=True;Connect Timeout=15");
             base.OnConfiguring(optionsBuilder);
         }
 
