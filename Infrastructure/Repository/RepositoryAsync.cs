@@ -107,7 +107,7 @@ namespace Infrastructure.Repository
 
             return orderBy != null
                 ? Task.FromResult(orderBy(query).PageResult(page, pageSize))
-                : Task.FromResult(query.PageResult(page, pageSize));
+                : Task.FromResult(query.OrderBy(o=>o.Id).PageResult(page, pageSize));
         }
 
         public Task<PagedResult<TResult>> GetPagedResultBySelectAsync<TResult>(
@@ -136,7 +136,7 @@ namespace Infrastructure.Repository
 
             return orderBy != null
                 ? Task.FromResult(orderBy(query).Select(selector).PageResult(page, pageSize))
-                : Task.FromResult(query.Select(selector).PageResult(page, pageSize));
+                : Task.FromResult(query.OrderBy(o => o.Id).Select(selector).PageResult(page, pageSize));
         }
 
         #endregion
