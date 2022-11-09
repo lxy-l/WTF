@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using Domain.AggregateRoots;
 using Domain.Entities;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.Repository
@@ -23,14 +22,12 @@ namespace Domain.Repository
         /// <returns></returns>
         IQueryable<TEntity> GetQuery();
 
-
         /// <summary>
         /// 查询列表（根据条件筛选）
         /// </summary>
         /// <param name="expression"></param>
         /// <param name="orderBy"></param>
         /// <param name="include"></param>
-        /// <param name="disableTracking"></param>
         /// <param name="ignoreQueryFilters"></param>
         /// <returns></returns>
         Task<List<TEntity>> GetQueryAsync(
@@ -89,12 +86,13 @@ namespace Domain.Repository
             int pageSize = 20,
             bool ignoreQueryFilters = false);
 
+
         /// <summary>
         /// 分页查询（自定义Select字段）
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="selector"></param>
-        /// <param name="predicate"></param>
+        /// <param name="expression"></param>
         /// <param name="orderBy"></param>
         /// <param name="include"></param>
         /// <param name="page"></param>

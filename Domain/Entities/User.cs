@@ -8,12 +8,21 @@ namespace Domain.Entities
 {
     public class User: Entity<int>, IAggregateRoot
     {
+        /// <summary>
+        /// 姓名
+        /// </summary>
         [Required]
         [StringLength(255)]
         public string Name { get; set; }
 
+        /// <summary>
+        /// 生日
+        /// </summary>
         public DateTimeOffset Birthday { get; set; }
 
+        /// <summary>
+        /// 地址
+        /// </summary>
         public Address Address { get; private set; }
 
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
