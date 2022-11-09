@@ -29,6 +29,7 @@ builder.Services.AddHealthChecks()
     .AddSqlServer(userSqlServerConnectionString,name:"UserSqlServer")
     .AddSqlServer(authSqlServerConnectionString,name:"AuthSqlServer")
     .AddDbContextCheck<DbContext>("DbContext")
+    .AddTcpHealthCheck((x) => { x.AddHost("localhost", 5341); },"Seq")
     //.AddRedis("")
     ;
 
