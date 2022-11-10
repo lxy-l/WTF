@@ -1,5 +1,7 @@
 using System.Reflection;
 
+using Application.ApplicationServices;
+
 using Domain.Repository;
 
 using HealthChecks.UI.Client;
@@ -86,12 +88,14 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
-builder.Services.AddTransient(typeof(IUserRepositoryAsync<,,>), typeof(UserRepositoryAsync<,,>));
 
-builder.Services
-    .RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(Application.Register)))
-    .Where(x => x.Name.EndsWith("Service"))
-    .AsPublicImplementedInterfaces();
+
+builder.Services.AddTransient(typeof(IBaseService<,>),typeof(BaseService<,>));
+
+//var a=builder.Services
+//    .RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(Application.Register)))
+//    .Where(x => x.Name.EndsWith("Service"))
+//    .AsPublicImplementedInterfaces();
 #endregion
 
 builder.Services.AddControllers();

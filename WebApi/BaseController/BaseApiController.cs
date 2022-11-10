@@ -18,7 +18,7 @@ namespace WebApi.BaseController
     /// <typeparam name="TKey"></typeparam>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity : Entity<TKey>, IAggregateRoot
     {
         /// <summary>
@@ -42,7 +42,8 @@ namespace WebApi.BaseController
         [HttpGet]
         public async Task<PagedResult<TEntity>> Get([FromQuery] SeachParams seachParams)
         {
-            return await _service.GetPagedResult(seachParams);
+            var list = await _service.GetPagedResult(seachParams);
+            return list;
         }
 
         /// <summary>

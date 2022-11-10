@@ -8,12 +8,13 @@ using Domain.Repository;
 
 namespace Application.ApplicationServices
 {
-    public class BaseService<TEntity,TKey> : IBaseService<TEntity, TKey> where TEntity : Entity<TKey>, IAggregateRoot
+    public class BaseService<TEntity,TKey> 
+        : IBaseService<TEntity, TKey> where TEntity : Entity<TKey>, IAggregateRoot
     {
         protected readonly IUnitOfWork _unitOfWork;
-        protected readonly IUserRepositoryAsync<TEntity, UserViewModel, TKey> _baseRep;
+        protected readonly IRepositoryAsync<TEntity, TKey> _baseRep;
 
-        public BaseService(IUserRepositoryAsync<TEntity, UserViewModel, TKey> userRep, IUnitOfWork unitOfWork)
+        public BaseService(IRepositoryAsync<TEntity, TKey> userRep, IUnitOfWork unitOfWork)
         {
             _baseRep = userRep;
             _unitOfWork = unitOfWork;
