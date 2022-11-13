@@ -2,7 +2,7 @@
 
 namespace Application.DTO;
 
-public class SeachParams
+public class SearchParams
 {
     /// <summary>
     /// 页码

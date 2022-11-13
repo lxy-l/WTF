@@ -16,7 +16,7 @@
   <ItemGroup>
     <PackageReference Include="EFCore.BulkExtensions" Version="6.5.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="7.0.0" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.22" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.23" />
   </ItemGroup>
 
 </Project>

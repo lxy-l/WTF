@@ -1,12 +1,9 @@
-﻿using System;
-namespace Domain.AggregateRoots
+﻿namespace Domain.AggregateRoots;
+
+/// <summary>
+/// 聚合根
+/// </summary>
+public interface IAggregateRoot
 {
-    /// <summary>
-    /// 聚合根
-    /// </summary>
-    public interface IAggregateRoot
-    {
 
-    }
 }
-

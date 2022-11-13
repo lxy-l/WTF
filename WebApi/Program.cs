@@ -77,9 +77,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
-        builder =>
+        policyBuilder =>
         {
-            builder.AllowAnyOrigin()
+            policyBuilder.AllowAnyOrigin()
                    .AllowAnyHeader()
                    .WithMethods("GET", "POST", "PUT", "DELETE");
         });
@@ -96,7 +96,7 @@ builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsyn
 
 builder.Services.AddTransient(typeof(IBaseService<,>), typeof(BaseService<,>));
 
-var a = builder.Services
+builder.Services
     .RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(Application.Register)))
     .Where(x => x.Name.EndsWith("Service"))
     .AsPublicImplementedInterfaces();

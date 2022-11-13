@@ -1,23 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-
-using Domain.Entities;
+﻿using Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Mappings
+namespace Infrastructure.Mappings;
+
+public class UserMap : IEntityTypeConfiguration<User>
 {
-    public class UserMap : IEntityTypeConfiguration<User>
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        public void Configure(EntityTypeBuilder<User> builder)
-        {
-            builder.OwnsOne(p => p.Address);
+        builder.OwnsOne(p => p.Address);
             
-        }
     }
 }
