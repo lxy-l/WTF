@@ -4,54 +4,53 @@ using System.Text.Json.Serialization;
 using Domain.AggregateRoots;
 using Domain.ValueObject;
 
-namespace Domain.Entities
+namespace Domain.Entities;
+
+public class User: Entity<int>, IAggregateRoot
 {
-    public class User: Entity<int>, IAggregateRoot
-    {
-        /// <summary>
-        /// 姓名
-        /// </summary>
-        [Required]
-        [StringLength(255)]
-        public string Name { get; set; }
+    /// <summary>
+    /// 姓名
+    /// </summary>
+    [Required]
+    [StringLength(255)]
+    public string Name { get; set; }
 
-        /// <summary>
-        /// 生日
-        /// </summary>
-        public DateTimeOffset Birthday { get; set; }
+    /// <summary>
+    /// 生日
+    /// </summary>
+    public DateTimeOffset Birthday { get; set; }
 
-        /// <summary>
-        /// 地址
-        /// </summary>
-        public Address Address { get; private set; }
+    /// <summary>
+    /// 地址
+    /// </summary>
+    public Address Address { get; private set; }
 
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
-        public User(int id = default) : base(id)
+    public User(int id = default) : base(id)
 #pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
-        {
-            //Address = new Address("","","","");
-        }
-
-        [JsonConstructor]
-        public User(string name, DateTimeOffset birthday,Address address, int id = default) : base(id)
-        {
-            Name = name;
-            Birthday = birthday;
-            Address = address;
-        }
-
-        /// <summary>
-        /// 编辑信息
-        /// </summary>
-        /// <param name="user"></param>
-        public void Edit(User user)
-        {
-            Name = user.Name;
-            Birthday = user.Birthday;
-            ModifyTime = DateTimeOffset.Now;
-            Address = user.Address;
-        }
-
-
+    {
+        //Address = new Address("","","","");
     }
+
+    [JsonConstructor]
+    public User(string name, DateTimeOffset birthday,Address address, int id = default) : base(id)
+    {
+        Name = name;
+        Birthday = birthday;
+        Address = address;
+    }
+
+    /// <summary>
+    /// 编辑信息
+    /// </summary>
+    /// <param name="user"></param>
+    public void Edit(User user)
+    {
+        Name = user.Name;
+        Birthday = user.Birthday;
+        ModifyTime = DateTimeOffset.Now;
+        Address = user.Address;
+    }
+
+
 }

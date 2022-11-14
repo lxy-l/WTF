@@ -27,14 +27,16 @@ var userSqlServerConnectionString = builder.Configuration.GetConnectionString("U
 var authSqlServerConnectionString = builder.Configuration.GetConnectionString("AuthSqlServer");
 
 
-#region ½¡¿µ¼ì²éÅäÖÃ
+#region å¥åº·æ£€æŸ¥é…ç½®
+#pragma warning disable CS8604 // å¼•ç”¨ç±»å‹å‚æ•°å¯èƒ½ä¸º nullã€‚
 builder.Services.AddHealthChecks()
-    .AddSqlServer(userSqlServerConnectionString,name:"UserSqlServer")
-    .AddSqlServer(authSqlServerConnectionString,name:"AuthSqlServer")
-    .AddTcpHealthCheck((x) => { x.AddHost("localhost", 5341); },"Seq");
+    .AddSqlServer(userSqlServerConnectionString, name: "UserSqlServer")
+    .AddSqlServer(authSqlServerConnectionString, name: "AuthSqlServer")
+    .AddTcpHealthCheck((x) => { x.AddHost("localhost", 5341); }, "Seq");
+#pragma warning restore CS8604 // å¼•ç”¨ç±»å‹å‚æ•°å¯èƒ½ä¸º nullã€‚
 #endregion
 
-#region Êı¾İ¿âÅäÖÃ
+#region æ•°æ®åº“é…ç½®
 builder.Services.AddDbContextPool<DbContext, UserDbContext>(options =>
     options.UseSqlServer(userSqlServerConnectionString)
 );
@@ -46,14 +48,14 @@ builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 #endregion
 
-#region ÈÕÖ¾ÅäÖÃ
+#region æ—¥å¿—é…ç½®
 builder.Services.AddLogging(loggingBuilder =>
 {
     loggingBuilder.AddSeq(builder.Configuration.GetSection("Seq"));
 });
 #endregion
 
-#region ÈÏÖ¤ÅäÖÃ
+#region è®¤è¯é…ç½®
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 //    .AddEntityFrameworkStores<ApplicationDbContext>()
 //    .AddDefaultTokenProviders();
@@ -71,32 +73,32 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     options => builder.Configuration.Bind("JwtSettings", options));
 #endregion
 
-#region Cors¿çÓòÅäÖÃ
+#region Corsè·¨åŸŸé…ç½®
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
-        builder =>
+        policyBuilder =>
         {
-            builder.AllowAnyOrigin()
+            policyBuilder.AllowAnyOrigin()
                    .AllowAnyHeader()
                    .WithMethods("GET", "POST", "PUT", "DELETE");
         });
 });
 #endregion
 
-#region ·şÎñÅäÖÃ
+#region æœåŠ¡é…ç½®
 
-//TODO ¿ÉÒÔ¿¼ÂÇ¸ÄÓÃAutoFac×¢Èë
+//TODO å¯ä»¥è€ƒè™‘æ”¹ç”¨AutoFacæ³¨å…¥
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
 
-builder.Services.AddTransient(typeof(IBaseService<,>),typeof(BaseService<,>));
+builder.Services.AddTransient(typeof(IBaseService<,>), typeof(BaseService<,>));
 
-var a = builder.Services
+builder.Services
     .RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(Application.Register)))
-    .Where(x =>x.Name.EndsWith("Service"))
+    .Where(x => x.Name.EndsWith("Service"))
     .AsPublicImplementedInterfaces();
 #endregion
 
@@ -106,7 +108,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(config =>
 {
-    #region XMLÎÄµµ
+    #region XMLæ–‡æ¡£
     config.OrderActionsBy(o => o.RelativePath);
     var xmlPath = Path.Combine(basePath, "WebApi.xml");
     config.IncludeXmlComments(xmlPath, true);
@@ -119,10 +121,10 @@ builder.Services.AddSwaggerGen(config =>
     config.OperationFilter<SecurityRequirementsOperationFilter>();
     #endregion
 
-    #region SwaggerÊÚÈ¨ÈÏÖ¤
+    #region Swaggeræˆæƒè®¤è¯
     config.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
-        Description = "JWT BearerÊÚÈ¨",
+        Description = "JWT Beareræˆæƒ",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey
@@ -147,14 +149,14 @@ else if (app.Environment.IsStaging())
 {
 
 }
-else if(app.Environment.IsProduction())
+else if (app.Environment.IsProduction())
 {
     app.UseStatusCodePages();
 }
 
-app.UseHealthChecks("/hc",new HealthCheckOptions
-{ 
-    Predicate=_=>true,
+app.UseHealthChecks("/hc", new HealthCheckOptions
+{
+    Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 

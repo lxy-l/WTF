@@ -3,7 +3,6 @@
 using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Core;
-using InfluxDB.Client.Writes;
 
 const string token = "kCZxIR5O_zrcK5SYDIgohYJRY-9GEj4yN0syBNlPHF3VKH3SfAnCl_Acy1hf1R0Esu4kK8xyaBwN10WShh_NuA==";
 const string bucket = "database";
