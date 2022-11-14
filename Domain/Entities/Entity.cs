@@ -28,7 +28,7 @@ public abstract class Entity<TKey>
     /// 唯一标识
     /// </summary>
     [Key]
-    public TKey Id { get; }
+    public TKey Id { get; private set; }
 
     /// <summary>
     /// 创建时间

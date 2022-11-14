@@ -8,19 +8,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Infrastructure.Repository.Tests;
 
+/// <summary>
+/// 基础设施仓储实现单元测试
+/// </summary>
 [TestClass]
 public class RepositoryAsyncTests
 {
     static UserDbContext dbContext = new(new DbContextOptions<UserDbContext>());
-namespace Infrastructure.Repository.Tests
-{
-    /// <summary>
-    /// 基础设施仓储实现单元测试
-    /// </summary>
-    [TestClass]
-    public class RepositoryAsyncTests
-    {
-        static UserDbContext dbContext = new(new DbContextOptions<UserDbContext>());
 
     IUnitOfWork unitOfWork = new UnitOfWork.UnitOfWork(dbContext);
 
@@ -142,7 +136,7 @@ namespace Infrastructure.Repository.Tests
     [TestMethod()]
     public void GetQueryAsyncTest1()
     {
-        var list = repository.GetQueryAsync(w=>w.Id<10,orderBy:x=>x.OrderBy(o=>o.CreateTime)).Result;
+        var list = repository.GetQueryAsync(w => w.Id < 10, orderBy: x => x.OrderBy(o => o.CreateTime)).Result;
         Assert.IsNotNull(list);
         Assert.IsTrue(list[0].CreateTime < list[1].CreateTime);
 
@@ -154,7 +148,7 @@ namespace Infrastructure.Repository.Tests
     [TestMethod()]
     public void GetPagedResultAsyncTest1()
     {
-        var list = repository.GetPagedResultAsync( orderBy: x => x.OrderBy(o => o.CreateTime)).Result;
+        var list = repository.GetPagedResultAsync(orderBy: x => x.OrderBy(o => o.CreateTime)).Result;
         Assert.IsNotNull(list);
         Assert.IsTrue(list.Queryable.ToList()[0].CreateTime < list.Queryable.ToList()[1].CreateTime);
 

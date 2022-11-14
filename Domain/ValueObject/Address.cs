@@ -14,7 +14,7 @@ public record Address : ValueObject<Address>
     /// 街道
     /// </summary>
     [StringLength(255)]
-    private string Street { get; set; }
+    public string Street { get; set; }
     
 
     /// <summary>
