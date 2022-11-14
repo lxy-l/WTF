@@ -14,8 +14,8 @@ namespace WebApi.BaseController
     /// <summary>
     /// 通用控制器
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TEntity">实体</typeparam>
+    /// <typeparam name="TKey">主键</typeparam>
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize]

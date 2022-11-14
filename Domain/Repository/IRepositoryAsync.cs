@@ -23,7 +23,7 @@ namespace Domain.Repository
         IQueryable<TEntity> GetQuery();
 
         /// <summary>
-        /// 查询列表（根据条件筛选）
+        /// 查询列表（根据Lambda条件筛选）
         /// </summary>
         /// <param name="expression">筛选条件</param>
         /// <param name="orderBy">排序</param>
@@ -69,7 +69,7 @@ namespace Domain.Repository
         Task<long> CountAsync(Expression<Func<TEntity,bool>>? expression = null);
 
         /// <summary>
-        /// 分页查询
+        /// 分页查询（Lambda）
         /// </summary>
         /// <param name="expression">筛选条件</param>
         /// <param name="orderBy">排序</param>
@@ -88,7 +88,7 @@ namespace Domain.Repository
 
 
         /// <summary>
-        /// 分页查询（自定义Select字段）
+        /// 分页查询（自定义Select字段,Lambda）
         /// </summary>
         /// <typeparam name="TResult">返回类型</typeparam>
         /// <param name="selector">选择返回的数据</param>

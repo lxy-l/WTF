@@ -9,6 +9,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Infrastructure.Repository.Tests
 {
+    /// <summary>
+    /// 基础设施仓储实现单元测试
+    /// </summary>
     [TestClass]
     public class RepositoryAsyncTests
     {
