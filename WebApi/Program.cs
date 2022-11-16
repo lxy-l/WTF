@@ -16,7 +16,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
-using NetCore.AutoRegisterDi;
+//using NetCore.AutoRegisterDi;
+
+using Scrutor;
 
 using Swashbuckle.AspNetCore.Filters;
 
@@ -96,10 +98,16 @@ builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsyn
 
 builder.Services.AddTransient(typeof(IBaseService<,>), typeof(BaseService<,>));
 
-builder.Services
-    .RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(Application.Register)))
-    .Where(x => x.Name.EndsWith("Service"))
-    .AsPublicImplementedInterfaces();
+builder.Services.Scan(scan => scan
+    .FromAssemblyOf<Application.Register>()
+    .AddClasses(classes=>classes.Where(c=>c.Name.EndsWith("Service")))
+    .UsingRegistrationStrategy(RegistrationStrategy.Throw)
+    .AsImplementedInterfaces()
+    .WithTransientLifetime());
+//builder.Services
+//    .RegisterAssemblyPublicNonGenericClasses(Assembly.GetAssembly(typeof(Application.Register)))
+//    .Where(x => x.Name.EndsWith("Service"))
+//    .AsPublicImplementedInterfaces();
 #endregion
 
 builder.Services.AddControllers();
