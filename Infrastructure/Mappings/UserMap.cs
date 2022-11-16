@@ -9,7 +9,7 @@ public class UserMap : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.OwnsOne(p => p.Address);
+        //builder.OwnsOne(p => p.Address);
             
     }
 }

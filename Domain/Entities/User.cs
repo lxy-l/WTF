@@ -6,51 +6,36 @@ using Domain.ValueObject;
 
 namespace Domain.Entities;
 
-public class User: Entity<int>, IAggregateRoot
+public class User : Entity<int>, IAggregateRoot
 {
     /// <summary>
-    /// 姓名
+    /// 用户名
     /// </summary>
     [Required]
     [StringLength(255)]
     public string Name { get; set; }
 
     /// <summary>
-    /// 生日
+    /// 密码
     /// </summary>
-    public DateTimeOffset Birthday { get; set; }
+    [Required]
+    [StringLength(255)]
+    public string Password { get; set; }
 
     /// <summary>
-    /// 地址
+    /// 身份信息
     /// </summary>
-    public Address Address { get; private set; }
+    public virtual UserInfo? UserInfo { get; set; }
 
-#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
-    public User(int id = default) : base(id)
-#pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
+    public User(string name, string password, UserInfo? userInfo, int id = default) : base(id)
     {
-        //Address = new Address("","","","");
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        Password = password ?? throw new ArgumentNullException(nameof(password));
+        UserInfo = userInfo;
     }
 
-    [JsonConstructor]
-    public User(string name, DateTimeOffset birthday,Address address, int id = default) : base(id)
+    private User(int id = default) : base(id)
     {
-        Name = name;
-        Birthday = birthday;
-        Address = address;
+
     }
-
-    /// <summary>
-    /// 编辑信息
-    /// </summary>
-    /// <param name="user"></param>
-    public void Edit(User user)
-    {
-        Name = user.Name;
-        Birthday = user.Birthday;
-        ModifyTime = DateTimeOffset.Now;
-        Address = user.Address;
-    }
-
-
 }
