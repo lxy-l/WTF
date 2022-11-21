@@ -20,8 +20,6 @@ public class RepositoryAsyncTests
 
     IRepositoryAsync<User, int> repository = new RepositoryAsync<User, int>(dbContext);
 
-
-
     [TestMethod()]
     public void SingleAsyncTest1()
     {

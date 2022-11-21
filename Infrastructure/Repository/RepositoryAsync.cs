@@ -119,7 +119,7 @@ public sealed class RepositoryAsync<TEntity, TKey> : IRepositoryAsync<TEntity, T
         int page = 0, int pageSize = 20,bool ignoreQueryFilters = false)
     {
         IQueryable<TEntity> query = GetQuery().AsNoTracking();
-
+        
         if (include != null)
         {
             query = include(query);

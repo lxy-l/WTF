@@ -1,5 +1,3 @@
-using System.Reflection;
-
 using Application.ApplicationServices;
 
 using Domain.Repository;
@@ -81,9 +79,10 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policyBuilder =>
         {
-            policyBuilder.AllowAnyOrigin()
-                   .AllowAnyHeader()
-                   .WithMethods("GET", "POST", "PUT", "DELETE");
+            policyBuilder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .WithMethods("GET", "POST", "PUT", "DELETE");
         });
 });
 #endregion
@@ -100,7 +99,7 @@ builder.Services.AddTransient(typeof(IBaseService<,>), typeof(BaseService<,>));
 
 builder.Services.Scan(scan => scan
     .FromAssemblyOf<Application.Register>()
-    .AddClasses(classes=>classes.Where(c=>c.Name.EndsWith("Service")))
+    .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Service")))
     .UsingRegistrationStrategy(RegistrationStrategy.Throw)
     .AsImplementedInterfaces()
     .WithTransientLifetime());
