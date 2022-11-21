@@ -47,4 +47,8 @@
     <None Remove="IdentityConfig\" />
     <None Remove="NetCore.AutoRegisterDi" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
 </Project>

@@ -26,7 +26,7 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity : En
     /// <summary>
     /// 构造
     /// </summary>
-    /// <param name="service"></param>
+    /// <param name="service">应用层服务</param>
     public BaseApiController(IBaseService<TEntity, TKey> service)
     {
         Service = service;
@@ -35,6 +35,8 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity : En
     /// <summary>
     /// 获取数据列表
     /// </summary>
+    /// <remarks>支持动态排序，动态筛选</remarks>
+    /// <param name="searchParams">通用查询参数</param>
     /// <returns></returns>
     [HttpGet]
     public async Task<PagedResult<TEntity>> Get([FromQuery] SearchParams searchParams)
