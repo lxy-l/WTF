@@ -6,6 +6,8 @@ using Domain.AggregateRoots;
 using Domain.Entities;
 using Domain.Repository;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Application.ApplicationServices;
 
 public class BaseService<TEntity, TKey>
@@ -44,6 +46,11 @@ public class BaseService<TEntity, TKey>
         BaseRep.Update(model);
         await UnitOfWork.CommitAsync();
         return model;
+    }
+
+    public async Task<List<TEntity>> GetAll()
+    {
+        return await BaseRep.GetQuery().ToListAsync();
     }
 
     public async Task<TEntity?> GetModelById(TKey id)

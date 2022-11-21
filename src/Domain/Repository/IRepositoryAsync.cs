@@ -11,7 +11,7 @@ namespace Domain.Repository;
 /// <summary>
 /// 基础仓储接口
 /// </summary>
-public interface IRepositoryAsync<TEntity, in TKey> where TEntity : Entity<TKey>, IAggregateRoot
+public interface IRepositoryAsync<TEntity, in TKey> where TEntity :IAggregateRoot
 {
 
     #region 查询

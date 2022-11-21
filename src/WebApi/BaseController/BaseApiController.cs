@@ -44,6 +44,16 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity : En
     }
 
     /// <summary>
+    /// 获取全部数据
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("GetAll")]
+    public async Task<List<TEntity>> GetAll()
+    {
+        return await Service.GetAll();
+    }
+
+    /// <summary>
     /// 根据主键获取
     /// </summary>
     /// <param name="id">主键</param>

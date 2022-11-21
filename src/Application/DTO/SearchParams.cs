@@ -5,6 +5,16 @@ namespace Application.DTO;
 public class SearchParams
 {
     /// <summary>
+    /// 筛选条件
+    /// </summary>
+    public string? Filters { get; set; }
+
+    /// <summary>
+    /// 排序条件
+    /// </summary>
+    public string? Sort { get; set; }
+
+    /// <summary>
     /// 页码
     /// </summary>
     [Required]

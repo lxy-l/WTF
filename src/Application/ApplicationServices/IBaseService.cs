@@ -15,6 +15,12 @@ namespace Application.ApplicationServices;
 public interface IBaseService<TEntity, in TKey> where TEntity : Entity<TKey>, IAggregateRoot
 {
     /// <summary>
+    /// 获取全部数据
+    /// </summary>
+    /// <returns></returns>
+    Task<List<TEntity>> GetAll();
+
+    /// <summary>
     /// 分页查询
     /// </summary>
     /// <param name="searchParams"></param>
