@@ -4,22 +4,28 @@ namespace WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ValuesController : ControllerBase
+public class TaskController : ControllerBase
 {
-    private readonly ILogger<ValuesController> _logger;
+    private readonly ILogger<TaskController> _logger;
 
-    public ValuesController(ILogger<ValuesController> logger)
+    public TaskController(ILogger<TaskController> logger)
     {
         _logger = logger;
     }
 
+    /// <summary>
+    /// 异步编程示例
+    /// </summary>
+    /// <remarks>添加CancellationToken参数后，如果客户端取消请求，则可以立即停止Task</remarks>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken cancellationToken=default)
     {
         await Task.Delay(5000, cancellationToken)
             .ContinueWith(x =>
             {
-                //这里的Task不会阻塞
+                //这里的Task不会阻塞主线程
                 Task.Factory.StartNew(async () =>
                 {
                     Console.WriteLine("任务开始");

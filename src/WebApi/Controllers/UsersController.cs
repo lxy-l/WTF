@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationServices;
+using Application.DTO;
 
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,23 @@ namespace WebApi.Controllers;
 
 public class UsersController : BaseApiController<User, int>
 {
-    public UsersController(IBaseService<User, int> service) : base(service)
+    public IUserService _userService { get; set; }
+    public UsersController(IUserService userService) : base(userService)
     {
+        _userService = userService;
     }
+
+    /// <summary>
+    /// 获取用户（包含用户信息）
+    /// </summary>
+    /// <remarks>多表联查示例</remarks>
+    /// <param name="search"></param>
+    /// <returns></returns>
+    [HttpGet("GetUserInfo")]
+    public async Task<IActionResult> GetUserInfo([FromQuery]SearchParams search)
+    {
+        var list=await _userService.GetUserAndInfo(search);
+        return Ok(list);
+    }
+
 }
