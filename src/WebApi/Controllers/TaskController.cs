@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
 
@@ -7,6 +8,7 @@ namespace WebApi.Controllers;
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class TaskController : ControllerBase
 {
     private readonly ILogger<TaskController> _logger;

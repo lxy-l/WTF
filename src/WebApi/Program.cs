@@ -6,6 +6,7 @@ using HealthChecks.UI.Client;
 
 using Infrastructure.Context;
 using Infrastructure.Repository;
+using Infrastructure.Service;
 using Infrastructure.UnitOfWork;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -96,7 +97,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
 
 builder.Services.AddTransient(typeof(IBaseService<,>), typeof(BaseService<,>));
-
+builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
 builder.Services.Scan(scan => scan
     .FromAssemblyOf<Application.Register>()
     .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Service")))

@@ -1,4 +1,6 @@
-﻿using Application.ApplicationServices;
+﻿using System.Security.Claims;
+
+using Application.ApplicationServices;
 using Application.DTO;
 using Infrastructure.Service;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +27,7 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("Login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
@@ -34,7 +36,11 @@ namespace WebApi.Controllers
             if (ModelState.IsValid)
             {
                 //TODO 生成toekn方法重写
-                JwtTokenViewModel token = _tokenService.GetJwtToken(null);
+                List<Claim> claims = new List<Claim>
+                {
+                    new Claim("id", "1")
+                };
+                JwtTokenViewModel token = _tokenService.GetJwtToken(claims);
                 return Ok(token);
             }
             return BadRequest();
@@ -45,7 +51,7 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]

@@ -28,20 +28,22 @@ namespace Infrastructure.Service
         /// <returns></returns>
         public JwtTokenViewModel GetJwtToken(List<Claim> claims)
         {
-            string? secretKey = _configuration["JwtSetting:SecretKey"];
+            string? secretKey = _configuration["JwtSettings:Secret"];
             if (string.IsNullOrEmpty(secretKey))
             {
                 throw new Exception("未配置JWT密钥！");
             }
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(secretKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var time = TimeSpan.FromSeconds(3600);
+            double ExpireSeconds = double.Parse(_configuration["JwtSettings:ExpireSeconds"]??
+                throw new Exception("未配置token过期时间！"));
+            var time = TimeSpan.FromSeconds(ExpireSeconds);
             var token = new JwtSecurityToken
             (
-                issuer: _configuration["JwtSetting:Issuer"],
-                audience: _configuration["JwtSetting:Audience"],
-                claims: claims, expires: DateTime.Now.Add(time),
+                issuer: _configuration["JwtSettings:ValidIssuer"],
+                audience: _configuration["JwtSettings:ValidAudience"],
+                claims: claims, 
+                expires: DateTime.Now.Add(time),
                 signingCredentials: creds
             );
             var access_token = new JwtSecurityTokenHandler().WriteToken(token);
