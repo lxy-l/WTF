@@ -1,3 +1,5 @@
+using System.Text;
+
 using Application.ApplicationServices;
 
 using Domain.Repository;
@@ -6,16 +8,14 @@ using HealthChecks.UI.Client;
 
 using Infrastructure.Context;
 using Infrastructure.Repository;
-using Infrastructure.Service;
 using Infrastructure.UnitOfWork;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-
-//using NetCore.AutoRegisterDi;
 
 using Scrutor;
 
@@ -57,9 +57,9 @@ builder.Services.AddLogging(loggingBuilder =>
 #endregion
 
 #region 认证配置
-//builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-//    .AddEntityFrameworkStores<ApplicationDbContext>()
-//    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -70,8 +70,23 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = false;
 });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
-    options => builder.Configuration.Bind("JwtSettings", options));
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(
+                                builder.Configuration["JwtSettings:Secret"] ??
+                                throw new Exception("未配置密钥"))),
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
 #endregion
 
 #region Cors跨域配置
@@ -94,10 +109,10 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>));
+builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(EFCoreRepositoryAsync<,>));
 
 builder.Services.AddTransient(typeof(IBaseService<,>), typeof(BaseService<,>));
-builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
+
 builder.Services.Scan(scan => scan
     .FromAssemblyOf<Application.Register>()
     .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Service")))

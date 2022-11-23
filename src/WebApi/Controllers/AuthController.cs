@@ -1,9 +1,7 @@
-﻿using System.Security.Claims;
-
-using Application.ApplicationServices;
+﻿using Application.ApplicationServices;
 using Application.DTO;
-using Infrastructure.Service;
-using Microsoft.AspNetCore.Http;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -13,13 +11,20 @@ namespace WebApi.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthController : ControllerBase
     {
         private readonly IJwtTokenService _tokenService;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public AuthenticationController(IJwtTokenService tokenService)
+        public AuthController(
+            IJwtTokenService tokenService, 
+            SignInManager<IdentityUser> signInManager, 
+            UserManager<IdentityUser> userManager)
         {
             _tokenService = tokenService;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -35,13 +40,15 @@ namespace WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                //TODO 生成toekn方法重写
-                List<Claim> claims = new List<Claim>
+                //TODO 妈的搞不成换组件
+                var result= await _signInManager
+                    .PasswordSignInAsync(model.Username,model.Password,true,true);
+                if (result.Succeeded)
                 {
-                    new Claim("id", "1")
-                };
-                JwtTokenViewModel token = _tokenService.GetJwtToken(claims);
-                return Ok(token);
+                    JwtTokenViewModel token = await _tokenService.CreateJwtTokenAsync("1", model.Username);
+                    return Ok(token);
+                }
+                return Unauthorized(result);
             }
             return BadRequest();
         }
@@ -55,12 +62,12 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register(IdentityUser model)
         {
             if (ModelState.IsValid)
             {
-                //string token = await _tokenService.();
-                return Ok();
+                var result= await _userManager.CreateAsync(model);
+                return Ok(result);
             }
             return BadRequest();
         }

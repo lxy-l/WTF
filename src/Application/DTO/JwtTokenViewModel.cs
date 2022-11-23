@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Service
+namespace Application.DTO
 {
-    public class JwtTokenViewModel
+    public record JwtTokenViewModel
     {
         /// <summary>
         /// token

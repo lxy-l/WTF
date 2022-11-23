@@ -18,7 +18,7 @@ public class RepositoryAsyncTests
 
     IUnitOfWork unitOfWork = new UnitOfWork.UnitOfWork(dbContext);
 
-    IRepositoryAsync<User, int> repository = new RepositoryAsync<User, int>(dbContext);
+    IRepositoryAsync<User, int> repository = new EFCoreRepositoryAsync<User, int>(dbContext);
 
     [TestMethod()]
     public void SingleAsyncTest1()

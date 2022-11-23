@@ -20,7 +20,6 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
     {
-        //throw new Exception("自定义异常");
         return await _dbContext.SaveChangesAsync(cancellationToken);
     }
 

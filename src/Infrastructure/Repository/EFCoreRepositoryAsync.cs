@@ -15,7 +15,7 @@ namespace Infrastructure.Repository;
 /// <summary>
 /// 基础仓储实现
 /// </summary>
-public sealed class RepositoryAsync<TEntity, TKey> : IRepositoryAsync<TEntity, TKey>
+public sealed class EFCoreRepositoryAsync<TEntity, TKey> : IRepositoryAsync<TEntity, TKey>
     where TEntity : Entity<TKey>, IAggregateRoot
 {
     /// <summary>
@@ -28,7 +28,7 @@ public sealed class RepositoryAsync<TEntity, TKey> : IRepositoryAsync<TEntity, T
     /// </summary>
     private DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
 
-    public RepositoryAsync(DbContext context)
+    public EFCoreRepositoryAsync(DbContext context)
     {
         _dbContext = context;
     }

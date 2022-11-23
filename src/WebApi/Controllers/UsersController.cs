@@ -19,9 +19,8 @@ public class UsersController : BaseApiController<User, int>
     }
 
     /// <summary>
-    /// 获取用户（包含用户信息）
+    /// 获取用户（包含用户信息多表联查示例）
     /// </summary>
-    /// <remarks>多表联查示例</remarks>
     /// <param name="search"></param>
     /// <returns></returns>
     [HttpGet("GetUserInfo")]
