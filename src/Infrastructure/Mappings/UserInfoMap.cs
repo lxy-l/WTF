@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Mappings;
 
-public class UserMap : IEntityTypeConfiguration<User>
+public class UserInfoMap : IEntityTypeConfiguration<UserInfo>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<UserInfo> builder)
     {
-
+        builder.OwnsOne(p => p.Address);
     }
 }

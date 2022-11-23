@@ -15,9 +15,12 @@ public class UserDbContext:DbContext
 
     public DbSet<User>? Users { get; set; }
 
+    public DbSet<UserInfo>? UserInfos { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UserMap());
+        modelBuilder.ApplyConfiguration(new UserInfoMap());
         base.OnModelCreating(modelBuilder);
     }
 

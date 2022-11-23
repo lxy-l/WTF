@@ -3,20 +3,20 @@
 using Application.DTO;
 
 using Domain.AggregateRoots;
-using Domain.Entities;
 using Domain.Repository;
+
+using Infrastructure.Repository;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.ApplicationServices;
 
-public class BaseService<TEntity, TKey>
-    : IBaseService<TEntity, TKey> where TEntity : Entity<TKey>, IAggregateRoot
+public class BaseService<TEntity, TKey> where TEntity : AggregateRoot<TKey>
 {
     protected readonly IUnitOfWork UnitOfWork;
-    protected readonly IRepositoryAsync<TEntity, TKey> BaseRep;
+    protected readonly IEFCoreRepositoryAsync<TEntity,TKey> BaseRep;
 
-    public BaseService(IRepositoryAsync<TEntity, TKey> userRep, IUnitOfWork unitOfWork)
+    public BaseService(IEFCoreRepositoryAsync<TEntity,TKey> userRep, IUnitOfWork unitOfWork)
     {
         BaseRep = userRep;
         UnitOfWork = unitOfWork;
@@ -36,21 +36,21 @@ public class BaseService<TEntity, TKey>
         {
             throw new Exception("未找到实体信息！");
         }
-        BaseRep.Delete(model);
+        await BaseRep.DeleteAsync(model);
         await UnitOfWork.CommitAsync();
         return model;
     }
 
     public async Task<TEntity> EditEntity(TEntity model)
     {
-        BaseRep.Update(model);
+        await BaseRep.UpdateAsync(model);
         await UnitOfWork.CommitAsync();
         return model;
     }
 
     public async Task<List<TEntity>> GetAll()
     {
-        return await BaseRep.GetQuery().ToListAsync();
+        return await (await BaseRep.GetQueryableAsync()).ToListAsync();
     }
 
     public async Task<TEntity?> GetModelById(TKey id)
@@ -60,6 +60,8 @@ public class BaseService<TEntity, TKey>
 
     public async Task<PagedResult<TEntity>> GetPagedResult(SearchParams searchParams)
     {
-        return await BaseRep.GetPagedResultAsync(page: searchParams.Page, pageSize: searchParams.PageSize);
+        //TODO PageResult后期需要自己封装
+        return (await BaseRep.GetQueryAsync())
+            .PageResult(searchParams.Page,searchParams.PageSize);
     }
 }

@@ -1,6 +1,4 @@
-﻿using EFCore.BulkExtensions;
-
-namespace Domain.Repository;
+﻿namespace Domain.Repository;
 
 /// <summary>
 /// 工作单元接口
@@ -10,20 +8,8 @@ public interface IUnitOfWork
     /// <summary>
     /// 提交更改
     /// </summary>
+    /// <param name="Enable">是否开启批量提交</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<int> CommitAsync(CancellationToken cancellationToken = default);
-
-
-    /// <summary>
-    /// 批量提交
-    /// </summary>
-    /// <returns></returns>
-    Task BulkCommitAsync(BulkConfig? bulkConfig = null);
-
-
-    /// <summary>
-    /// 回滚更改
-    /// </summary>
-    Task RollBackAsync();
+    Task<int> CommitAsync(bool Enable=false,CancellationToken cancellationToken = default);
 }

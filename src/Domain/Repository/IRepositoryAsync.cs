@@ -1,39 +1,40 @@
-﻿using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 using Domain.AggregateRoots;
-using Domain.Entities;
-
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.Repository;
 
 /// <summary>
 /// 基础仓储接口
 /// </summary>
-public interface IRepositoryAsync<TEntity, in TKey> where TEntity :IAggregateRoot
+public interface IRepositoryAsync<TEntity, in TKey> where TEntity : AggregateRoot<TKey>
 {
 
     #region 查询
 
+    ///// <summary>
+    ///// 获取IQuery对象
+    ///// </summary>
+    ///// <returns>实体列表</returns>
+    //IQueryable<TEntity> GetQuery();
+
     /// <summary>
-    /// 获取IQuery对象
+    /// 异步获取IQuery对象
     /// </summary>
-    /// <returns>实体列表</returns>
-    IQueryable<TEntity> GetQuery();
+    /// <returns></returns>
+    Task<IQueryable<TEntity>> GetQueryableAsync();
+
 
     /// <summary>
     /// 查询列表（根据Lambda条件筛选）
     /// </summary>
     /// <param name="expression">筛选条件</param>
     /// <param name="orderBy">排序</param>
-    /// <param name="include">EF包含查询</param>
     /// <param name="ignoreQueryFilters">是否禁用筛选器</param>
     /// <returns></returns>
-    Task<List<TEntity>> GetQueryAsync(
+    Task<IQueryable<TEntity>> GetQueryAsync(
         Expression<Func<TEntity, bool>>? expression = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool ignoreQueryFilters = false);
 
     /// <summary>
@@ -68,47 +69,6 @@ public interface IRepositoryAsync<TEntity, in TKey> where TEntity :IAggregateRoo
     /// <returns></returns>
     Task<long> CountAsync(Expression<Func<TEntity, bool>>? expression = null);
 
-    /// <summary>
-    /// 分页查询（Lambda）
-    /// </summary>
-    /// <param name="expression">筛选条件</param>
-    /// <param name="orderBy">排序</param>
-    /// <param name="include">EF包含查询</param>
-    /// <param name="page">页码</param>
-    /// <param name="pageSize">页面数据</param>
-    /// <param name="ignoreQueryFilters">是否禁用筛选器</param>
-    /// <returns></returns>
-    Task<PagedResult<TEntity>> GetPagedResultAsync(
-        Expression<Func<TEntity, bool>>? expression = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-        int page = 1,
-        int pageSize = 20,
-        bool ignoreQueryFilters = false);
-
-
-    /// <summary>
-    /// 分页查询（自定义Select字段,Lambda）
-    /// </summary>
-    /// <typeparam name="TResult">返回类型</typeparam>
-    /// <param name="selector">选择返回的数据</param>
-    /// <param name="expression">筛选条件</param>
-    /// <param name="orderBy">排序</param>
-    /// <param name="include">EF包含查询</param>
-    /// <param name="page">页码</param>
-    /// <param name="pageSize">页面数据</param>
-    /// <param name="ignoreQueryFilters">是否禁用筛选器</param>
-    /// <returns></returns>
-    Task<PagedResult<TResult>> GetPagedResultBySelectAsync<TResult>(
-        Expression<Func<TEntity, TResult>> selector,
-        Expression<Func<TEntity, bool>>? expression = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-        int page = 1,
-        int pageSize = 20,
-        bool ignoreQueryFilters = false);
-
-
     #endregion
 
 
@@ -140,10 +100,10 @@ public interface IRepositoryAsync<TEntity, in TKey> where TEntity :IAggregateRoo
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns></returns>
-    void Update(TEntity entity);
+    Task UpdateAsync(TEntity entity);
 
     /// <summary>
-    /// 批量修改(BulkCommit)
+    /// 批量修改
     /// </summary>
     /// <param name="entities">实体列表</param>
     Task UpdateAsync(IList<TEntity> entities);
@@ -159,10 +119,10 @@ public interface IRepositoryAsync<TEntity, in TKey> where TEntity :IAggregateRoo
     /// </summary>
     /// <param name="entity">实体</param>
     /// <returns></returns>
-    void Delete(TEntity entity);
+    Task DeleteAsync(TEntity entity);
 
     /// <summary>
-    /// 批量删除(BulkCommit)
+    /// 批量删除
     /// </summary>
     /// <param name="entities">实体列表</param>
     /// <returns></returns>
@@ -176,6 +136,5 @@ public interface IRepositoryAsync<TEntity, in TKey> where TEntity :IAggregateRoo
     Task<int> DeleteAsync(Expression<Func<TEntity, bool>> expression);
 
     #endregion
-
 
 }

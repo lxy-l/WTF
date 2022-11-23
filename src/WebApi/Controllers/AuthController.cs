@@ -41,14 +41,15 @@ namespace WebApi.Controllers
             if (ModelState.IsValid)
             {
                 //TODO 妈的搞不成换组件
-                var result= await _signInManager
-                    .PasswordSignInAsync(model.Username,model.Password,true,true);
-                if (result.Succeeded)
-                {
-                    JwtTokenViewModel token = await _tokenService.CreateJwtTokenAsync("1", model.Username);
-                    return Ok(token);
-                }
-                return Unauthorized(result);
+                //var result= await _signInManager
+                //    .PasswordSignInAsync(model.Username,model.Password,true,true);
+                //if (result.Succeeded)
+                //{
+
+                //}
+                JwtTokenViewModel token = await _tokenService.CreateJwtTokenAsync("1", model.Username);
+                return Ok(token);
+                //return Unauthorized(result);
             }
             return BadRequest();
         }

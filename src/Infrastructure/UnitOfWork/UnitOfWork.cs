@@ -18,18 +18,16 @@ public class UnitOfWork : IUnitOfWork
         _dbContext = context;
     }
 
-    public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
+
+    public async Task<int> CommitAsync(bool Enable = false, CancellationToken cancellationToken = default)
     {
+        if (Enable)
+        {
+            /**
+             * EFCore.BulkExtensions组件批量提交
+             */
+             await _dbContext.BulkSaveChangesAsync(cancellationToken :cancellationToken);
+        }
         return await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task BulkCommitAsync(BulkConfig? bulkConfig = null)
-    {
-        await _dbContext.BulkSaveChangesAsync(bulkConfig);
-    }
-
-    public async Task RollBackAsync()
-    {
-        await _dbContext.Database.RollbackTransactionAsync();
     }
 }

@@ -4,7 +4,6 @@ using Application.ApplicationServices;
 using Application.DTO;
 
 using Domain.AggregateRoots;
-using Domain.Entities;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +15,10 @@ namespace WebApi.BaseController;
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TKey"></typeparam>
-[Authorize]
+//[Authorize]
 [Route("api/[controller]")]
 [ApiController]
-public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity : Entity<TKey>, IAggregateRoot
+public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity :  AggregateRoot<TKey>
 {
     /// <summary>
     /// 通用泛型服务

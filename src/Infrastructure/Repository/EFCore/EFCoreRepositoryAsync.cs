@@ -2,7 +2,6 @@
 using System.Linq.Expressions;
 
 using Domain.AggregateRoots;
-using Domain.Entities;
 using Domain.Repository;
 
 using EFCore.BulkExtensions;
@@ -15,13 +14,14 @@ namespace Infrastructure.Repository;
 /// <summary>
 /// 基础仓储实现
 /// </summary>
-public sealed class EFCoreRepositoryAsync<TEntity, TKey> : IRepositoryAsync<TEntity, TKey>
-    where TEntity : Entity<TKey>, IAggregateRoot
+public class EFCoreRepositoryAsync<TEntity, TKey> :
+    IEFCoreRepositoryAsync<TEntity,TKey>
+    where TEntity : AggregateRoot<TKey>
 {
     /// <summary>
     /// 数据上下文
     /// </summary>
-    private readonly DbContext _dbContext;
+    private readonly DbContext _dbContext;//TODO 改为异步获取
 
     /// <summary>
     /// DbSet
@@ -35,20 +35,14 @@ public sealed class EFCoreRepositoryAsync<TEntity, TKey> : IRepositoryAsync<TEnt
 
     #region 查询
 
-    public IQueryable<TEntity> GetQuery() => DbSet.AsQueryable();
+    public async Task<IQueryable<TEntity>> GetQueryableAsync() => await Task.Run(DbSet.AsQueryable);
 
-    public async Task<List<TEntity>> GetQueryAsync(
-        Expression<Func<TEntity, bool>>? expression = null, 
+    public async Task<IQueryable<TEntity>> GetQueryAsync(
+        Expression<Func<TEntity, bool>>? expression = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool ignoreQueryFilters = false)
     {
-        IQueryable<TEntity> query = GetQuery().AsNoTracking();
-
-        if (include != null)
-        {
-            query = include(query);
-        }
+        IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
 
         if (expression != null)
         {
@@ -60,21 +54,47 @@ public sealed class EFCoreRepositoryAsync<TEntity, TKey> : IRepositoryAsync<TEnt
             query = query.IgnoreQueryFilters();
         }
 
-        return orderBy != null ? await orderBy(query).ToListAsync() : await query.ToListAsync();
+        return orderBy != null ? orderBy(query) : query;
     }
+
+    public async Task<IQueryable<TEntity>> GetQueryAsync(
+        Expression<Func<TEntity, bool>>? expression = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool ignoreQueryFilters = false)
+        {
+            IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (expression != null)
+            {
+                query = query.Where(expression);
+            }
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            return orderBy != null ? orderBy(query) : query;
+        }
 
     public async Task<TEntity?> FindByIdAsync(TKey id) => await DbSet.FindAsync(id);
 
     public async Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>>? expression) => expression switch
     {
-        null => await GetQuery().SingleAsync(),
-        _ => await GetQuery().SingleAsync(expression)
+        null => await (await GetQueryableAsync()).SingleAsync(),
+        _ => await (await GetQueryableAsync()).SingleAsync(expression)
     };
 
     public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>>? expression = null) => expression switch
     {
-        null => await GetQuery().FirstOrDefaultAsync(),
-        _ => await GetQuery().FirstOrDefaultAsync(expression)
+        null => await (await GetQueryableAsync()).FirstOrDefaultAsync(),
+        _ => await (await GetQueryableAsync()).FirstOrDefaultAsync(expression)
     };
 
     public async Task<long> CountAsync(Expression<Func<TEntity, bool>>? expression = null) => expression switch
@@ -83,13 +103,13 @@ public sealed class EFCoreRepositoryAsync<TEntity, TKey> : IRepositoryAsync<TEnt
         _ => await DbSet.CountAsync(expression)
     };
 
-    public Task<PagedResult<TEntity>> GetPagedResultAsync(
-        Expression<Func<TEntity, bool>>? expression = null, 
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, 
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, 
+    public async Task<IQueryable<TEntity>> GetPagedResultAsync(
+        Expression<Func<TEntity, bool>>? expression = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         int page = 1, int pageSize = 20, bool ignoreQueryFilters = false)
     {
-        IQueryable<TEntity> query = GetQuery().AsNoTracking();
+        IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
 
         if (include != null)
         {
@@ -105,21 +125,20 @@ public sealed class EFCoreRepositoryAsync<TEntity, TKey> : IRepositoryAsync<TEnt
         {
             query = query.IgnoreQueryFilters();
         }
-
         return orderBy != null
-            ? Task.FromResult(orderBy(query).PageResult(page, pageSize))
-            : Task.FromResult(query.OrderBy(o=>o.Id).PageResult(page, pageSize));
+        ? orderBy(query).Skip(page).Take(pageSize)
+        : query.Skip(page).Take(pageSize);
     }
 
-    public Task<PagedResult<TResult>> GetPagedResultBySelectAsync<TResult>(
+    public async Task<IQueryable<TResult>> GetPagedResultBySelectAsync<TResult>(
         Expression<Func<TEntity, TResult>> selector,
         Expression<Func<TEntity, bool>>? expression = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-        int page = 0, int pageSize = 20,bool ignoreQueryFilters = false)
+        int page = 0, int pageSize = 20, bool ignoreQueryFilters = false)
     {
-        IQueryable<TEntity> query = GetQuery().AsNoTracking();
-        
+        IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
+
         if (include != null)
         {
             query = include(query);
@@ -136,8 +155,8 @@ public sealed class EFCoreRepositoryAsync<TEntity, TKey> : IRepositoryAsync<TEnt
         }
 
         return orderBy != null
-            ? Task.FromResult(orderBy(query).Select(selector).PageResult(page, pageSize))
-            : Task.FromResult(query.OrderBy(o => o.Id).Select(selector).PageResult(page, pageSize));
+               ? orderBy(query).Skip(page).Take(pageSize).Select(selector)
+               : query.Skip(page).Take(pageSize).Select(selector);
     }
 
     #endregion
@@ -154,16 +173,16 @@ public sealed class EFCoreRepositoryAsync<TEntity, TKey> : IRepositoryAsync<TEnt
 
     #region 修改
 
-    public void Update(TEntity entity) => DbSet.Update(entity);
+    public Task UpdateAsync(TEntity entity) => Task.Run(() => DbSet.Update(entity));
 
     public async Task UpdateAsync(IList<TEntity> entities) => await _dbContext.BulkUpdateAsync(entities);
-        
+
     #endregion
 
 
     #region 删除
 
-    public void Delete(TEntity entity) => DbSet.Remove(entity);
+    public Task DeleteAsync(TEntity entity) =>Task.Run(()=>DbSet.Remove(entity));
 
     public async Task<int> DeleteAsync(Expression<Func<TEntity, bool>>? expression) => expression switch
     {

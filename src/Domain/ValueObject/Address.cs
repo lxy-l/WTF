@@ -1,13 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using Microsoft.EntityFrameworkCore;
-
 namespace Domain.ValueObject;
 
 /// <summary>
 /// 地址
 /// </summary>
-[Owned]
 public record Address : ValueObject<Address>
 {
     /// <summary>

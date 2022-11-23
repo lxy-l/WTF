@@ -57,9 +57,9 @@ builder.Services.AddLogging(loggingBuilder =>
 #endregion
 
 #region 认证配置
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+//    .AddEntityFrameworkStores<ApplicationDbContext>()
+//    .AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -109,7 +109,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddTransient(typeof(IRepositoryAsync<,>), typeof(EFCoreRepositoryAsync<,>));
+builder.Services.AddTransient(typeof(IEFCoreRepositoryAsync<,>), typeof(EFCoreRepositoryAsync<,>));
 
 builder.Services.AddTransient(typeof(IBaseService<,>), typeof(BaseService<,>));
 

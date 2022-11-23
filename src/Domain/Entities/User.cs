@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 using Domain.AggregateRoots;
-using Domain.ValueObject;
 
 namespace Domain.Entities;
 
-public class User : Entity<int>, IAggregateRoot
+public class User : AggregateRoot<int>
 {
     /// <summary>
     /// 用户名

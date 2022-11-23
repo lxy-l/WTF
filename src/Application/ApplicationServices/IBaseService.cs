@@ -3,7 +3,6 @@
 using Application.DTO;
 
 using Domain.AggregateRoots;
-using Domain.Entities;
 
 namespace Application.ApplicationServices;
 
@@ -12,7 +11,7 @@ namespace Application.ApplicationServices;
 /// </summary>
 /// <typeparam name="TEntity">实体</typeparam>
 /// <typeparam name="TKey">主键</typeparam>
-public interface IBaseService<TEntity, in TKey> where TEntity : Entity<TKey>, IAggregateRoot
+public interface IBaseService<TEntity, in TKey> where TEntity : AggregateRoot<TKey>
 {
     /// <summary>
     /// 获取全部数据
