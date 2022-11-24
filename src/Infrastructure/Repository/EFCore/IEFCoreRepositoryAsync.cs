@@ -26,5 +26,8 @@ namespace Infrastructure.Repository
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
             bool ignoreQueryFilters = false);
+
+
+        Task<IQueryable<TEntity>> GetQueryAsync(string? exp);
     }
 }

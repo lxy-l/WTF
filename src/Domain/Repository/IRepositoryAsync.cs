@@ -12,12 +12,6 @@ public interface IRepositoryAsync<TEntity, in TKey> where TEntity : AggregateRoo
 
     #region 查询
 
-    ///// <summary>
-    ///// 获取IQuery对象
-    ///// </summary>
-    ///// <returns>实体列表</returns>
-    //IQueryable<TEntity> GetQuery();
-
     /// <summary>
     /// 异步获取IQuery对象
     /// </summary>

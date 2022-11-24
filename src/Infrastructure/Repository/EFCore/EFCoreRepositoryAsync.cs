@@ -5,6 +5,8 @@ using Domain.AggregateRoots;
 
 using EFCore.BulkExtensions;
 
+using Infrastructure.Linq;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -80,6 +82,14 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
         }
 
         return orderBy != null ? orderBy(query) : query;
+    }
+
+    public async Task<IQueryable<TEntity>> GetQueryAsync(string? exp)
+    {
+        IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
+        var lambda =LinqQuery.BuildLambda<TEntity>(exp);
+        IQueryable<TEntity> results = query.Where(lambda);
+        return results;
     }
 
     public async Task<TEntity?> FindByIdAsync(TKey id) => await DbSet.FindAsync(id);
