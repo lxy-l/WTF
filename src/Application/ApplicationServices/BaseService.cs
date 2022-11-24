@@ -60,8 +60,17 @@ public class BaseService<TEntity, TKey> where TEntity : AggregateRoot<TKey>
 
     public async Task<PagedResult<TEntity>> GetPagedResult(SearchParams searchParams)
     {
-        //TODO PageResult后期需要自己封装
-        return (await BaseRep.GetQueryAsync())
-            .PageResult(searchParams.Page,searchParams.PageSize);
+
+        /*
+         * 动态查询，根据SearchParams参数进行筛选排序
+         */
+
+        var query = await BaseRep.GetQueryableAsync();
+
+        if (!string.IsNullOrWhiteSpace(searchParams.Sort))
+        {
+            query.OrderBy(searchParams.Sort);
+        }
+        return query.PageResult(searchParams.Page,searchParams.PageSize);
     }
 }

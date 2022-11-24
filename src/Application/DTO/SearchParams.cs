@@ -2,6 +2,7 @@
 
 namespace Application.DTO;
 
+[Serializable]
 public class SearchParams
 {
     /// <summary>
@@ -10,7 +11,7 @@ public class SearchParams
     public string? Filters { get; set; }
 
     /// <summary>
-    /// 排序条件
+    /// 排序条件（Name ASC, Age DESC）
     /// </summary>
     public string? Sort { get; set; }
 

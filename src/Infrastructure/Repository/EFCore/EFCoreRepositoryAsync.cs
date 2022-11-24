@@ -2,7 +2,6 @@
 using System.Linq.Expressions;
 
 using Domain.AggregateRoots;
-using Domain.Repository;
 
 using EFCore.BulkExtensions;
 
@@ -15,7 +14,7 @@ namespace Infrastructure.Repository;
 /// 基础仓储实现
 /// </summary>
 public class EFCoreRepositoryAsync<TEntity, TKey> :
-    IEFCoreRepositoryAsync<TEntity,TKey>
+    IEFCoreRepositoryAsync<TEntity, TKey>
     where TEntity : AggregateRoot<TKey>
 {
     /// <summary>
@@ -62,26 +61,26 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
+
+        if (include != null)
         {
-            IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (expression != null)
-            {
-                query = query.Where(expression);
-            }
-
-            if (ignoreQueryFilters)
-            {
-                query = query.IgnoreQueryFilters();
-            }
-
-            return orderBy != null ? orderBy(query) : query;
+            query = include(query);
         }
+
+        if (expression != null)
+        {
+            query = query.Where(expression);
+        }
+
+        if (ignoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
+
+        return orderBy != null ? orderBy(query) : query;
+    }
 
     public async Task<TEntity?> FindByIdAsync(TKey id) => await DbSet.FindAsync(id);
 
@@ -102,62 +101,6 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
         null => await DbSet.CountAsync(),
         _ => await DbSet.CountAsync(expression)
     };
-
-    public async Task<IQueryable<TEntity>> GetPagedResultAsync(
-        Expression<Func<TEntity, bool>>? expression = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-        int page = 1, int pageSize = 20, bool ignoreQueryFilters = false)
-    {
-        IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
-
-        if (include != null)
-        {
-            query = include(query);
-        }
-
-        if (expression != null)
-        {
-            query = query.Where(expression);
-        }
-
-        if (ignoreQueryFilters)
-        {
-            query = query.IgnoreQueryFilters();
-        }
-        return orderBy != null
-        ? orderBy(query).Skip(page).Take(pageSize)
-        : query.Skip(page).Take(pageSize);
-    }
-
-    public async Task<IQueryable<TResult>> GetPagedResultBySelectAsync<TResult>(
-        Expression<Func<TEntity, TResult>> selector,
-        Expression<Func<TEntity, bool>>? expression = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
-        int page = 0, int pageSize = 20, bool ignoreQueryFilters = false)
-    {
-        IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
-
-        if (include != null)
-        {
-            query = include(query);
-        }
-
-        if (expression != null)
-        {
-            query = query.Where(expression);
-        }
-
-        if (ignoreQueryFilters)
-        {
-            query = query.IgnoreQueryFilters();
-        }
-
-        return orderBy != null
-               ? orderBy(query).Skip(page).Take(pageSize).Select(selector)
-               : query.Skip(page).Take(pageSize).Select(selector);
-    }
 
     #endregion
 
@@ -182,7 +125,7 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
 
     #region 删除
 
-    public Task DeleteAsync(TEntity entity) =>Task.Run(()=>DbSet.Remove(entity));
+    public Task DeleteAsync(TEntity entity) => Task.Run(() => DbSet.Remove(entity));
 
     public async Task<int> DeleteAsync(Expression<Func<TEntity, bool>>? expression) => expression switch
     {

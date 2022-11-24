@@ -2,6 +2,7 @@
 
 namespace Application.DTO;
 
+[Serializable]
 public class LoginModel
 {
     [Required(ErrorMessage = "用户名不能为空")] 

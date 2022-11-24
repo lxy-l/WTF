@@ -21,7 +21,7 @@ namespace Application.ApplicationServices
         {
             /*
              *  前提是遵循EFCore框架的导航属性设计
-                Include会自动生成 LEFT JOIN语句 以BaseRep为主表查询从表信息
+                Include会自动生成 LEFT JOIN语句
              */
             
             var list = (await BaseRep.GetQueryAsync(
