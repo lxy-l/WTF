@@ -21,13 +21,18 @@ namespace Infrastructure.Repository
         /// <param name="include">EF包含查询</param>
         /// <param name="ignoreQueryFilters">是否禁用筛选器</param>
         /// <returns></returns>
-        Task<IQueryable<TEntity>> GetQueryAsync(
+        Task<IQueryable<TEntity>> GetQueryIncludeAsync(
         Expression<Func<TEntity, bool>>? expression = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
             bool ignoreQueryFilters = false);
 
-
-        Task<IQueryable<TEntity>> GetQueryAsync(string? exp);
+        /// <summary>
+        /// 动态查询
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        Task<IQueryable<TEntity>> GetDynamicQueryAsync(string? filter=null,string? sort=null, string? include = null);
     }
 }

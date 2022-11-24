@@ -11,46 +11,46 @@ namespace Application.ApplicationServices;
 /// </summary>
 /// <typeparam name="TEntity">实体</typeparam>
 /// <typeparam name="TKey">主键</typeparam>
-public interface IBaseService<TEntity, in TKey> where TEntity : AggregateRoot<TKey>
+public interface IBaseService<TEntity,TKey> where TEntity : AggregateRoot<TKey>
 {
     /// <summary>
     /// 获取全部数据
     /// </summary>
     /// <returns></returns>
-    Task<List<TEntity>> GetAll();
+    Task<List<TEntity>> GetAll(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 分页查询
     /// </summary>
     /// <param name="searchParams"></param>
     /// <returns></returns>
-    Task<PagedResult<TEntity>> GetPagedResult(SearchParams searchParams);
+    Task<PagedResult<TEntity>> GetPagedResult(SearchParams searchParams, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 根据主键获取单个实体
     /// </summary>
     /// <param name="id">主键</param>
     /// <returns></returns>
-    Task<TEntity?> GetModelById(TKey id);
+    Task<TEntity?> GetModelById(TKey id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 新增
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<TEntity> AddEntity(TEntity model);
+    Task<TEntity> AddEntity(TEntity model, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 删除
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    Task<TEntity> DeleteEntity(TKey id);
+    Task<TEntity> DeleteEntity(TKey id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 修改
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    Task<TEntity> EditEntity(TEntity model);
+    Task<TEntity> EditEntity(TEntity model, CancellationToken cancellationToken = default);
 }

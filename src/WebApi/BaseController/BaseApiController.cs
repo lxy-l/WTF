@@ -41,9 +41,9 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity :  A
     /// <param name="searchParams">通用查询参数</param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<PagedResult<TEntity>> Get([FromQuery] SearchParams searchParams)
+    public async Task<PagedResult<TEntity>> Get([FromQuery] SearchParams searchParams, CancellationToken cancellationToken = default)
     {
-        var list = await Service.GetPagedResult(searchParams);
+        var list = await Service.GetPagedResult(searchParams,cancellationToken);
         return list;
     }
 
@@ -52,9 +52,9 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity :  A
     /// </summary>
     /// <returns></returns>
     [HttpGet("GetAll")]
-    public async Task<List<TEntity>> GetAll()
+    public async Task<List<TEntity>> GetAll(CancellationToken cancellationToken = default)
     {
-        return await Service.GetAll();
+        return await Service.GetAll(cancellationToken);
     }
 
     /// <summary>
@@ -63,9 +63,9 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity :  A
     /// <param name="id">主键</param>
     /// <returns></returns>
     [HttpGet("GetModelById")]
-    public async Task<TEntity?> GetModelById(TKey id)
+    public async Task<TEntity?> GetModelById(TKey id, CancellationToken cancellationToken = default)
     {
-        return await Service.GetModelById(id);
+        return await Service.GetModelById(id, cancellationToken);
     }
 
     /// <summary>
@@ -74,9 +74,9 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity :  A
     /// <param name="model">模型参数</param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> Post(TEntity model)
+    public async Task<IActionResult> Post(TEntity model , CancellationToken cancellationToken = default)
     {
-        var user = await Service.AddEntity(model);
+        var user = await Service.AddEntity(model, cancellationToken);
         return Ok(user);
     }
 
@@ -86,18 +86,19 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity :  A
     /// <param name="model">模型参数</param>
     /// <returns></returns>
     [HttpPut]
-    public async Task<IActionResult> Put(TEntity model)
+    public async Task<IActionResult> Put(TEntity model, CancellationToken cancellationToken = default)
     {
-        return Ok(await Service.EditEntity(model));
+        return Ok(await Service.EditEntity(model, cancellationToken));
     }
     /// <summary>
     /// 删除
     /// </summary>
     /// <param name="id">主键</param>
+    /// 
     /// <returns></returns>
     [HttpDelete]
-    public async Task<IActionResult> Delete(TKey id)
+    public async Task<IActionResult> Delete(TKey id, CancellationToken cancellationToken = default)
     {
-        return Ok(await Service.DeleteEntity(id));
+        return Ok(await Service.DeleteEntity(id, cancellationToken));
     }
 }

@@ -26,7 +26,6 @@ public class UserDbContext:DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Server=localhost;Database=MyDataBase;User ID=sa;Password=Lxy962921;Persist Security Info=True;MultipleActiveResultSets=True;Connect Timeout=15;TrustServerCertificate=true");
         base.OnConfiguring(optionsBuilder);
     }
 

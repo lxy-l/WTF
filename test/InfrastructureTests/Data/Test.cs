@@ -20,6 +20,6 @@ namespace InfrastructureTests.Data
 
         public DateTime DateTime { get; set; }
 
-        public ICollection<TestInfo>? TestInfos { get; set; } = new List<TestInfo>();
+        public ICollection<TestInfo>? TestInfos { get; set; }
     }
 }

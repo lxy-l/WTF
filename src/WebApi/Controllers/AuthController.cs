@@ -14,17 +14,11 @@ namespace WebApi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IJwtTokenService _tokenService;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
 
         public AuthController(
-            IJwtTokenService tokenService, 
-            SignInManager<IdentityUser> signInManager, 
-            UserManager<IdentityUser> userManager)
+            IJwtTokenService tokenService)
         {
             _tokenService = tokenService;
-            _signInManager = signInManager;
-            _userManager = userManager;
         }
 
         /// <summary>
@@ -67,8 +61,8 @@ namespace WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result= await _userManager.CreateAsync(model);
-                return Ok(result);
+                //var result= await _userManager.CreateAsync(model);
+                return Ok(model);
             }
             return BadRequest();
         }

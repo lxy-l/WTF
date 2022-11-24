@@ -1,7 +1,4 @@
-﻿using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
-
-using Domain.AggregateRoots;
+﻿using Domain.AggregateRoots;
 
 using EFCore.BulkExtensions;
 
@@ -9,6 +6,9 @@ using Infrastructure.Linq;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+
+using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Repository;
 
@@ -22,7 +22,7 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
     /// <summary>
     /// 数据上下文
     /// </summary>
-    private readonly DbContext _dbContext;//TODO 改为异步获取
+    private readonly DbContext _dbContext;
 
     /// <summary>
     /// DbSet
@@ -36,7 +36,7 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
 
     #region 查询
 
-    public async Task<IQueryable<TEntity>> GetQueryableAsync() => await Task.Run(DbSet.AsQueryable);
+    public async Task<IQueryable<TEntity>> GetQueryableAsync() => await Task.Run(DbSet.AsQueryable).ConfigureAwait(false);
 
     public async Task<IQueryable<TEntity>> GetQueryAsync(
         Expression<Func<TEntity, bool>>? expression = null,
@@ -45,10 +45,7 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
     {
         IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
 
-        if (expression != null)
-        {
-            query = query.Where(expression);
-        }
+        query = query.WhereIf(expression != null, expression);
 
         if (ignoreQueryFilters)
         {
@@ -58,23 +55,20 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
         return orderBy != null ? orderBy(query) : query;
     }
 
-    public async Task<IQueryable<TEntity>> GetQueryAsync(
+    public async Task<IQueryable<TEntity>> GetQueryIncludeAsync(
         Expression<Func<TEntity, bool>>? expression = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool ignoreQueryFilters = false)
     {
-        IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
+        IQueryable<TEntity> query = (await GetQueryableAsync().ConfigureAwait(false)).AsNoTracking();
 
         if (include != null)
         {
             query = include(query);
         }
 
-        if (expression != null)
-        {
-            query = query.Where(expression);
-        }
+        query = query.WhereIf(expression != null, expression);
 
         if (ignoreQueryFilters)
         {
@@ -84,32 +78,44 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
         return orderBy != null ? orderBy(query) : query;
     }
 
-    public async Task<IQueryable<TEntity>> GetQueryAsync(string? exp)
+    public async Task<IQueryable<TEntity>> GetDynamicQueryAsync(string? filter=null, string? sort=null,string? include=null)
     {
         IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
-        var lambda =LinqQuery.BuildLambda<TEntity>(exp);
-        IQueryable<TEntity> results = query.Where(lambda);
-        return results;
+        if (!string.IsNullOrWhiteSpace(include))
+        {
+            //TODO 动态include多表联查
+
+        }
+        if (!string.IsNullOrWhiteSpace(filter))
+        {
+            var lambda = LinqQuery.BuildLambda<TEntity>(filter);
+            query = query.Where(lambda);
+        }
+        if (!string.IsNullOrWhiteSpace(sort))
+        {
+            query = query.OrderBy(sort);
+        }
+        return query;
     }
 
-    public async Task<TEntity?> FindByIdAsync(TKey id) => await DbSet.FindAsync(id);
+    public async Task<TEntity?> FindByIdAsync(TKey id) => await DbSet.FindAsync(id).ConfigureAwait(false);
 
     public async Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>>? expression) => expression switch
     {
-        null => await (await GetQueryableAsync()).SingleAsync(),
-        _ => await (await GetQueryableAsync()).SingleAsync(expression)
+        null => await (await GetQueryableAsync()).SingleAsync().ConfigureAwait(false),
+        _ => await (await GetQueryableAsync()).SingleAsync(expression).ConfigureAwait(false)
     };
 
     public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>>? expression = null) => expression switch
     {
-        null => await (await GetQueryableAsync()).FirstOrDefaultAsync(),
-        _ => await (await GetQueryableAsync()).FirstOrDefaultAsync(expression)
+        null => await (await GetQueryableAsync()).FirstOrDefaultAsync().ConfigureAwait(false),
+        _ => await (await GetQueryableAsync()).FirstOrDefaultAsync(expression).ConfigureAwait(false)
     };
 
     public async Task<long> CountAsync(Expression<Func<TEntity, bool>>? expression = null) => expression switch
     {
-        null => await DbSet.CountAsync(),
-        _ => await DbSet.CountAsync(expression)
+        null => await DbSet.CountAsync().ConfigureAwait(false),
+        _ => await DbSet.CountAsync(expression).ConfigureAwait(false)
     };
 
     #endregion
@@ -117,9 +123,9 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
 
     #region 新增
 
-    public async Task InsertAsync(TEntity entity) => await DbSet.AddAsync(entity);
+    public async Task InsertAsync(TEntity entity) => await DbSet.AddAsync(entity).ConfigureAwait(false);
 
-    public async Task BatchInsertAsync(List<TEntity> entities) => await _dbContext.BulkInsertAsync(entities);
+    public async Task BatchInsertAsync(List<TEntity> entities) => await _dbContext.BulkInsertAsync(entities).ConfigureAwait(false);
 
     #endregion
 
@@ -128,7 +134,7 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
 
     public Task UpdateAsync(TEntity entity) => Task.Run(() => DbSet.Update(entity));
 
-    public async Task UpdateAsync(IList<TEntity> entities) => await _dbContext.BulkUpdateAsync(entities);
+    public async Task UpdateAsync(IList<TEntity> entities) => await _dbContext.BulkUpdateAsync(entities).ConfigureAwait(false);
 
     #endregion
 
@@ -139,11 +145,13 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
 
     public async Task<int> DeleteAsync(Expression<Func<TEntity, bool>>? expression) => expression switch
     {
-        null => await DbSet.BatchDeleteAsync(),
-        _ => await DbSet.Where(expression).BatchDeleteAsync()
+        null => await DbSet.BatchDeleteAsync().ConfigureAwait(false),
+        _ => await DbSet.Where(expression).BatchDeleteAsync().ConfigureAwait(false)
     };
 
-    public async Task DeleteAsync(IList<TEntity> entities) => await _dbContext.BulkDeleteAsync(entities);
+    public async Task DeleteAsync(IList<TEntity> entities) => await _dbContext.BulkDeleteAsync(entities).ConfigureAwait(false);
+
+
 
     #endregion
 }

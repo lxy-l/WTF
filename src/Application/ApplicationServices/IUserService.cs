@@ -20,6 +20,6 @@ namespace Application.ApplicationServices
         /// 获取全部用户包含用户信息
         /// </summary>
         /// <returns></returns>
-        Task<PagedResult<User>> GetUserAndInfo(SearchParams search);
+        Task<PagedResult<User>> GetUserAndInfo(SearchParams search, CancellationToken cancellationToken = default);
     }
 }

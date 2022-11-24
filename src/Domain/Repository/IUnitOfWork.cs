@@ -11,5 +11,5 @@ public interface IUnitOfWork
     /// <param name="Enable">是否开启批量提交</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<int> CommitAsync(bool Enable=false,CancellationToken cancellationToken = default);
+    Task<int> CommitAsync(CancellationToken cancellationToken = default, bool Enable = false);
 }

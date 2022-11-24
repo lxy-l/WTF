@@ -17,14 +17,14 @@ namespace Application.ApplicationServices
         {
         }
 
-        public async Task<PagedResult<User>> GetUserAndInfo(SearchParams search)
+        public async Task<PagedResult<User>> GetUserAndInfo(SearchParams search, CancellationToken cancellationToken = default)
         {
             /*
              *  前提是遵循EFCore框架的导航属性设计
                 Include会自动生成 LEFT JOIN语句
              */
             
-            var list = (await BaseRep.GetQueryAsync(
+            var list = (await BaseRep.GetQueryIncludeAsync(
                 include: x => x.Include(i => i.UserInfo)))
                 .PageResult(search.Page,search.PageSize);
 
