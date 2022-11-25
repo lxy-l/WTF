@@ -1,14 +1,12 @@
-﻿using Application.DTO;
+﻿using System.Linq.Dynamic.Core;
+
+using Application.DTO;
 
 using Domain.AggregateRoots;
 using Domain.Repository;
 
 using Infrastructure.Linq;
 using Infrastructure.Repository;
-
-using Microsoft.EntityFrameworkCore;
-
-using System.Linq.Dynamic.Core;
 
 namespace Application.ApplicationServices;
 
@@ -21,7 +19,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
     { 
         get 
         {
-            return new List<string> { "1","2"};
+            return new List<string> { "UserInfo"};
         } 
     }
 
@@ -31,14 +29,14 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
         UnitOfWork = unitOfWork;
     }
 
-    public async Task<TEntity> AddEntity(TEntity model, CancellationToken cancellationToken = default)
+    public async Task<TEntity> AddEntity(TEntity model)
     {
         await BaseRep.InsertAsync(model).ConfigureAwait(false);
-        await UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+        await UnitOfWork.CommitAsync().ConfigureAwait(false);
         return model;
     }
 
-    public async Task<TEntity> DeleteEntity(TKey id, CancellationToken cancellationToken = default)
+    public async Task<TEntity> DeleteEntity(TKey id)
     {
         TEntity? model = await BaseRep.FindByIdAsync(id).ConfigureAwait(false);
         if (model is null)
@@ -46,28 +44,23 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
             throw new Exception("未找到实体信息！");
         }
         await BaseRep.DeleteAsync(model).ConfigureAwait(false);
-        await UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+        await UnitOfWork.CommitAsync().ConfigureAwait(false);
         return model;
     }
 
-    public async Task<TEntity> EditEntity(TEntity model, CancellationToken cancellationToken = default)
+    public async Task<TEntity> EditEntity(TEntity model)
     {
         await BaseRep.UpdateAsync(model).ConfigureAwait(false);
-        await UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+        await UnitOfWork.CommitAsync().ConfigureAwait(false);
         return model;
     }
 
-    public async Task<List<TEntity>> GetAll(CancellationToken cancellationToken = default)
-    {
-        return await (await BaseRep.GetQueryableAsync().ConfigureAwait(false)).ToListAsync();
-    }
-
-    public async Task<TEntity?> GetModelById(TKey id, CancellationToken cancellationToken = default)
+    public async Task<TEntity?> GetModelById(TKey id)
     {
         return await BaseRep.FindByIdAsync(id).ConfigureAwait(false);
     }
 
-    public async Task<PagedResult<TEntity>> GetPagedResult(SearchParams searchParams, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<TEntity>> GetPagedResult(SearchParams searchParams)
     {
 
         /*
@@ -76,7 +69,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
         var query = await BaseRep.GetQueryableAsync().ConfigureAwait(false);
 
-        if (Table.Any())
+        if (Table?.Any()??false)
         {
             //TODO 多表联查
             //query.IncludeIf
@@ -84,7 +77,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
         if (!string.IsNullOrWhiteSpace(searchParams.Filters))
         {
-            var lambda = LinqQuery.BuildLambda<TEntity>(searchParams.Filters);
+            var lambda = LinqQuery.BuildFilterLambda<TEntity>(searchParams.Filters);
             query = query.Where(lambda);
         }
         if (!string.IsNullOrWhiteSpace(searchParams.Sort))

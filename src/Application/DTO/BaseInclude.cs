@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.DTO
+﻿namespace Application.DTO
 {
+    /// <summary>
+    /// 从表
+    /// </summary>
     public abstract class BaseInclude
     {
+        /// <summary>
+        /// 从表
+        /// </summary>
         public virtual List<string>? Table { get; }
     }
 }

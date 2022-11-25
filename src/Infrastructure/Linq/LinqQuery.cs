@@ -16,7 +16,7 @@ namespace Infrastructure.Linq
         /// <typeparam name="T"></typeparam>
         /// <param name="exps"></param>
         /// <returns></returns>
-        public static Expression<Func<T, bool>> BuildLambda<T>(string exps) where T : class
+        public static Expression<Func<T, bool>> BuildFilterLambda<T>(string exps) where T : class
         {
             var sourceType = typeof(T);
             var sourceParameter = Expression.Parameter(sourceType);

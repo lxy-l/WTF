@@ -65,7 +65,7 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity :  A
     [HttpGet("GetModelById")]
     public async Task<TEntity?> GetModelById(TKey id, CancellationToken cancellationToken = default)
     {
-        return await Service.GetModelById(id, cancellationToken);
+        return await Service.GetModelById(id);
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity :  A
     [HttpPost]
     public async Task<IActionResult> Post(TEntity model , CancellationToken cancellationToken = default)
     {
-        var user = await Service.AddEntity(model, cancellationToken);
+        var user = await Service.AddEntity(model);
         return Ok(user);
     }
 
@@ -88,7 +88,7 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity :  A
     [HttpPut]
     public async Task<IActionResult> Put(TEntity model, CancellationToken cancellationToken = default)
     {
-        return Ok(await Service.EditEntity(model, cancellationToken));
+        return Ok(await Service.EditEntity(model));
     }
     /// <summary>
     /// 删除
@@ -99,6 +99,6 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity :  A
     [HttpDelete]
     public async Task<IActionResult> Delete(TKey id, CancellationToken cancellationToken = default)
     {
-        return Ok(await Service.DeleteEntity(id, cancellationToken));
+        return Ok(await Service.DeleteEntity(id));
     }
 }

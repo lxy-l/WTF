@@ -88,7 +88,7 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
         }
         if (!string.IsNullOrWhiteSpace(filter))
         {
-            var lambda = LinqQuery.BuildLambda<TEntity>(filter);
+            var lambda = LinqQuery.BuildFilterLambda<TEntity>(filter);
             query = query.Where(lambda);
         }
         if (!string.IsNullOrWhiteSpace(sort))
