@@ -1,4 +1,4 @@
-﻿namespace Application.DTO
+﻿namespace Application.Core.DTO
 {
     [Serializable]
     public record JwtTokenViewModel

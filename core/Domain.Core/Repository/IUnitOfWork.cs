@@ -1,4 +1,7 @@
-﻿namespace Domain.Repository;
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace Domain.Core.Repository;
 
 /// <summary>
 /// 工作单元接口

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Domain.Core;
+
 namespace Domain.ValueObject;
 
 /// <summary>

@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Domain.Core;
 
 namespace InfrastructureTests.Data
 {

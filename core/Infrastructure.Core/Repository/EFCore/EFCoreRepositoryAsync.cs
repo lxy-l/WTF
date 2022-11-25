@@ -1,16 +1,16 @@
-﻿using Domain.AggregateRoots;
+﻿using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
+
+using Domain.Core;
 
 using EFCore.BulkExtensions;
 
-using Infrastructure.Linq;
+using Infrastructure.Core.Extend;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
-
-namespace Infrastructure.Repository;
+namespace Infrastructure.Core.Repository;
 
 /// <summary>
 /// 基础仓储实现
@@ -82,7 +82,7 @@ public class EFCoreRepositoryAsync<TEntity, TKey> : IEFCoreRepositoryAsync<TEnti
         }
         if (!string.IsNullOrWhiteSpace(filter))
         {
-            var lambda = LinqQuery.BuildFilterLambda<TEntity>(filter);
+            var lambda = LinqExtend.BuildFilterLambda<TEntity>(filter);
             query = query.Where(lambda);
         }
         if (!string.IsNullOrWhiteSpace(sort))

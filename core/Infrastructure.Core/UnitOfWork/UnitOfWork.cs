@@ -1,10 +1,10 @@
-﻿using Domain.Repository;
+﻿using Domain.Core.Repository;
 
 using EFCore.BulkExtensions;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.UnitOfWork;
+namespace Infrastructure.Core.UnitOfWork;
 
 /// <summary>
 /// 工作单元实现

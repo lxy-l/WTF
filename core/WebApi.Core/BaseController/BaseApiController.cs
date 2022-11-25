@@ -1,14 +1,13 @@
 ﻿using System.Linq.Dynamic.Core;
 
-using Application.ApplicationServices;
-using Application.DTO;
+using Application.Core.ApplicationServices;
+using Application.Core.DTO;
 
-using Domain.AggregateRoots;
+using Domain.Core;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.BaseController;
+namespace WebApi.Core.BaseController;
 
 /// <summary>
 /// 通用控制器

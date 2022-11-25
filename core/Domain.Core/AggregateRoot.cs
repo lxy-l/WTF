@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-
-namespace Domain.AggregateRoots;
+﻿namespace Domain.Core;
 
 /// <summary>
 /// 聚合根

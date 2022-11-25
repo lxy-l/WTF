@@ -2,12 +2,12 @@
 using System.Security.Claims;
 using System.Text;
 
-using Application.DTO;
+using Application.Core.DTO;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Application.ApplicationServices
+namespace Application.Core.ApplicationServices
 {
     public class JwtTokenService : IJwtTokenService
     {

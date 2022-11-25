@@ -1,11 +1,11 @@
 ﻿using System.Linq.Expressions;
 
-using Domain.AggregateRoots;
-using Domain.Repository;
+using Domain.Core;
+using Domain.Core.Repository;
 
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace Infrastructure.Repository
+namespace Infrastructure.Core.Repository
 {
     /// <summary>
     /// EFCore通用仓储

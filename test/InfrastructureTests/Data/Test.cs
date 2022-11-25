@@ -1,4 +1,4 @@
-﻿using Domain.AggregateRoots;
+﻿using Domain.Core;
 
 namespace InfrastructureTests.Data
 {

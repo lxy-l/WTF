@@ -1,11 +1,12 @@
 ﻿using System.Linq.Dynamic.Core;
 
-using Application.DTO;
+using Application.Core.ApplicationServices;
+using Application.Core.DTO;
 
+using Domain.Core.Repository;
 using Domain.Entities;
-using Domain.Repository;
 
-using Infrastructure.Repository;
+using Infrastructure.Core.Repository;
 
 using Microsoft.EntityFrameworkCore;
 

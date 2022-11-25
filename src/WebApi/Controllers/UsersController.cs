@@ -1,9 +1,11 @@
 ﻿using Application.ApplicationServices;
-using Application.DTO;
+using Application.Core.DTO;
 
 using Domain.Entities;
+
 using Microsoft.AspNetCore.Mvc;
-using WebApi.BaseController;
+
+using WebApi.Core.BaseController;
 
 namespace WebApi.Controllers;
 

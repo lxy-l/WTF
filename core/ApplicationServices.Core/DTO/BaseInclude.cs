@@ -1,4 +1,4 @@
-﻿namespace Application.DTO
+﻿namespace Application.Core.DTO
 {
     /// <summary>
     /// 从表

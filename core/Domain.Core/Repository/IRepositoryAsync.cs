@@ -1,8 +1,10 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
-using Domain.AggregateRoots;
-
-namespace Domain.Repository;
+namespace Domain.Core.Repository;
 
 /// <summary>
 /// 基础仓储接口

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
-using Domain.AggregateRoots;
+using Domain.Core;
 using Domain.ValueObject;
 
 namespace Domain.Entities;

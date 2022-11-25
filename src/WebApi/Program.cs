@@ -1,15 +1,15 @@
 using System.Text;
 using System.Text.Json.Serialization;
 
-using Application.ApplicationServices;
+using Application.Core.ApplicationServices;
 
-using Domain.Repository;
+using Domain.Core.Repository;
 
 using HealthChecks.UI.Client;
 
 using Infrastructure.Context;
-using Infrastructure.Repository;
-using Infrastructure.UnitOfWork;
+using Infrastructure.Core.Repository;
+using Infrastructure.Core.UnitOfWork;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -115,7 +115,7 @@ builder.Services.AddTransient(typeof(IEFCoreRepositoryAsync<,>), typeof(EFCoreRe
 builder.Services.AddTransient(typeof(IBaseService<,>), typeof(BaseService<,>));
 
 builder.Services.Scan(scan => scan
-    .FromAssemblyOf<Application.Register>()
+    .FromAssembliesOf(typeof(Application.Register),typeof(Application.Core.Register))
     .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Service")))
     .UsingRegistrationStrategy(RegistrationStrategy.Throw)
     .AsImplementedInterfaces()

@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
+using Domain.Core;
+
 namespace Domain.Entities;
 
 /// <summary>

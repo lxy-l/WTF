@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities;
-
+namespace Domain.Core;
 /// <summary>
 /// 实体
 /// </summary>
@@ -16,8 +16,6 @@ public abstract class Entity<TKey> where TKey : struct
     protected Entity(TKey id)
     {
         Id = id;
-        //CreateTime = DateTimeOffset.Now;
-        //ModifyTime = DateTimeOffset.Now;
     }
 
     /// <summary>
@@ -25,16 +23,6 @@ public abstract class Entity<TKey> where TKey : struct
     /// </summary>
     [Key]
     public TKey Id { get; private set; }
-
-    ///// <summary>
-    ///// 创建时间
-    ///// </summary>
-    //public DateTimeOffset CreateTime { get; private set; }
-
-    ///// <summary>
-    ///// 修改时间
-    ///// </summary>
-    //public DateTimeOffset ModifyTime { get; protected set; }
 
     /// <summary>
     /// Equals
@@ -61,10 +49,6 @@ public abstract class Entity<TKey> where TKey : struct
     /// <exception cref="Exception"></exception>
     public override int GetHashCode()
     {
-        //if (Id is null)
-        //{
-        //    throw new Exception("主键为空！");
-        //}
         return Id.GetHashCode();
     }
 
@@ -80,8 +64,6 @@ public abstract class Entity<TKey> where TKey : struct
             return true;
         if (entity1 is null || entity2 is null)
             return false;
-        //if (entity1.Id == null)
-        //    return false;
         if (entity1.Id.Equals(default(TKey)))
             return false;
         return entity1.Id.Equals(entity2.Id);

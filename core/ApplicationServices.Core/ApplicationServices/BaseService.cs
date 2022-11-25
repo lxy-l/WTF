@@ -1,14 +1,14 @@
 ﻿using System.Linq.Dynamic.Core;
 
-using Application.DTO;
+using Application.Core.DTO;
 
-using Domain.AggregateRoots;
-using Domain.Repository;
+using Domain.Core;
+using Domain.Core.Repository;
 
-using Infrastructure.Linq;
-using Infrastructure.Repository;
+using Infrastructure.Core.Extend;
+using Infrastructure.Core.Repository;
 
-namespace Application.ApplicationServices;
+namespace Application.Core.ApplicationServices;
 
 public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKey> 
     where TEntity : AggregateRoot<TKey>
@@ -54,6 +54,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
     {
         if (default(TKey).Equals(model.Id))
         {
+            //TODO 封装自定义业务异常类，正常返回业务错误
             throw new Exception("主键错误！");
         }
         bool IsExist= await BaseRep
@@ -90,7 +91,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
         if (!string.IsNullOrWhiteSpace(searchParams.Filters))
         {
-            var lambda = LinqQuery.BuildFilterLambda<TEntity>(searchParams.Filters);
+            var lambda = LinqExtend.BuildFilterLambda<TEntity>(searchParams.Filters);
             query = query.Where(lambda);
         }
         if (!string.IsNullOrWhiteSpace(searchParams.Sort))

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Dynamic.Core;
 
-using Infrastructure.Repository;
+using Infrastructure.Core.Repository;
 
 using InfrastructureTests.Data;
 

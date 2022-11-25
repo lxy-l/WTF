@@ -1,4 +1,4 @@
-﻿namespace Domain.ValueObject;
+﻿namespace Domain.Core;
 
 /// <summary>
 /// 值对象

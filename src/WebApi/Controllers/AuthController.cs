@@ -1,4 +1,5 @@
-﻿using Application.ApplicationServices;
+﻿using Application.Core.ApplicationServices;
+using Application.Core.DTO;
 using Application.DTO;
 
 using Microsoft.AspNetCore.Identity;

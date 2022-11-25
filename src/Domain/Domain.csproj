@@ -9,10 +9,13 @@
 
   <ItemGroup>
     <Folder Include="DomainService\" />
-    <Folder Include="Aggregates\" />
     <Folder Include="Factories\" />
     <Folder Include="Specification\" />
     <Folder Include="DomainEvent\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\Domain.Core\Domain.Core.csproj" />
   </ItemGroup>
 
 </Project>

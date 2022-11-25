@@ -1,10 +1,10 @@
 ﻿using System.Linq.Dynamic.Core;
 
-using Application.DTO;
+using Application.Core.DTO;
 
-using Domain.AggregateRoots;
+using Domain.Core;
 
-namespace Application.ApplicationServices;
+namespace Application.Core.ApplicationServices;
 
 /// <summary>
 /// 基础服务接口

@@ -1,9 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-using Application.DTO;
+using Application.Core.DTO;
 
-namespace Application.ApplicationServices
+namespace Application.Core.ApplicationServices
 {
     /// <summary>
     /// JwtToken服务
