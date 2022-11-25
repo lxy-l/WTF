@@ -5,7 +5,7 @@ namespace Domain.Entities;
 /// <summary>
 /// 实体
 /// </summary>
-public abstract class Entity<TKey>
+public abstract class Entity<TKey> where TKey : struct
 {
 
     /// <summary>
@@ -60,10 +60,10 @@ public abstract class Entity<TKey>
     /// <exception cref="Exception"></exception>
     public override int GetHashCode()
     {
-        if (Id is null)
-        {
-            throw new Exception("主键为空！");
-        }
+        //if (Id is null)
+        //{
+        //    throw new Exception("主键为空！");
+        //}
         return Id.GetHashCode();
     }
 
@@ -79,8 +79,8 @@ public abstract class Entity<TKey>
             return true;
         if (entity1 is null || entity2 is null)
             return false;
-        if (entity1.Id == null)
-            return false;
+        //if (entity1.Id == null)
+        //    return false;
         if (entity1.Id.Equals(default(TKey)))
             return false;
         return entity1.Id.Equals(entity2.Id);
