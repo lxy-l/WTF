@@ -10,7 +10,9 @@ using Infrastructure.Repository;
 
 namespace Application.ApplicationServices;
 
-public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKey> where TEntity : AggregateRoot<TKey>
+public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKey> 
+    where TEntity : AggregateRoot<TKey>
+    where TKey : struct
 {
     protected readonly IUnitOfWork UnitOfWork;
     protected readonly IEFCoreRepositoryAsync<TEntity, TKey> BaseRep;
@@ -50,6 +52,17 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
     public async Task<TEntity> EditEntity(TEntity model)
     {
+        if (default(TKey).Equals(model.Id))
+        {
+            throw new Exception("主键错误！");
+        }
+        bool IsExist= await BaseRep
+            .AnyAsync(x=>x.Id.Equals(model.Id))
+            .ConfigureAwait(false);
+        if (!IsExist)
+        {
+            throw new Exception("未找到实体信息！");
+        }
         await BaseRep.UpdateAsync(model).ConfigureAwait(false);
         await UnitOfWork.CommitAsync().ConfigureAwait(false);
         return model;

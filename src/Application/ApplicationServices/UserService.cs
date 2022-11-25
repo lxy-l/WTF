@@ -25,7 +25,7 @@ namespace Application.ApplicationServices
              */
             
             var list = (await BaseRep.GetQueryIncludeAsync(
-                include: x => x.Include(i => i.UserInfo)))
+                 x => x.Include(i => i.UserInfo)))
                 .PageResult(search.Page,search.PageSize);
 
             return list;

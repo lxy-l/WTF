@@ -11,7 +11,9 @@ namespace Application.ApplicationServices;
 /// </summary>
 /// <typeparam name="TEntity">实体</typeparam>
 /// <typeparam name="TKey">主键</typeparam>
-public interface IBaseService<TEntity,TKey> where TEntity : AggregateRoot<TKey>
+public interface IBaseService<TEntity,TKey> 
+    where TEntity : AggregateRoot<TKey>
+    where TKey : struct
 {
     /// <summary>
     /// 分页查询

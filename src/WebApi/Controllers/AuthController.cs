@@ -54,6 +54,7 @@ namespace WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
+                await Task.Delay(1000);
                 return Ok(model);
             }
             return BadRequest();

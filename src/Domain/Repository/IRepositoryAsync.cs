@@ -7,7 +7,9 @@ namespace Domain.Repository;
 /// <summary>
 /// 基础仓储接口
 /// </summary>
-public interface IRepositoryAsync<TEntity, in TKey> where TEntity : AggregateRoot<TKey>
+public interface IRepositoryAsync<TEntity,TKey>
+    where TEntity : AggregateRoot<TKey>
+    where TKey : struct
 {
 
     #region 查询
@@ -20,7 +22,7 @@ public interface IRepositoryAsync<TEntity, in TKey> where TEntity : AggregateRoo
 
 
     /// <summary>
-    /// 查询列表（根据Lambda条件筛选）
+    /// 查询列表
     /// </summary>
     /// <param name="expression">筛选条件</param>
     /// <param name="orderBy">排序</param>
@@ -39,7 +41,7 @@ public interface IRepositoryAsync<TEntity, in TKey> where TEntity : AggregateRoo
     Task<TEntity?> FindByIdAsync(TKey id);
 
     /// <summary>
-    /// 查询单个实体信息（根据条件筛选）
+    /// 查询单个实体信息
     /// </summary>
     /// <remarks>查询不到会抛出异常</remarks>
     /// <param name="expression">筛选条件</param>
@@ -48,13 +50,19 @@ public interface IRepositoryAsync<TEntity, in TKey> where TEntity : AggregateRoo
 
 
     /// <summary>
-    /// 查询单个实体信息（根据条件筛选）
+    /// 查询单个实体信息
     /// </summary>
     /// <remarks>查询不到返回null</remarks>
     /// <param name="expression">筛选条件</param>
     /// <returns></returns>
     Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>>? expression = null);
 
+    /// <summary>
+    /// 判断是否存在
+    /// </summary>
+    /// <param name="predicate">条件</param>
+    /// <returns></returns>
+    Task<bool> AnyAsync(Expression<Func<TEntity, bool>>? predicate = null);
 
     /// <summary>
     /// 根据条件查询数量

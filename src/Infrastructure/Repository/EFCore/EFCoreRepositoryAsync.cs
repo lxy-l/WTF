@@ -15,9 +15,9 @@ namespace Infrastructure.Repository;
 /// <summary>
 /// 基础仓储实现
 /// </summary>
-public class EFCoreRepositoryAsync<TEntity, TKey> :
-    IEFCoreRepositoryAsync<TEntity, TKey>
+public class EFCoreRepositoryAsync<TEntity, TKey> : IEFCoreRepositoryAsync<TEntity, TKey>
     where TEntity : AggregateRoot<TKey>
+    where TKey : struct
 {
     /// <summary>
     /// 数据上下文
@@ -44,9 +44,7 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
         bool ignoreQueryFilters = false)
     {
         IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
-
         query = query.WhereIf(expression != null, expression);
-
         if (ignoreQueryFilters)
         {
             query = query.IgnoreQueryFilters();
@@ -56,18 +54,14 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
     }
 
     public async Task<IQueryable<TEntity>> GetQueryIncludeAsync(
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object?>> include,
         Expression<Func<TEntity, bool>>? expression = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool ignoreQueryFilters = false)
     {
         IQueryable<TEntity> query = (await GetQueryableAsync().ConfigureAwait(false)).AsNoTracking();
-
-        if (include != null)
-        {
-            query = include(query);
-        }
-
+        
+        query = include(query);
         query = query.WhereIf(expression != null, expression);
 
         if (ignoreQueryFilters)
@@ -99,6 +93,12 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
     }
 
     public async Task<TEntity?> FindByIdAsync(TKey id) => await DbSet.FindAsync(id).ConfigureAwait(false);
+
+    public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>>? predicate = null) => predicate switch
+    {
+        null => await (await GetQueryableAsync()).AsNoTracking().AnyAsync().ConfigureAwait(false),
+        _ => await (await GetQueryableAsync()).AsNoTracking().AnyAsync(predicate).ConfigureAwait(false)
+    };
 
     public async Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>>? expression) => expression switch
     {
@@ -150,7 +150,6 @@ public class EFCoreRepositoryAsync<TEntity, TKey> :
     };
 
     public async Task DeleteAsync(IList<TEntity> entities) => await _dbContext.BulkDeleteAsync(entities).ConfigureAwait(false);
-
 
 
     #endregion

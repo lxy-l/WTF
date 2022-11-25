@@ -37,7 +37,7 @@ namespace Infrastructure.Linq
         /// <param name="condition">条件</param>
         /// <param name="expression">表达式</param>
         /// <returns></returns>
-        public static IQueryable<T> IncludeIf<T, TProperty>(this IQueryable<T> source, bool condition, Expression<Func<T, TProperty>>? expression)
+        public static IQueryable<T> IncludeIf<T, TProperty>(this IQueryable<T> source, bool condition, Expression<Func<T, TProperty>> expression)
             where T : class => 
             condition
                 ? source.Include(expression)
@@ -51,7 +51,7 @@ namespace Infrastructure.Linq
         /// <param name="condition">条件</param>
         /// <param name="expression">表达式</param>
         /// <returns></returns>
-        public static IQueryable<T> WhereIf<T>(this IQueryable<T> source, bool condition, Expression<Func<T, bool>>? expression) => 
+        public static IQueryable<T> WhereIf<T>(this IQueryable<T> source, bool condition, Expression<Func<T, bool>> expression) => 
             condition
                 ? source.Where(expression)
                 : source;
