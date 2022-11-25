@@ -18,9 +18,9 @@ public interface IBaseService<TEntity,TKey>
     /// <summary>
     /// 分页查询
     /// </summary>
-    /// <param name="searchParams"></param>
+    /// <param name="searchParams">筛选条件模型</param>
     /// <returns></returns>
-    Task<PagedResult<TEntity>> GetPagedResult(SearchParams searchParams);
+    Task<PagedResult<dynamic>> GetPagedResult(SearchParams searchParams);
 
     /// <summary>
     /// 根据主键获取单个实体
@@ -32,21 +32,21 @@ public interface IBaseService<TEntity,TKey>
     /// <summary>
     /// 新增
     /// </summary>
-    /// <param name="model"></param>
+    /// <param name="model">实体模型</param>
     /// <returns></returns>
     Task<TEntity> AddEntity(TEntity model);
 
     /// <summary>
     /// 删除
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="id">主键</param>
     /// <returns></returns>
     Task<TEntity> DeleteEntity(TKey id);
 
     /// <summary>
     /// 修改
     /// </summary>
-    /// <param name="model"></param>
+    /// <param name="model">实体模型</param>
     /// <returns></returns>
     Task<TEntity> EditEntity(TEntity model);
 }

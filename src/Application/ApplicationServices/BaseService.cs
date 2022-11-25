@@ -73,7 +73,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
         return await BaseRep.FindByIdAsync(id).ConfigureAwait(false);
     }
 
-    public async Task<PagedResult<TEntity>> GetPagedResult(SearchParams searchParams)
+    public async Task<PagedResult<dynamic>> GetPagedResult(SearchParams searchParams)
     {
 
         /*
@@ -98,6 +98,6 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
             query = query.OrderBy(searchParams.Sort);
         }
 
-        return query.PageResult(searchParams.Page, searchParams.PageSize);
+        return query.PageResult<dynamic>(searchParams.Page, searchParams.PageSize);
     }
 }

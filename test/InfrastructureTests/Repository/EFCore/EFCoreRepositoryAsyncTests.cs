@@ -1,4 +1,6 @@
-﻿using Infrastructure.Repository;
+﻿using System.Linq.Dynamic.Core;
+
+using Infrastructure.Repository;
 
 using InfrastructureTests.Data;
 
@@ -19,7 +21,8 @@ namespace Infrastructure.Repository.Tests
                 DbContext.AddRange(new List<Test>
                 {
                        new Test("string",DateTime.UtcNow,new List<TestInfo>{new TestInfo(1,"B1")},1),
-                       new Test("string",DateTime.UtcNow.AddDays(1),null,2),
+                       new Test("string",DateTime.UtcNow.AddDays(1),
+                       new List<TestInfo>{new TestInfo(2,"B2")},2),
                        new Test("string",DateTime.UtcNow.AddDays(2),null,3),
                        new Test("string",DateTime.UtcNow.AddDays(3),null,4),
                        new Test("string",DateTime.UtcNow.AddDays(4),null,5),
@@ -30,7 +33,7 @@ namespace Infrastructure.Repository.Tests
 
         }
 
-        [DataRow("""Name="string" && TestInfos!=null""", "", """Name="string"&&TestInfos==null""", "")]
+        [DataRow("""Name="string" && TestInfos.Count>0""", "DateTime DESC", """Name="string"&&TestInfos.Count=0""", "DateTime ASC")]
         [TestMethod()]
         public void GetDynamicQueryAsyncTest(string exp1,string sort1, string exp2,string sort2)
         {
@@ -38,29 +41,17 @@ namespace Infrastructure.Repository.Tests
             IEFCoreRepositoryAsync<Test, int> _repositoryAsync = new EFCoreRepositoryAsync<Test, int>(DbContext);
             var count = _repositoryAsync.CountAsync().Result;
             Assert.IsTrue(count != 0);
-            var list = _repositoryAsync.GetDynamicQueryAsync("""Name="string"&& id==1""").Result.ToList();
-            //var list2 = _repositoryAsync.GetDynamicQueryAsync(exp2).Result.ToList();
-            foreach (var item in list)
-            {
-                if (item.TestInfos!=null)
-                {
-                    foreach (var item2 in item.TestInfos)
-                    {
-                        Console.WriteLine(item2);
-                    }
-                }
-               
-                //Console.WriteLine(item.TestInfos);
-            }
-            Assert.AreEqual(1, list.Count());
-            //Assert.AreEqual(5, list2.Count());
-            //var before = list.ToList()[0];
-            //var after = list.ToList()[1];
-            //Assert.IsTrue(before.DateTime<after.DateTime);
+            var list = _repositoryAsync.GetDynamicQueryAsync(exp1,sort1).Result.ToList();
+            var list2 = _repositoryAsync.GetDynamicQueryAsync(exp2,sort2).Result.ToList();
+            Assert.AreEqual(2, list.Count());
+            Assert.AreEqual(4, list2.Count());
+            var before = list.ToList()[0];
+            var after = list.ToList()[1];
+            Assert.IsTrue(before.DateTime > after.DateTime);
 
-            // before = list2.ToList()[0];
-            // after = list2.ToList()[1];
-            //Assert.IsTrue(before.DateTime > after.DateTime);
+            before = list2.ToList()[0];
+            after = list2.ToList()[1];
+            Assert.IsTrue(before.DateTime < after.DateTime);
         }
 
         protected virtual void Dispose(bool disposing)

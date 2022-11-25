@@ -44,7 +44,7 @@ public class BaseApiController<TEntity,TKey> : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<PagedResult<TEntity>> Get([FromQuery] SearchParams searchParams, CancellationToken cancellationToken = default)
+    public async Task<PagedResult<dynamic>> Get([FromQuery] SearchParams searchParams, CancellationToken cancellationToken = default)
     {
         var list = await Service.GetPagedResult(searchParams);
         return list;
