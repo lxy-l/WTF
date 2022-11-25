@@ -1,9 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using Domain.AggregateRoots;
+using Domain.ValueObject;
 
 namespace Domain.Entities;
 
+/// <summary>
+/// 用户类
+/// </summary>
 public class User : AggregateRoot<int>
 {
     /// <summary>
@@ -18,17 +22,33 @@ public class User : AggregateRoot<int>
     /// </summary>
     [Required]
     [StringLength(255)]
-    public string Password { get; set; }
+    public string PasswordHash { get; set; }
 
     /// <summary>
-    /// 身份信息
+    /// 身份信息（一对一关系，即一个用户对应一个身份证，一个身份证仅对应一个人）
     /// </summary>
-    public virtual UserInfo? UserInfo { get; set; }
+    public UserInfo? UserInfo { get; set; }
 
-    public User(string name, string password, UserInfo? userInfo, int id = default) : base(id)
+    /// <summary>
+    /// 车（一对多关系，即一个用户可以有多辆车）
+    /// </summary>
+    public ICollection<Car> Cars { get; set; }
+
+    /// <summary>
+    /// 宠物(多对多关系，即一个宠物可以有多个主人，一个人可以有多个宠物)
+    /// </summary>
+    public ICollection<Pet>? Pets { get; set; }
+
+    /// <summary>
+    /// 住址(值对象)
+    /// </summary>
+    public Address? Address { get; set; }
+
+    public User(string name, string password, UserInfo? userInfo,Address? address, int id = default) : base(id)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
-        Password = password ?? throw new ArgumentNullException(nameof(password));
+        PasswordHash = password ?? throw new ArgumentNullException(nameof(password));
+        Address=address?? throw new ArgumentNullException(nameof(address));
         UserInfo = userInfo;
     }
 

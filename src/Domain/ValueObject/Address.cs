@@ -27,21 +27,13 @@ public record Address : ValueObject<Address>
     public string Country { get; set; }
 
     /// <summary>
-    /// 州
-    /// </summary>
-    [StringLength(255)]
-    public string State { get; set; }
-
-    /// <summary>
     /// 
     /// </summary>
-    /// <param name="state"></param>
     /// <param name="country"></param>
     /// <param name="city"></param>
     /// <param name="street"></param>
-    public Address(string state,string country,string city,string street)
+    public Address(string country,string city,string street)
     {
-        State = state;
         Country = country;
         City = city;
         Street = street;
