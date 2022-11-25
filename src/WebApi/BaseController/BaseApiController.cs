@@ -43,18 +43,8 @@ public class BaseApiController<TEntity,TKey> : ControllerBase where TEntity :  A
     [HttpGet]
     public async Task<PagedResult<TEntity>> Get([FromQuery] SearchParams searchParams, CancellationToken cancellationToken = default)
     {
-        var list = await Service.GetPagedResult(searchParams,cancellationToken);
+        var list = await Service.GetPagedResult(searchParams);
         return list;
-    }
-
-    /// <summary>
-    /// 获取全部数据
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet("GetAll")]
-    public async Task<List<TEntity>> GetAll(CancellationToken cancellationToken = default)
-    {
-        return await Service.GetAll(cancellationToken);
     }
 
     /// <summary>
