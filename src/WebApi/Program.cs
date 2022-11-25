@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Application.ApplicationServices;
 
@@ -125,7 +126,12 @@ builder.Services.Scan(scan => scan
 //    .AsPublicImplementedInterfaces();
 #endregion
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        //解决Json层级太深，循环依赖问题
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 

@@ -5,6 +5,7 @@ namespace Domain.Entities;
 /// <summary>
 /// 实体
 /// </summary>
+[Serializable]
 public abstract class Entity<TKey> where TKey : struct
 {
 

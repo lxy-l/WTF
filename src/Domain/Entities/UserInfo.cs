@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 using Domain.ValueObject;
 
@@ -33,11 +34,12 @@ public class UserInfo:Entity<int>
     /// 关联用户id
     /// </summary>
     public int UserId { get; set; }
-    
+
     /// <summary>
     /// 对应人员
     /// </summary>
-    public User User { get; set; }
+    [JsonIgnore]
+    public User? User { get; set; }
 
     /// <summary>
     /// 户籍地址
@@ -45,15 +47,17 @@ public class UserInfo:Entity<int>
     [Required]
     public Address Address { get; set; }
 
-    public UserInfo(string name, DateTimeOffset birthday, string cardId, Address address,int id =default):base(id)
+    private UserInfo(int id) : base(id)
+    {
+    }
+
+    public UserInfo(string name, DateTimeOffset birthday, string cardId, int userId, Address address, int id = default) 
+        : base(id)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
         Birthday = birthday;
         CardId = cardId ?? throw new ArgumentNullException(nameof(cardId));
+        UserId = userId;
         Address = address ?? throw new ArgumentNullException(nameof(address));
-    }
-
-    private UserInfo(int id) : base(id)
-    {
     }
 }

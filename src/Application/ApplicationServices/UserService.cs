@@ -25,7 +25,10 @@ namespace Application.ApplicationServices
              */
             
             var list = (await BaseRep.GetQueryIncludeAsync(
-                 x => x.Include(i => i.UserInfo)))
+                 x => 
+                 x.Include(i => i.UserInfo)
+                 .Include(x=>x.Pets)
+                 .Include(x=>x.Cars)))
                 .PageResult(search.Page,search.PageSize);
 
             return list;

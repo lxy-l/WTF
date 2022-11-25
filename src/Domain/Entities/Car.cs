@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Domain.Entities;
 
@@ -7,11 +8,10 @@ namespace Domain.Entities;
 /// </summary>
 public class Car : Entity<int>
 {
-    public Car(string name, string description, User user,int id=default) : this(id)
+    public Car(string name, string description,int id=default) : this(id)
     {
         Name = name;
         Description = description;
-        User = user;
     }
 
     private Car(int id) : base(id)
@@ -33,5 +33,6 @@ public class Car : Entity<int>
     /// <summary>
     /// 关联用户
     /// </summary>
-    public User User { get; set; }
+    [JsonIgnore]
+    public User? User { get; set; }
 }

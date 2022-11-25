@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 using Domain.Enum;
 
@@ -13,20 +14,29 @@ public class Pet : Entity<int>
     {
     }
 
-    public Pet(string name, DateTimeOffset birthday, PetType petType, ICollection<User> user,int id=default):base(id)
+    public Pet(string name, DateTimeOffset birthday, PetType petType,int id=default):base(id)
     {
         Name = name;
         Birthday = birthday;
         PetType = petType;
-        User = user;
     }
 
+    /// <summary>
+    /// 名称
+    /// </summary>
     [StringLength(255)]
     public string Name { get; set; }
 
+    /// <summary>
+    /// 生日
+    /// </summary>
     public DateTimeOffset Birthday { get; set; }
 
+    /// <summary>
+    /// 宠物类型
+    /// </summary>
     public PetType PetType { get; set; }
 
-    public ICollection<User> User { get; set; }
+    [JsonIgnore]
+    public ICollection<User>? User { get; set; }
 }

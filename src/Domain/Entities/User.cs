@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 using Domain.AggregateRoots;
 using Domain.ValueObject;
@@ -32,7 +33,7 @@ public class User : AggregateRoot<int>
     /// <summary>
     /// 车（一对多关系，即一个用户可以有多辆车）
     /// </summary>
-    public ICollection<Car> Cars { get; set; }
+    public ICollection<Car>? Cars { get; set; }
 
     /// <summary>
     /// 宠物(多对多关系，即一个宠物可以有多个主人，一个人可以有多个宠物)
@@ -44,16 +45,18 @@ public class User : AggregateRoot<int>
     /// </summary>
     public Address? Address { get; set; }
 
-    public User(string name, string password, UserInfo? userInfo,Address? address, int id = default) : base(id)
-    {
-        Name = name ?? throw new ArgumentNullException(nameof(name));
-        PasswordHash = password ?? throw new ArgumentNullException(nameof(password));
-        Address=address?? throw new ArgumentNullException(nameof(address));
-        UserInfo = userInfo;
-    }
-
     private User(int id = default) : base(id)
     {
 
+    }
+
+    public User(string name, string passwordHash, UserInfo? userInfo, ICollection<Car>? cars, ICollection<Pet>? pets, Address? address, int id = default) : base(id)
+    {
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
+        UserInfo = userInfo;
+        Cars = cars;
+        Pets = pets;
+        Address = address;
     }
 }
