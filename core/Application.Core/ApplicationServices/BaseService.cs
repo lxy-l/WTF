@@ -10,20 +10,14 @@ using Infrastructure.Core.Repository;
 
 namespace Application.Core.ApplicationServices;
 
-public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKey> 
+public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKey>
     where TEntity : AggregateRoot<TKey>
     where TKey : struct
 {
     protected readonly IUnitOfWork UnitOfWork;
     protected readonly IEFCoreRepositoryAsync<TEntity, TKey> BaseRep;
 
-    public override List<string>? Table 
-    { 
-        get 
-        {
-            return new List<string> { "UserInfo"};
-        } 
-    }
+    public override List<string>? Table => new() { "UserInfo" };
 
     public BaseService(IEFCoreRepositoryAsync<TEntity, TKey> userRep, IUnitOfWork unitOfWork)
     {
@@ -57,8 +51,8 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
             //TODO 封装自定义业务异常类，正常返回业务错误
             throw new Exception("主键错误！");
         }
-        bool IsExist= await BaseRep
-            .AnyAsync(x=>x.Id.Equals(model.Id))
+        bool IsExist = await BaseRep
+            .AnyAsync(x => x.Id.Equals(model.Id))
             .ConfigureAwait(false);
         if (!IsExist)
         {
@@ -83,7 +77,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
         var query = await BaseRep.GetQueryableAsync().ConfigureAwait(false);
 
-        if (Table?.Any()??false)
+        if (Table?.Any() ?? false)
         {
             //TODO 多表联查
             //query.IncludeIf

@@ -26,16 +26,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 var basePath = AppDomain.CurrentDomain.BaseDirectory;
 var userSqlServerConnectionString = builder.Configuration.GetConnectionString("UserSqlServer");
-var authSqlServerConnectionString = builder.Configuration.GetConnectionString("AuthSqlServer");
+//var authSqlServerConnectionString = builder.Configuration.GetConnectionString("AuthSqlServer");
 
 
 #region 健康检查配置
-#pragma warning disable CS8604 // 引用类型参数可能为 null。
 builder.Services.AddHealthChecks()
     .AddSqlServer(userSqlServerConnectionString, name: "UserSqlServer")
-    .AddSqlServer(authSqlServerConnectionString, name: "AuthSqlServer")
+    //.AddSqlServer(authSqlServerConnectionString, name: "AuthSqlServer")
     .AddTcpHealthCheck((x) => { x.AddHost("localhost", 5341); }, "Seq");
-#pragma warning restore CS8604 // 引用类型参数可能为 null。
 #endregion
 
 #region 数据库配置
@@ -43,9 +41,9 @@ builder.Services.AddDbContextPool<DbContext, UserDbContext>(options =>
     options.UseSqlServer(userSqlServerConnectionString)
 );
 
-builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
-    options.UseSqlServer(authSqlServerConnectionString)
-);
+//builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
+//    options.UseSqlServer(authSqlServerConnectionString)
+//);
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 #endregion
