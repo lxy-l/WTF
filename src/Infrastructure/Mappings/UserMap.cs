@@ -1,6 +1,4 @@
-﻿using Azure;
-
-using Domain.Entities;
+﻿using Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -20,7 +18,7 @@ public class UserMap : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         //值对象 需要在EFCore中手动映射
-        builder.OwnsOne(x=>x.Address);
+        builder.OwnsOne(x => x.Address);
 
 
         /*
@@ -52,7 +50,7 @@ public class UserMap : IEntityTypeConfiguration<User>
             .HasConstraintName("FK_UserPet_PetId")
             .OnDelete(DeleteBehavior.Cascade)
             ,
-        j=>j
+        j => j
             .HasOne<User>()
             .WithMany()
             .HasForeignKey("UserId")
