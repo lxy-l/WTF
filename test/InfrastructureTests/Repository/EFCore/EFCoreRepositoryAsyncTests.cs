@@ -11,7 +11,7 @@ namespace Infrastructure.Repository.Tests
     [TestClass()]
     public class EFCoreRepositoryAsyncTests:IDisposable
     {
-        private readonly TestDbContext DbContext = new TestDbContext();
+        private readonly TestDbContext DbContext = new();
         private bool disposedValue;
 
         public EFCoreRepositoryAsyncTests()
@@ -37,14 +37,13 @@ namespace Infrastructure.Repository.Tests
         [TestMethod()]
         public void GetDynamicQueryAsyncTest(string exp1,string sort1, string exp2,string sort2)
         {
-           
             IEFCoreRepositoryAsync<Test, int> _repositoryAsync = new EFCoreRepositoryAsync<Test, int>(DbContext);
             var count = _repositoryAsync.CountAsync().Result;
             Assert.IsTrue(count != 0);
             var list = _repositoryAsync.GetDynamicQueryAsync(exp1,sort1).Result.ToList();
             var list2 = _repositoryAsync.GetDynamicQueryAsync(exp2,sort2).Result.ToList();
-            Assert.AreEqual(2, list.Count());
-            Assert.AreEqual(4, list2.Count());
+            Assert.AreEqual(2, list.Count);
+            Assert.AreEqual(4, list2.Count);
             var before = list.ToList()[0];
             var after = list.ToList()[1];
             Assert.IsTrue(before.DateTime > after.DateTime);

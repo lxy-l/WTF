@@ -23,7 +23,7 @@ public class UnitOfWork : IUnitOfWork
     {
         if (Enable)
         {
-            /**
+            /*
              * EFCore.BulkExtensions组件批量提交
              */
              await _dbContext.BulkSaveChangesAsync(cancellationToken :cancellationToken);

@@ -47,7 +47,7 @@ public class TaskController : ControllerBase
                     _logger.LogInformation("5秒后：执行了");
                 }
 
-            });
+            }, cancellationToken);
         return Ok("OK");
     }
 }

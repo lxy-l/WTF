@@ -14,10 +14,10 @@ namespace WebApi.Controllers;
 /// </summary>
 public class UsersController : BaseApiController<User, int>
 {
-    public IUserService _userService { get; set; }
+    public IUserService UserService { get; set; }
     public UsersController(IUserService userService) : base(userService)
     {
-        _userService = userService;
+        UserService = userService;
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ public class UsersController : BaseApiController<User, int>
     [HttpGet("GetUserInfo")]
     public async Task<IActionResult> GetUserInfo([FromQuery]SearchParams search)
     {
-        var list=await _userService.GetUserAndInfo(search);
+        var list=await UserService.GetUserAndInfo(search);
         return Ok(list);
     }
 

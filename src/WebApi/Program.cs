@@ -113,7 +113,7 @@ builder.Services.AddTransient(typeof(IEFCoreRepositoryAsync<,>), typeof(EFCoreRe
 builder.Services.AddTransient(typeof(IBaseService<,>), typeof(BaseService<,>));
 
 builder.Services.Scan(scan => scan
-    .FromAssembliesOf(typeof(Application.Register),typeof(Application.Core.Register))
+    .FromAssembliesOf(typeof(Application.Register), typeof(Application.Core.Register))
     .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Service")))
     .UsingRegistrationStrategy(RegistrationStrategy.Throw)
     .AsImplementedInterfaces()
