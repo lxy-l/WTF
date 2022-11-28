@@ -26,9 +26,9 @@ public class UsersController : BaseApiController<User, int>
     /// <param name="search"></param>
     /// <returns></returns>
     [HttpGet("GetUserInfo")]
-    public async Task<IActionResult> GetUserInfo([FromQuery]SearchParams search)
+    public async Task<IActionResult> GetUserInfo([FromQuery] SearchParams search)
     {
-        var list=await UserService.GetUserAndInfo(search);
+        var list = await UserService.GetUserAndInfo(search);
         return Ok(list);
     }
 
