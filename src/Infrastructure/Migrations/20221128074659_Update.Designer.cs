@@ -4,6 +4,7 @@ using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221128074659_Update")]
+    partial class Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,19 +132,19 @@ namespace Infrastructure.Migrations
                     b.ToTable("UserInfos");
                 });
 
-            modelBuilder.Entity("UserPets", b =>
+            modelBuilder.Entity("PetUser", b =>
                 {
-                    b.Property<int>("PetId")
+                    b.Property<int>("PetsId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("PetId", "UserId");
+                    b.HasKey("PetsId", "UserId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserPets");
+                    b.ToTable("PetUser");
                 });
 
             modelBuilder.Entity("Domain.Entities.Car", b =>
@@ -229,21 +232,19 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("UserPets", b =>
+            modelBuilder.Entity("PetUser", b =>
                 {
                     b.HasOne("Domain.Entities.Pet", null)
                         .WithMany()
-                        .HasForeignKey("PetId")
+                        .HasForeignKey("PetsId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_UserPet_PetId");
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_UserPet_UserId");
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
