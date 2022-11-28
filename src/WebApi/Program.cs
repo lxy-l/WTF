@@ -5,6 +5,7 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 using WebApi.Config;
+using WebApi.Extend;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ builder.Services.AddServicesConfig();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
     {
-        //解决Json层级太深，循环依赖问题
+        options.JsonSerializerOptions.Converters.Add(new DateTimeOffsetJsonConverter());
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
