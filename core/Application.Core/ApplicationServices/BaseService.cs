@@ -7,6 +7,8 @@ using Domain.Core.Repository;
 using Infrastructure.Core.Extend;
 using Infrastructure.Core.Repository;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Application.Core.ApplicationServices;
 
 public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKey>
@@ -16,7 +18,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
     protected readonly IUnitOfWork UnitOfWork;
     protected readonly IEFCoreRepositoryAsync<TEntity, TKey> BaseRep;
 
-    public override List<string>? Table => new() { "UserInfo" };
+    public override string[]? Table => new string[] { "UserInfo" };
 
     public BaseService(IEFCoreRepositoryAsync<TEntity, TKey> userRep, IUnitOfWork unitOfWork)
     {
@@ -71,29 +73,12 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
     public async Task<PagedResult<dynamic>> GetPagedResult(SearchParams searchParams)
     {
-
         /*
          * 动态查询，根据SearchParams参数进行筛选排序
          */
-
-        var query = await BaseRep.GetQueryableAsync().ConfigureAwait(false);
-
-        if (Table?.Any() ?? false)
-        {
-            //TODO 多表联查
-            //query.IncludeIf
-        }
-
-        if (!string.IsNullOrWhiteSpace(searchParams.Filters))
-        {
-            var lambda = LinqExtend.BuildFilterLambda<TEntity>(searchParams.Filters);
-            query = query.Where(lambda);
-        }
-        if (!string.IsNullOrWhiteSpace(searchParams.Sort))
-        {
-            query = query.OrderBy(searchParams.Sort);
-        }
-
+        var query = await BaseRep
+            .GetDynamicQueryAsync(searchParams.Filters,searchParams.Sort,Table)
+            .ConfigureAwait(false);
         return query.PageResult<dynamic>(searchParams.Page, searchParams.PageSize);
     }
 }

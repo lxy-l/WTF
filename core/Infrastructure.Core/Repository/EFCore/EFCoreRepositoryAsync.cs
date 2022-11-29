@@ -6,6 +6,7 @@ using EFCore.BulkExtensions;
 using Infrastructure.Core.Extend;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Infrastructure.Core.Repository;
@@ -70,13 +71,15 @@ public class EFCoreRepositoryAsync<TEntity, TKey> : IEFCoreRepositoryAsync<TEnti
         return orderBy != null ? orderBy(query) : query;
     }
 
-    public async Task<IQueryable<TEntity>> GetDynamicQueryAsync(string? filter=null, string? sort=null,string? include=null)
+    public async Task<IQueryable<TEntity>> GetDynamicQueryAsync(string? filter=null, string? sort = null, string[]? include=null)
     {
         IQueryable<TEntity> query = (await GetQueryableAsync()).AsNoTracking();
-        if (!string.IsNullOrWhiteSpace(include))
+        if (include?.Any() ?? false)
         {
-            //TODO 动态include多表联查
-
+            foreach (var table in include)
+            {
+                query = query.Include(table);
+            }
         }
         if (!string.IsNullOrWhiteSpace(filter))
         {

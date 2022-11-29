@@ -8,6 +8,6 @@
         /// <summary>
         /// 从表
         /// </summary>
-        public virtual List<string>? Table { get; }
+        public virtual string[]? Table { get; }
     }
 }
