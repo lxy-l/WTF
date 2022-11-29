@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
-
-using Domain.Core;
+using Domain.Core.Models;
 using Domain.Core.Repository;
 
 using Microsoft.EntityFrameworkCore.Query;

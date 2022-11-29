@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
-using Domain.Core;
+using Domain.Core.Models;
 using Domain.ValueObject;
 
 namespace Domain.Entities;

@@ -1,8 +1,7 @@
 ﻿using System.Linq.Dynamic.Core;
 
 using Application.Core.DTO;
-
-using Domain.Core;
+using Domain.Core.Models;
 
 namespace Application.Core.ApplicationServices;
 

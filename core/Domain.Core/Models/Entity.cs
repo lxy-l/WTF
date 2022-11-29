@@ -1,13 +1,18 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Core;
+namespace Domain.Core.Models;
 /// <summary>
 /// 实体
 /// </summary>
 [Serializable]
-public abstract class Entity<TKey> where TKey : struct
+public abstract class Entity<TKey> : IEntity<TKey> where TKey : struct
 {
+    /// <summary>
+    /// 唯一标识
+    /// </summary>
+    [Key]
+    public TKey Id { get; set; }
 
     /// <summary>
     /// 构造
@@ -18,11 +23,11 @@ public abstract class Entity<TKey> where TKey : struct
         Id = id;
     }
 
-    /// <summary>
-    /// 唯一标识
-    /// </summary>
-    [Key]
-    public TKey Id { get; private set; }
+    ///// <summary>
+    ///// 唯一标识
+    ///// </summary>
+    //[Key]
+    //public TKey Id { get; private set; }
 
     /// <summary>
     /// Equals

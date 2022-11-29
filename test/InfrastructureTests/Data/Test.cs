@@ -1,4 +1,4 @@
-﻿using Domain.Core;
+﻿using Domain.Core.Models;
 
 namespace InfrastructureTests.Data
 {

@@ -47,7 +47,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Cars");
+                    b.ToTable("Car");
                 });
 
             modelBuilder.Entity("Domain.Entities.Pet", b =>
@@ -71,7 +71,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pets");
+                    b.ToTable("Pet");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -94,7 +94,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserInfo", b =>
@@ -126,7 +126,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserInfos");
+                    b.ToTable("UserInfo");
                 });
 
             modelBuilder.Entity("UserPets", b =>
@@ -178,7 +178,7 @@ namespace Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("User");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
@@ -217,7 +217,7 @@ namespace Infrastructure.Migrations
 
                             b1.HasKey("UserInfoId");
 
-                            b1.ToTable("UserInfos");
+                            b1.ToTable("UserInfo");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserInfoId");
