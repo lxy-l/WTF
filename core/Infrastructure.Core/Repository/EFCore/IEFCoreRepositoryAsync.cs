@@ -35,6 +35,6 @@ namespace Infrastructure.Core.Repository
         /// <param name="sort">排序条件</param>
         /// <param name="include">子表</param>
         /// <returns></returns>
-        Task<IQueryable<TEntity>> GetDynamicQueryAsync(string? filter=null,string? sort=null, string? include = null);
+        Task<IQueryable<TEntity>> GetDynamicQueryAsync(string? filter=null,string? sort=null, string[]? include = null);
     }
 }
