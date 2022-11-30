@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20221125071528_Init")]
+    [Migration("20221129061139_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -50,7 +50,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Cars");
+                    b.ToTable("Car");
                 });
 
             modelBuilder.Entity("Domain.Entities.Pet", b =>
@@ -74,7 +74,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pets");
+                    b.ToTable("Pet");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -97,7 +97,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserInfo", b =>
@@ -129,29 +129,30 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserInfos");
+                    b.ToTable("UserInfo");
                 });
 
-            modelBuilder.Entity("PetUser", b =>
+            modelBuilder.Entity("UserPets", b =>
                 {
-                    b.Property<int>("PetsId")
+                    b.Property<int>("PetId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("PetsId", "UserId");
+                    b.HasKey("PetId", "UserId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PetUser");
+                    b.ToTable("UserPets");
                 });
 
             modelBuilder.Entity("Domain.Entities.Car", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("Cars")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("User");
                 });
@@ -180,7 +181,7 @@ namespace Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("User");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
@@ -219,7 +220,7 @@ namespace Infrastructure.Migrations
 
                             b1.HasKey("UserInfoId");
 
-                            b1.ToTable("UserInfos");
+                            b1.ToTable("UserInfo");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserInfoId");
@@ -231,19 +232,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PetUser", b =>
+            modelBuilder.Entity("UserPets", b =>
                 {
                     b.HasOne("Domain.Entities.Pet", null)
                         .WithMany()
-                        .HasForeignKey("PetsId")
+                        .HasForeignKey("PetId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_UserPet_PetId");
 
                     b.HasOne("Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_UserPet_UserId");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>

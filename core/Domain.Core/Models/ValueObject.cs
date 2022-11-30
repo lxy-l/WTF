@@ -1,4 +1,4 @@
-﻿namespace Domain.Core;
+﻿namespace Domain.Core.Models;
 
 /// <summary>
 /// 值对象

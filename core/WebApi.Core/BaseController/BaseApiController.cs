@@ -2,9 +2,7 @@
 
 using Application.Core.ApplicationServices;
 using Application.Core.DTO;
-
-using Domain.Core;
-
+using Domain.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Core.BaseController;

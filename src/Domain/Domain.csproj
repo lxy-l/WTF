@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="DomainService\" />
+    <Folder Include="Entities\Bank\" />
     <Folder Include="Factories\" />
     <Folder Include="Specification\" />
     <Folder Include="DomainEvent\" />

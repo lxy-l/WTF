@@ -9,30 +9,33 @@ using WebApi.Extend;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Ω°øµºÏ≤È≈‰÷√
 builder.Services.AddHealthCheckConfig(builder.Configuration);
-
+//DBContext≈‰÷√
 builder.Services.AddDbContextConfig(builder.Configuration);
-
+//Log≈‰÷√
 builder.Services.AddLogConfig(builder.Configuration);
-
+// ⁄»®»œ÷§≈‰÷√
 builder.Services.AddIdentityConfig(builder.Configuration);
-
+//øÁ”Ú≈‰÷√
 builder.Services.AddCorsConfig();
-
+//ª˘¥°∑˛ŒÒ◊¢»Î
 builder.Services.AddServicesConfig();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new DateTimeOffsetJsonConverter());
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    });
+{
+    options.JsonSerializerOptions.Converters.Add(new DateTimeOffsetJsonConverter());
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerConfig();
-
 builder.Services.AddApplicationInsightsTelemetry();
 
+//SwaggerŒƒµµ≈‰÷√
+builder.Services.AddSwaggerConfig();
+//Consul≈‰÷√
+builder.Services.AddConsulConfig(builder.Configuration);
 
 var app = builder.Build();
 

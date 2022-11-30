@@ -1,4 +1,4 @@
-﻿namespace Domain.Core;
+﻿namespace Domain.Core.Models;
 
 /// <summary>
 /// 聚合根
@@ -7,5 +7,6 @@ public abstract class AggregateRoot<TKey> : Entity<TKey> where TKey : struct
 {
     protected AggregateRoot(TKey id) : base(id)
     {
+
     }
 }

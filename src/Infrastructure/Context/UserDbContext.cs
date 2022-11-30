@@ -1,5 +1,8 @@
-﻿using Domain.Entities;
+﻿using System.Reflection;
 
+using Domain.Entities;
+
+using Infrastructure.Core.Extend;
 using Infrastructure.Mappings;
 
 using Microsoft.EntityFrameworkCore;
@@ -12,18 +15,24 @@ public class UserDbContext:DbContext
     {
     }
 
-    public DbSet<User>? Users { get; set; }
+    //public DbSet<User>? Users { get; set; }
 
-    public DbSet<UserInfo>? UserInfos { get; set; }
+    //public DbSet<UserInfo>? UserInfos { get; set; }
 
-    public DbSet<Pet> Pets { get; set; }
+    //public DbSet<Pet> Pets { get; set; }
 
-    public DbSet<Car> Cars { get; set; }
+    //public DbSet<Car> Cars { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new UserMap());
-        modelBuilder.ApplyConfiguration(new UserInfoMap());
+        var Types = EFEntityInfo.GetEntityTypes(typeof(Domain.Register).Assembly);
+        foreach (var entityType in Types)
+        {
+            modelBuilder.Entity(entityType);
+        }
+        //modelBuilder.ApplyConfiguration(new UserMap());
+        //modelBuilder.ApplyConfiguration(new UserInfoMap());
+        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         base.OnModelCreating(modelBuilder);
     }
 

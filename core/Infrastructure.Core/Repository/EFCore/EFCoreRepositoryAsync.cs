@@ -1,8 +1,6 @@
 ﻿using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-
-using Domain.Core;
-
+using Domain.Core.Models;
 using EFCore.BulkExtensions;
 
 using Infrastructure.Core.Extend;
