@@ -19,15 +19,16 @@ public class UnitOfWork : IUnitOfWork
     }
 
 
-    public async Task<int> CommitAsync(CancellationToken cancellationToken = default,bool Enable = false)
+    public async Task<int> CommitAsync(CancellationToken cancellationToken = default, bool Enable = false)
     {
         if (Enable)
         {
             /*
              * EFCore.BulkExtensions组件批量提交
              */
-             await _dbContext.BulkSaveChangesAsync(cancellationToken :cancellationToken);
+            await _dbContext.BulkSaveChangesAsync(cancellationToken: cancellationToken);
         }
         return await _dbContext.SaveChangesAsync(cancellationToken);
+
     }
 }

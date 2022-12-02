@@ -28,7 +28,6 @@ public class UserService : BaseService<User, int>, IUserService
             Include会自动生成 LEFT JOIN语句
          */
 
-        throw new Exception("1");
         var list = (await BaseRep.GetQueryIncludeAsync(
              x => 
              x.Include(i => i.UserInfo)

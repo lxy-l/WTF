@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace WebApi.Config;
 
@@ -15,9 +16,11 @@ public static class DbContextConfig
             options.UseSqlServer(Configuration.GetConnectionString("UserSqlServer"))
         );
 
-        //Services.AddDbContextPool<ApplicationDbContext>(options =>
-        //    options.UseSqlServer(Configuration.GetConnectionString("AuthSqlServer"))
-        //);
+        Services.AddDbContextPool<ApplicationDbContext>(options =>
+        {
+            options.UseSqlServer(Configuration.GetConnectionString("AuthSqlServer"));
+            options.UseOpenIddict();
+        });
 
         Services.AddDatabaseDeveloperPageExceptionFilter();
         #endregion
