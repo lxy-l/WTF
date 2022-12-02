@@ -1,0 +1,6 @@
+
+Add-Migration InitDataBase -Context UserDbContext
+Update-DataBase -Context UserDbContext
+
+Add-Migration InitDataBase -OutputDir "Migrations/Auth/" -Context ApplicationDbContext
+Update-DataBase -Context ApplicationDbContext

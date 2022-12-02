@@ -27,23 +27,23 @@ public static class IdentityConfig
             options.Password.RequireUppercase = false;
         });
         Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                        .AddJwtBearer(options =>
-                        {
-                            options.TokenValidationParameters = new TokenValidationParameters
-                            {
-                                ValidateIssuer = true,
-                                ValidIssuer = Configuration["JwtSettings:Issuer"],
-                                ValidateAudience = true,
-                                ValidAudience = Configuration["JwtSettings:Audience"],
-                                ValidateIssuerSigningKey = true,
-                                IssuerSigningKey = new SymmetricSecurityKey(
-                                    Encoding.UTF8.GetBytes(
-                                        Configuration["JwtSettings:Secret"] ??
-                                        throw new Exception("未配置密钥"))),
-                                ValidateLifetime = true,
-                                ClockSkew = TimeSpan.Zero
-                            };
-                        });
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = Configuration["JwtSettings:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JwtSettings:Audience"],
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(
+                            Configuration["JwtSettings:Secret"] ??
+                            throw new Exception("未配置密钥"))),
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
         #endregion
     }
 }

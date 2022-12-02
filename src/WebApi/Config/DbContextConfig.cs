@@ -15,8 +15,8 @@ public static class DbContextConfig
             options.UseSqlServer(Configuration.GetConnectionString("UserSqlServer"))
         );
 
-        //builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
-        //    options.UseSqlServer(authSqlServerConnectionString)
+        //Services.AddDbContextPool<ApplicationDbContext>(options =>
+        //    options.UseSqlServer(Configuration.GetConnectionString("AuthSqlServer"))
         //);
 
         Services.AddDatabaseDeveloperPageExceptionFilter();

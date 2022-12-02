@@ -14,7 +14,7 @@ namespace Application.Core.ApplicationServices
         /// 生成JwtToken
         /// </summary>
         /// <remarks>需配置JwtSettings</remarks>
-        /// <param name="claims">自定义声明</param>
+        /// <param name="claims">自定义声明(不要存储任何隐私信息)</param>
         /// <returns></returns>
         ValueTask<JwtTokenViewModel> CreateJwtTokenAsync(List<Claim> claims);
 
