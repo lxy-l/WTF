@@ -8,6 +8,6 @@
         /// <summary>
         /// 从表
         /// </summary>
-        public virtual string[]? Table { get; }
+        public virtual string[]? Table { get; set; }
     }
 }

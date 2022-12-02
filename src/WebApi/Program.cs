@@ -44,8 +44,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     //app.UseMigrationsEndPoint();
-    //app.UseStatusCodePagesWithReExecute("/Log/{0}");
-    //app.UseExceptionHandler("/Error");
+    //app.UseStatusCodePagesWithReExecute("/Error/{0}");
+
 }
 else if (app.Environment.IsStaging())
 {
@@ -53,7 +53,8 @@ else if (app.Environment.IsStaging())
 }
 else if (app.Environment.IsProduction())
 {
-    app.UseStatusCodePages();
+    //app.UseStatusCodePages();
+    app.UseExceptionHandler("/Error");
 }
 
 app.UseHealthChecks("/hc", new HealthCheckOptions

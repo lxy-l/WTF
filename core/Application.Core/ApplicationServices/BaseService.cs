@@ -1,6 +1,7 @@
 ﻿using System.Linq.Dynamic.Core;
 
 using Application.Core.DTO;
+using Application.Core.MyException;
 
 using Domain.Core.Models;
 using Domain.Core.Repository;
@@ -15,8 +16,6 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 {
     protected readonly IUnitOfWork UnitOfWork;
     protected readonly IEFCoreRepositoryAsync<TEntity, TKey> BaseRep;
-
-    public override string[]? Table => new string[] { "UserInfo" };
 
     public BaseService(IEFCoreRepositoryAsync<TEntity, TKey> userRep, IUnitOfWork unitOfWork)
     {
@@ -36,7 +35,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
         TEntity? model = await BaseRep.FindByIdAsync(id).ConfigureAwait(false);
         if (model is null)
         {
-            throw new Exception("未找到实体信息！");
+            throw new NotFoundException("未找到实体信息！");
         }
         await BaseRep.DeleteAsync(model).ConfigureAwait(false);
         await UnitOfWork.CommitAsync().ConfigureAwait(false);
@@ -47,15 +46,14 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
     {
         if (default(TKey).Equals(model.Id))
         {
-            //TODO 封装自定义业务异常类，正常返回业务错误
-            throw new Exception("主键错误！");
+            throw new NotFoundException("主键错误！");
         }
         bool IsExist = await BaseRep
             .AnyAsync(x => x.Id.Equals(model.Id))
             .ConfigureAwait(false);
         if (!IsExist)
         {
-            throw new Exception("未找到实体信息！");
+            throw new NotFoundException("未找到实体信息！");
         }
         await BaseRep.UpdateAsync(model).ConfigureAwait(false);
 
@@ -66,7 +64,12 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
     public async Task<TEntity?> GetModelById(TKey id)
     {
-        return await BaseRep.FindByIdAsync(id).ConfigureAwait(false);
+        var entity = await BaseRep.FindByIdAsync(id).ConfigureAwait(false);
+        if (entity is null)
+        {
+            throw new NotFoundException("未找到实体信息！");
+        }
+        return entity;
     }
 
     public async Task<PagedResult<dynamic>> GetPagedResult(SearchParams searchParams)
@@ -74,6 +77,10 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
         /*
          * 动态查询，根据SearchParams参数进行筛选排序
          */
+        if (!string.IsNullOrWhiteSpace(searchParams.Includes))
+        {
+            Table = searchParams.Includes.Split(',');
+        }
         var query = await BaseRep
             .GetDynamicQueryAsync(searchParams.Filters,searchParams.Sort,Table)
             .ConfigureAwait(false);

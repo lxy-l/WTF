@@ -7,9 +7,9 @@ public class SearchParams
 {
 
     /// <summary>
-    /// 展示字段
+    /// 子表列表(UserInfo,Cars,Pets)
     /// </summary>
-    public string? Select { get; set; }
+    public string? Includes { get; set; }
 
     /// <summary>
     /// 筛选条件
