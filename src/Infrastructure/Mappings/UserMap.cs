@@ -12,7 +12,7 @@ public class UserMap : IEntityTypeConfiguration<User>
         总结：一对一关系以及值对象映射需要手动在这里配置
               而多对多，一对多只需要配置导航属性(仅限于生成数据库的时候,可以生成不会报错!)
               如果要配置其他操作例如级联删除，则需要在这里配置
-        建议：Domain层不用数据注解的原因就是如果使用注解将会造成Doamin层依赖EFCore框架，超出了Domian层的职责
+        建议：Domain层不用数据注解的原因就是如果使用注解将会造成Domain层依赖EFCore框架，超出了Domain层的职责
               尽量能配置的关系全部配置，以免新增，删除等其他操作报错！
      */
     public void Configure(EntityTypeBuilder<User> builder)

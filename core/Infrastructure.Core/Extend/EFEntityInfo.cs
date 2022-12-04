@@ -4,7 +4,7 @@ using Domain.Core.Models;
 
 namespace Infrastructure.Core.Extend;
 
-public static   class EFEntityInfo
+public static class EfEntityInfo
 {
     public static IEnumerable<Type> GetEntityTypes(Assembly assembly)
     {

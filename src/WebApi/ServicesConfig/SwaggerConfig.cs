@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace WebApi.Config;
+namespace WebApi.ServicesConfig;
 
 /// <summary>
 /// Swagger配置

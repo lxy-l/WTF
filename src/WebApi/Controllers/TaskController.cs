@@ -34,9 +34,9 @@ public class TaskController : ControllerBase
                 Task.Factory.StartNew(async () =>
                 {
                     Console.WriteLine("任务开始");
-                    await Task.Delay(5000);
+                    await Task.Delay(5000, cancellationToken);
                     Console.WriteLine("任务结束");
-                });
+                }, cancellationToken);
 
                 if (x.IsCanceled)
                 {

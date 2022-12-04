@@ -1,41 +1,40 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace InfrastructureTests.Data
+namespace InfrastructureTests.Data;
+
+public class TestDbContext : DbContext
 {
-    public class TestDbContext : DbContext
+    public virtual DbSet<Test> Tests { get; set; }
+
+    public virtual DbSet<TestInfo> TestInfos { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public virtual DbSet<Test> Tests { get; set; }
-
-        public virtual DbSet<TestInfo> TestInfos { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Test>(x =>
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Test>(x =>
-            {
-                x.HasKey(x => x.Id);
-                x.HasIndex(x => x.Id).IsUnique();
-                x.HasMany(x => x.TestInfos)
+            x.HasKey(x => x.Id);
+            x.HasIndex(x => x.Id).IsUnique();
+            x.HasMany(x => x.TestInfos)
                 .WithOne();
-            });
+        });
 
-            modelBuilder.Entity<TestInfo>(x =>
-            {
-                x.HasKey(x => x.Id);
-            });
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        modelBuilder.Entity<TestInfo>(x =>
         {
-            optionsBuilder
-                .UseInMemoryDatabase("Test");
+            x.HasKey(x => x.Id);
+        });
+    }
 
-            //base.OnConfiguring(optionsBuilder);
-        }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder
+            .UseInMemoryDatabase("Test");
 
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
+        //base.OnConfiguring(optionsBuilder);
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
     }
 }

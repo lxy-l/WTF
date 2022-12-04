@@ -10,7 +10,7 @@ namespace Application.Core.ApplicationServices;
 /// </summary>
 /// <typeparam name="TEntity">实体</typeparam>
 /// <typeparam name="TKey">主键</typeparam>
-public interface IBaseService<TEntity,TKey> 
+public interface IBaseService<TEntity, in TKey> 
     where TEntity : AggregateRoot<TKey>
     where TKey : struct
 {

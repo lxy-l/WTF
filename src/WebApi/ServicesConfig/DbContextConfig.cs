@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebApi.Config;
+namespace WebApi.ServicesConfig;
 
 /// <summary>
 /// 数据上下文配置

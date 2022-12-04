@@ -10,7 +10,7 @@ namespace Domain.Core.Repository;
 /// <summary>
 /// 基础仓储接口
 /// </summary>
-public interface IRepositoryAsync<TEntity,TKey>
+public interface IRepositoryAsync<TEntity, in TKey>
     where TEntity : AggregateRoot<TKey>
     where TKey : struct
 {

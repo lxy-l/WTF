@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace InfrastructureTests.Data;
 
-namespace InfrastructureTests.Data
+public static class SeedData
 {
-    public static class SeedData
-    {
 
-    }
 }

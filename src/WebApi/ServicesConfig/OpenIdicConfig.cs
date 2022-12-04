@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using System.Security.Principal;
+﻿using System.Security.Principal;
+using Microsoft.AspNetCore.Authentication;
 
-namespace WebApi.Config;
+namespace WebApi.ServicesConfig;
 
 public static class OpenIdicConfig
 {

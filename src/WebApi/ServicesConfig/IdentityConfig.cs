@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Context;
 using Microsoft.IdentityModel.Tokens;
 
-namespace WebApi.Config;
+namespace WebApi.ServicesConfig;
 
 /// <summary>
 /// 授权认证配置

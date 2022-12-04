@@ -5,8 +5,7 @@ using Application.Core.MyException;
 
 using Domain.Core.Models;
 using Domain.Core.Repository;
-
-using Infrastructure.Core.Repository;
+using Infrastructure.Core.Repository.EFCore;
 
 namespace Application.Core.ApplicationServices;
 
@@ -15,9 +14,9 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
     where TKey : struct
 {
     protected readonly IUnitOfWork UnitOfWork;
-    protected readonly IEFCoreRepositoryAsync<TEntity, TKey> BaseRep;
+    protected readonly IEfCoreRepositoryAsync<TEntity, TKey> BaseRep;
 
-    public BaseService(IEFCoreRepositoryAsync<TEntity, TKey> userRep, IUnitOfWork unitOfWork)
+    public BaseService(IEfCoreRepositoryAsync<TEntity, TKey> userRep, IUnitOfWork unitOfWork)
     {
         BaseRep = userRep;
         UnitOfWork = unitOfWork;
@@ -48,10 +47,10 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
         {
             throw new NotFoundException("主键错误！");
         }
-        bool IsExist = await BaseRep
+        bool isExist = await BaseRep
             .AnyAsync(x => x.Id.Equals(model.Id))
             .ConfigureAwait(false);
-        if (!IsExist)
+        if (!isExist)
         {
             throw new NotFoundException("未找到实体信息！");
         }

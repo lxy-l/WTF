@@ -12,8 +12,8 @@ public class UserDbContext:DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var Types = EFEntityInfo.GetEntityTypes(typeof(Domain.Register).Assembly);
-        foreach (var entityType in Types)
+        var types = EfEntityInfo.GetEntityTypes(typeof(Domain.Register).Assembly);
+        foreach (var entityType in types)
         {
             modelBuilder.Entity(entityType);
         }

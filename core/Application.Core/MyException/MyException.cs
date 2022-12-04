@@ -5,17 +5,17 @@ namespace Application.Core.MyException;
 /// <summary>
 /// 自定义异常类
 /// </summary>
-public class MyException : Exception
+public abstract class MyException : Exception
 {
-    public MyException()
+    protected MyException()
     {
     }
 
-    public MyException(string? message) : base(message)
+    protected MyException(string? message) : base(message)
     {
     }
 
-    public MyException(string? message, Exception? innerException) : base(message, innerException)
+    protected MyException(string? message, Exception? innerException) : base(message, innerException)
     {
     }
 

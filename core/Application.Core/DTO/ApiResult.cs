@@ -1,4 +1,4 @@
-﻿namespace Application.Core;
+﻿namespace Application.Core.DTO;
 /// <summary>
 /// 异常信息类
 /// </summary>

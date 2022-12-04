@@ -1,15 +1,14 @@
 ﻿using Domain.Core.Models;
 
-namespace InfrastructureTests.Data
+namespace InfrastructureTests.Data;
+
+public class TestInfo:Entity<int>
 {
-    public class TestInfo:Entity<int>
+    public TestInfo(int id,string name) : base(id)
     {
-        public TestInfo(int id,string name) : base(id)
-        {
-            Name = name;
-        }
-
-        public string Name { get; set; }
-
+        Name = name;
     }
+
+    public string Name { get; set; }
+
 }

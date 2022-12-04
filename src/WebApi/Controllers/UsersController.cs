@@ -14,7 +14,7 @@ namespace WebApi.Controllers;
 /// </summary>
 public class UsersController : BaseApiController<User, int>
 {
-    public IUserService UserService { get; set; }
+    private IUserService UserService { get; }
     public UsersController(IUserService userService) : base(userService)
     {
         UserService = userService;

@@ -1,7 +1,7 @@
 ﻿using Consul;
 using Consul.AspNetCore;
 
-namespace WebApi.Config;
+namespace WebApi.ServicesConfig;
 
 /// <summary>
 /// Consul网关配置
@@ -17,8 +17,8 @@ public static class ConsulConfig
             options.Address = new Uri(config["Address"]);
             options.WaitTime = TimeSpan.FromSeconds(
                 config["WaitTime"] is not null
-                ? double.Parse(config["WaitTime"])
-                : 30);
+                    ? double.Parse(config["WaitTime"])
+                    : 30);
         });
         var service = config.GetSection("Service");
         Services.AddConsulServiceRegistration(options =>

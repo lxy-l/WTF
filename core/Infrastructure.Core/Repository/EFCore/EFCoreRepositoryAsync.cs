@@ -2,19 +2,16 @@
 using System.Linq.Expressions;
 using Domain.Core.Models;
 using EFCore.BulkExtensions;
-
 using Infrastructure.Core.Extend;
-
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace Infrastructure.Core.Repository;
+namespace Infrastructure.Core.Repository.EFCore;
 
 /// <summary>
 /// 基础仓储实现
 /// </summary>
-public class EFCoreRepositoryAsync<TEntity, TKey> : IEFCoreRepositoryAsync<TEntity, TKey>
+public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEntity, TKey>
     where TEntity : AggregateRoot<TKey>
     where TKey : struct
 {
@@ -28,7 +25,7 @@ public class EFCoreRepositoryAsync<TEntity, TKey> : IEFCoreRepositoryAsync<TEnti
     /// </summary>
     private DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
 
-    public EFCoreRepositoryAsync(DbContext context)
+    public EfCoreRepositoryAsync(DbContext context)
     {
         _dbContext = context;
     }

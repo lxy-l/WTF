@@ -13,12 +13,6 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'WebApi-Staging' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'WebApi-Production' " />
   <ItemGroup>
-    <Compile Remove="IdentityConfig\**" />
-    <Content Remove="IdentityConfig\**" />
-    <EmbeddedResource Remove="IdentityConfig\**" />
-    <None Remove="IdentityConfig\**" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Network" Version="6.0.4" />
     <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="6.0.4" />
     <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
@@ -51,9 +45,5 @@
     <ProjectReference Include="..\..\core\WebApi.Core\WebApi.Core.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="IdentityConfig\" />
-    <None Remove="NetCore.AutoRegisterDi" />
-  </ItemGroup>
+  
 </Project>

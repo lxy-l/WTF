@@ -4,7 +4,7 @@ using Infrastructure.Core.Repository.EFCore;
 using Infrastructure.Core.UnitOfWork;
 using Scrutor;
 
-namespace WebApi.Config;
+namespace WebApi.ServicesConfig;
 
 /// <summary>
 /// 注入服务配置

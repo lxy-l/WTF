@@ -1,15 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Infrastructure.Core.Extend.Tests
+namespace Infrastructure.Core.Extend.Tests;
+
+[TestClass()]
+public class GuidExtendTests
 {
-    [TestClass()]
-    public class GuidExtendTests
+    [TestMethod()]
+    public void CreateTest()
     {
-        [TestMethod()]
-        public void CreateTest()
-        {
-            var guid1= GuidExtend.Create();
-            Assert.IsNotNull(guid1);
-        }
+        var guid1= GuidExtend.Create();
+        Assert.IsNotNull(guid1);
     }
 }

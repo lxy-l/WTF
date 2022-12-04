@@ -6,20 +6,18 @@ using Application.Core.ApplicationServices;
 
 using Domain.Core.Repository;
 using Domain.Entities;
-
-using Infrastructure.Core.Repository;
-
+using Infrastructure.Core.Repository.EFCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.ApplicationServices;
 
 public class UserService : BaseService<User, int>, IUserService
 {
-    public UserService(IEFCoreRepositoryAsync<User, int> userRep, IUnitOfWork unitOfWork) : base(userRep, unitOfWork)
+    public UserService(IEfCoreRepositoryAsync<User, int> userRep, IUnitOfWork unitOfWork) : base(userRep, unitOfWork)
     {
     }
 
-    public override string[]? Table => new string[]{"UserInfo"};
+    protected override string[] Table => new[]{"UserInfo"};
 
     public async Task<PagedResult<User>> GetUserAndInfo(SearchParams search, CancellationToken cancellationToken = default)
     {
@@ -31,8 +29,8 @@ public class UserService : BaseService<User, int>, IUserService
         var list = (await BaseRep.GetQueryIncludeAsync(
              x => 
              x.Include(i => i.UserInfo)
-             .Include(x=>x.Pets)
-             .Include(x=>x.Cars)))
+             .Include(z=>z.Pets)
+             .Include(y=>y.Cars)))
             .PageResult(search.Page,search.PageSize);
 
         return list;
