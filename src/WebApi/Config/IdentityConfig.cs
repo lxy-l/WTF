@@ -62,7 +62,7 @@ public static class IdentityConfig
             });
         Services.AddAuthorization();
 
-
+        //微软自带Jwt认证
         //Services.AddIdentity<IdentityUser, IdentityRole>()
         //    .AddEntityFrameworkStores<ApplicationDbContext>()
         //    .AddDefaultTokenProviders();

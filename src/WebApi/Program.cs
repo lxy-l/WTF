@@ -16,17 +16,17 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//½¡¿µ¼ì²éÅäÖÃ
+//å¥åº·æ£€æŸ¥é…ç½®
 builder.Services.AddHealthCheckConfig(builder.Configuration);
-//DBContextÅäÖÃ
+//DBContexté…ç½®
 builder.Services.AddDbContextConfig(builder.Configuration);
-//LogÅäÖÃ
+//Logé…ç½®
 builder.Services.AddLogConfig(builder.Configuration);
-//ÊÚÈ¨ÈÏÖ¤ÅäÖÃ
+//æˆæƒè®¤è¯é…ç½®
 builder.Services.AddIdentityConfig(builder.Configuration);
-//¿çÓòÅäÖÃ
+//è·¨åŸŸé…ç½®
 builder.Services.AddCorsConfig();
-//»ù´¡·şÎñ×¢Èë
+//åŸºç¡€æœåŠ¡æ³¨å…¥
 builder.Services.AddServicesConfig();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -39,9 +39,9 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddApplicationInsightsTelemetry();
 
-//SwaggerÎÄµµÅäÖÃ
+//Swaggeræ–‡æ¡£é…ç½®
 builder.Services.AddSwaggerConfig();
-//ConsulÅäÖÃ
+//Consulé…ç½®
 builder.Services.AddConsulConfig(builder.Configuration);
 ;
 
@@ -52,7 +52,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     //app.UseMigrationsEndPoint();
-    
+
 
 }
 else if (app.Environment.IsStaging())
@@ -126,9 +126,6 @@ await using (var scope = app.Services.CreateAsyncScope())
                 }
             });
         }
-
-        // Note: no client registration is created for resource_server_2
-        // as it uses local token validation instead of introspection.
     }
 
     async Task CreateScopesAsync()
