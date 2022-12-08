@@ -8,7 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A73E4DBF-98CF-4DBF-A9FA-4F5B5C84475D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		EFCoreCommand.txt = EFCoreCommand.txt
+		command\EFCoreCommand.txt = command\EFCoreCommand.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainTests", "test\DomainTests\DomainTests.csproj", "{D0798EA4-D287-41AE-B4A5-6F72E7F527CE}"
