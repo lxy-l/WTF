@@ -1,16 +1,10 @@
-using System.Security.Claims;
-
+using AuthService.Configuration;
 using AuthService.Data;
-
-using IdentityModel;
 
 using IdentityServer7.EntityFramework.Storage.DbContexts;
 using IdentityServer7.EntityFramework.Storage.Mappers;
 
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
-using AuthService.Configuration;
 
 namespace AuthService.Seed
 {
@@ -40,33 +34,40 @@ namespace AuthService.Seed
 
             async Task CreateClients()
             {
-                if (!await context.Clients.AnyAsync())
+                var clients = await context.Clients.ToDictionaryAsync(x => x.ClientId);
+
+                foreach (var item in Config.Clients)
                 {
-                    foreach (var item in Config.Clients)
+                    if (!clients.ContainsKey(item.ClientId))
                     {
                         await context.Clients.AddAsync(item.ToEntity());
                     }
+
                 }
             }
 
             async Task CreateScopes()
             {
-                if (!await context.ApiScopes.AnyAsync())
+                var apiScopes = await context.ApiScopes.ToDictionaryAsync(x => x.Name);
+
+                foreach (var item in Config.ApiScopes)
                 {
-                    foreach (var item in Config.ApiScopes)
+                    if (!apiScopes.ContainsKey(item.Name))
                     {
                         await context.ApiScopes.AddAsync(item.ToEntity());
                     }
+
                 }
             }
 
             async Task CreateApiResources()
             {
-                if (!await context.ApiScopes.AnyAsync())
-                {
-                    foreach (var item in Config.ApiResources)
-                    {
+                var apiResources = await context.ApiResources.ToDictionaryAsync(x => x.Name);
 
+                foreach (var item in Config.ApiResources)
+                {
+                    if (!apiResources.ContainsKey(item.Name))
+                    {
                         await context.ApiResources.AddAsync(item.ToEntity());
                     }
                 }
@@ -74,9 +75,11 @@ namespace AuthService.Seed
 
             async Task CreateIdentityResources()
             {
-                if (!await context.ApiResources.AnyAsync())
+                var identityResources = await context.IdentityResources.ToDictionaryAsync(x => x.Name);
+
+                foreach (var item in Config.IdentityResources)
                 {
-                    foreach (var item in Config.IdentityResources)
+                    if (!identityResources.ContainsKey(item.Name))
                     {
                         await context.IdentityResources.AddAsync(item.ToEntity());
                     }

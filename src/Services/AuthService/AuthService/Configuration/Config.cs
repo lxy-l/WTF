@@ -35,7 +35,7 @@ namespace AuthService.Configuration
 
         public static IEnumerable<Client> Clients => new Client[]
             {
-                 new Client
+                new Client
                 {
                     ClientId = "Client",
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
@@ -74,7 +74,7 @@ namespace AuthService.Configuration
                     AllowOfflineAccess = true,
                     AllowedScopes = {  "openid", "profile" }
                 },
-                 new Client
+                new Client
                 {
                     ClientId = "Client3",
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
@@ -85,6 +85,23 @@ namespace AuthService.Configuration
                     //AllowOfflineAccess = true,
                     AllowedScopes = {  "openid", "profile","read" }
                 },
+                new Client
+                {
+                    ClientId= "mvc",
+                    ClientName="WebMvc",
+                    ClientSecrets={ new Secret("secret".Sha256())},
+                    //AllowedGrantTypes=GrantTypes.Hybrid,
+                    AllowedGrantTypes= GrantTypes.Code,
+                    RedirectUris={"https://localhost:7248/signin-oidc"},
+                    PostLogoutRedirectUris={"https://localhost:7248/signout-callback-oidc"},
+                    AllowedScopes=
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                    }
+                },
+            
             };
     }
 }

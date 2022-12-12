@@ -4,6 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	<!--<TieredPGO>true</TieredPGO>-->
+	<!--<PublishAot>true</PublishAot>-->
     <UserSecretsId>aspnet-AuthService-a209e7bd-faea-44f8-aa2c-f41d7797f22e</UserSecretsId>
   </PropertyGroup>
 

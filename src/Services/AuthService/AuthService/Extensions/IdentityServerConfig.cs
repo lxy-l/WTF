@@ -26,7 +26,7 @@ namespace AuthService.Extensions
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
             });
-
+            
 
             var migrationsAssembly = typeof(ApplicationDbContext).Assembly.GetName().Name;
 

@@ -52,6 +52,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\Services\Othe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{B7D426BB-8A6A-4750-BD52-13D720A0DAA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMvc", "src\Services\OtherService\WebMvc\WebMvc.csproj", "{9B9DF375-44D3-405B-9171-D609F621547E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,6 +120,10 @@ Global
 		{0515EE74-80C2-4EFF-902D-E57E35139A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0515EE74-80C2-4EFF-902D-E57E35139A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0515EE74-80C2-4EFF-902D-E57E35139A30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B9DF375-44D3-405B-9171-D609F621547E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B9DF375-44D3-405B-9171-D609F621547E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B9DF375-44D3-405B-9171-D609F621547E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B9DF375-44D3-405B-9171-D609F621547E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,6 +148,7 @@ Global
 		{CD0CD84A-F4AE-4F8E-8F71-E7A6875DF28A} = {0CDE9CC4-0627-4DFB-93C3-FEFD2078EB9A}
 		{0515EE74-80C2-4EFF-902D-E57E35139A30} = {0CDE9CC4-0627-4DFB-93C3-FEFD2078EB9A}
 		{B7D426BB-8A6A-4750-BD52-13D720A0DAA2} = {203BA516-61EA-44AD-AD31-2FEDF3A0E875}
+		{9B9DF375-44D3-405B-9171-D609F621547E} = {0CDE9CC4-0627-4DFB-93C3-FEFD2078EB9A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE7C3459-9161-4393-A320-68F980F4439C}
