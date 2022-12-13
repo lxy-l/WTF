@@ -15,8 +15,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityServerConfig(connectionString);
 
-builder.Services.AddControllers();
-builder.Services.AddRazorPages();
+builder.Services.AddControllersWithViews();
+//builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -27,7 +27,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Error");
+    app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
@@ -39,7 +39,7 @@ app.UseRouting();
 app.UseIdentityServer();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapDefaultControllerRoute();
 app.MapRazorPages();
 
 app.Run();

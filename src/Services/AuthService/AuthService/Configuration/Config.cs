@@ -88,7 +88,7 @@ namespace AuthService.Configuration
                 new Client
                 {
                     ClientId= "mvc",
-                    ClientName="WebMvc",
+                    ClientName="AuthService",
                     ClientSecrets={ new Secret("secret".Sha256())},
                     //AllowedGrantTypes=GrantTypes.Hybrid,
                     AllowedGrantTypes= GrantTypes.Code,
