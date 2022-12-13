@@ -2,6 +2,7 @@ using AuthService.Data;
 
 using IdentityServer7.EntityFramework;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ namespace AuthService.Extensions
                 .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            // Identity≈‰÷√£∫https://learn.microsoft.com/zh-cn/aspnet/core/security/authentication/identity-configuration?view=aspnetcore-7.0
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 6;
@@ -25,9 +27,32 @@ namespace AuthService.Extensions
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
-            });
-            
 
+                options.Lockout.DefaultLockoutTimeSpan= TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts= 5;
+                options.Lockout.AllowedForNewUsers= true;
+
+                options.SignIn.RequireConfirmedEmail=true;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
+            });
+
+            //Cookies≈‰÷√£∫https://learn.microsoft.com/zh-cn/dotnet/api/microsoft.aspnetcore.authentication.cookies.cookieauthenticationoptions?view=aspnetcore-7.0
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                //options.Cookie.Name = "YourAppCookieName";
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.LoginPath = "/Identity/Account/Login";
+                // ReturnUrlParameter requires 
+                //using Microsoft.AspNetCore.Authentication.Cookies;
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+                options.SlidingExpiration = true;
+            });
+
+
+
+            //IdentityServer≈‰÷√
             var migrationsAssembly = typeof(ApplicationDbContext).Assembly.GetName().Name;
 
             var builder = services

@@ -15,7 +15,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityServerConfig(connectionString);
-
+builder.Services
+    .AddAuthentication()
+    .AddMicrosoftAccount(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
+        options.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
+    });
 builder.Services.AddControllersWithViews();
 //builder.Services.AddRazorPages();
 

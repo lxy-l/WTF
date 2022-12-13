@@ -3,9 +3,11 @@
 using Microsoft.AspNetCore.Mvc;
 
 using AuthService.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AuthService.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

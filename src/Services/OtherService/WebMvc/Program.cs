@@ -1,13 +1,20 @@
+using System.IdentityModel.Tokens.Jwt;
+
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultScheme = "Cookies";
-    options.DefaultChallengeScheme = "oidc";
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 })
-    .AddCookie("Cookies")
+    .AddCookie()
     .AddOpenIdConnect("oidc", options =>
     {
         options.Authority = "https://localhost:7296";
@@ -16,6 +23,7 @@ builder.Services.AddAuthentication(options =>
         options.ClientSecret = "secret";
         options.ResponseType = "code";
         options.SaveTokens = true;
+        options.UsePkce=true;
         //options.
     });
 
