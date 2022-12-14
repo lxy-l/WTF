@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model IdentityUser
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+@*<partial name="_StatusMessage" for="StatusMessage" />*@
+<div class="row">
+    <form id="profile-form" asp-action="Edit" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+        <div class="form-floating mb-3">
+            <input asp-for="UserName" class="form-control" placeholder="Please choose your username." disabled />
+            <label asp-for="UserName" class="form-label"></label>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Email" class="form-control" placeholder="Please choose your username." disabled />
+            <label asp-for="Email" class="form-label"></label>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="LockoutEnd" class="form-control" placeholder="Please choose your username." disabled />
+            <label asp-for="LockoutEnd" class="form-label"></label>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="TwoFactorEnabled" class="form-control" placeholder="Please choose your username." disabled />
+            <label asp-for="TwoFactorEnabled" class="form-label"></label>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
+            <label asp-for="PhoneNumber" class="form-label"></label>
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

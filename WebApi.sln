@@ -52,7 +52,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\Services\Othe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{B7D426BB-8A6A-4750-BD52-13D720A0DAA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMvc", "src\Services\OtherService\WebMvc\WebMvc.csproj", "{9B9DF375-44D3-405B-9171-D609F621547E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebMvc", "src\Services\OtherService\WebMvc\WebMvc.csproj", "{9B9DF375-44D3-405B-9171-D609F621547E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

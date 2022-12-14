@@ -154,7 +154,7 @@ namespace AuthService.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        public IdentityUser CreateUser()
         {
             try
             {
@@ -168,7 +168,7 @@ namespace AuthService.Areas.Identity.Pages.Account
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        public IUserEmailStore<IdentityUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
