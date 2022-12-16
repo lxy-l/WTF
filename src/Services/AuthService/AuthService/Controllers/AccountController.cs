@@ -80,7 +80,11 @@ namespace AuthService.Controllers
         public async Task<IActionResult> EditAsync(IdentityUser model)
         {
             var user = await _userManager.FindByIdAsync(model.Id);
-            return View();
+            if (user==null)
+            {
+                return NotFound();
+            }
+            return RedirectToAction("Details",routeValues:user.Id);
         }
 
         [HttpGet]
@@ -90,7 +94,7 @@ namespace AuthService.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Delete(string id) 
         {
             var user=await _userManager.FindByIdAsync(id);
