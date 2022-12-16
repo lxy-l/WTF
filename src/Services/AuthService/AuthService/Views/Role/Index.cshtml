@@ -1,7 +1,7 @@
-﻿@using IdentityServer7.EntityFramework.Storage.Entities;
-@model IEnumerable<ApiResource>
+﻿@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<IdentityRole>
 @{
-    ViewData["Title"] = "ApiResource";
+    ViewData["Title"] = "IdentityRoles";
 }
 <h1>@ViewData["Title"]</h1>
 <hr />
@@ -20,19 +20,10 @@
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.DisplayName)
+                    @Html.DisplayNameFor(model => model.NormalizedName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th class="text-center">
-                    @Html.DisplayNameFor(model => model.Created)
-                </th>
-                <th class="text-center">
-                    @Html.DisplayNameFor(model => model.ShowInDiscoveryDocument)
-                </th>
-                <th class="text-center">
-                    @Html.DisplayNameFor(model => model.Enabled)
+                    @Html.DisplayNameFor(model => model.ConcurrencyStamp)
                 </th>
                 <th></th>
             </tr>
@@ -50,21 +41,11 @@
                         @Html.DisplayFor(model => item.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => item.DisplayName)
+                        @Html.DisplayFor(model => item.NormalizedName)
                     </td>
                     <td class="text-center">
-                        @Html.DisplayFor(model => item.Description)
+                        @Html.DisplayFor(model => item.ConcurrencyStamp)
                     </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(model => item.Created)
-                    </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(model => item.ShowInDiscoveryDocument)
-                    </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(model => item.Enabled)
-                    </td>
-
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a>|

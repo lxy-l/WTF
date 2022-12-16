@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1>@ViewData["Title"]</h1>
 @*<partial name="_StatusMessage" for="StatusMessage" />*@
 <div class="row">
     <form id="profile-form" asp-action="Edit" method="post">
@@ -36,5 +36,5 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @*<partial name="_ValidationScriptsPartial" />*@
 }

@@ -1,7 +1,7 @@
 ﻿@using IdentityServer7.EntityFramework.Storage.Entities;
-@model IEnumerable<ApiResource>
+@model IEnumerable<ApiScope>
 @{
-    ViewData["Title"] = "ApiResource";
+    ViewData["Title"] = "ApiScope";
 }
 <h1>@ViewData["Title"]</h1>
 <hr />
@@ -26,7 +26,7 @@
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
                 <th class="text-center">
-                    @Html.DisplayNameFor(model => model.Created)
+                    @Html.DisplayNameFor(model => model.Required)
                 </th>
                 <th class="text-center">
                     @Html.DisplayNameFor(model => model.ShowInDiscoveryDocument)
@@ -56,7 +56,7 @@
                         @Html.DisplayFor(model => item.Description)
                     </td>
                     <td class="text-center">
-                        @Html.DisplayFor(model => item.Created)
+                        @Html.DisplayFor(model => item.Required)
                     </td>
                     <td class="text-center">
                         @Html.DisplayFor(model => item.ShowInDiscoveryDocument)

@@ -8,7 +8,7 @@ const string token = "kCZxIR5O_zrcK5SYDIgohYJRY-9GEj4yN0syBNlPHF3VKH3SfAnCl_Acy1
 const string bucket = "database";
 const string org = "roy";
 
-using var client = InfluxDBClientFactory.Create("http://localhost:49153", token);
+using var client = new InfluxDBClient("http://localhost:49153", token);
 
 //using (var writeApi = client.GetWriteApi())
 //{

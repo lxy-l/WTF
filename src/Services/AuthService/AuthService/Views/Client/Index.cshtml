@@ -1,7 +1,8 @@
 ﻿@using IdentityServer7.EntityFramework.Storage.Entities;
-@model IEnumerable<ApiResource>
+
+@model IEnumerable<Client>
 @{
-    ViewData["Title"] = "ApiResource";
+    ViewData["Title"] = "Clients";
 }
 <h1>@ViewData["Title"]</h1>
 <hr />
@@ -17,22 +18,22 @@
                     #
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Name)
+                    @Html.DisplayNameFor(model => model.ClientId)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.DisplayName)
+                    @Html.DisplayNameFor(model => model.ClientName)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
                 <th class="text-center">
-                    @Html.DisplayNameFor(model => model.Created)
-                </th>
-                <th class="text-center">
-                    @Html.DisplayNameFor(model => model.ShowInDiscoveryDocument)
+                    @Html.DisplayNameFor(model => model.AllowedGrantTypes.FirstOrDefault().GrantType)
                 </th>
                 <th class="text-center">
                     @Html.DisplayNameFor(model => model.Enabled)
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.AllowOfflineAccess)
                 </th>
                 <th></th>
             </tr>
@@ -47,22 +48,22 @@
                 <tr scope="row">
                     <th scope="row"> @index </th>
                     <td>
-                        @Html.DisplayFor(model => item.Name)
+                        @Html.DisplayFor(model => item.ClientId)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => item.DisplayName)
+                        @Html.DisplayFor(model => item.ClientName)
                     </td>
                     <td class="text-center">
                         @Html.DisplayFor(model => item.Description)
                     </td>
                     <td class="text-center">
-                        @Html.DisplayFor(model => item.Created)
-                    </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(model => item.ShowInDiscoveryDocument)
+                        @Html.DisplayFor(model => item.AllowedGrantTypes.FirstOrDefault().GrantType)
                     </td>
                     <td class="text-center">
                         @Html.DisplayFor(model => item.Enabled)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(model => item.AllowOfflineAccess)
                     </td>
 
                     <td>
@@ -77,4 +78,3 @@
         </tbody>
     </table>
 </div>
-
