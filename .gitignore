@@ -368,3 +368,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 /src/Services/AuthService/AuthService/tempkey.jwk
+/src/Services/Identity/AuthService/tempkey.jwk
