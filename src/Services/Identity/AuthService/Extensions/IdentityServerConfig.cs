@@ -84,15 +84,15 @@ namespace AuthService.Extensions
 
             builder.AddDeveloperSigningCredential();
 
-            builder.Services
-                .AddAuthentication()
-                .AddMicrosoftAccount(options =>
-                {
-                    options.ClientId = Configuration["Authentication:Microsoft:ClientId"] 
-                    ?? throw new InvalidOperationException("Connection string 'ClientId' not found."); ;
-                    options.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"]
-                     ?? throw new InvalidOperationException("Connection string 'ClientSecret' not found."); ;
-                });
+            //builder.Services
+            //    .AddAuthentication()
+            //    .AddMicrosoftAccount(options =>
+            //    {
+            //        options.ClientId = Configuration["Authentication:Microsoft:ClientId"] 
+            //        ?? throw new InvalidOperationException("Connection string 'ClientId' not found."); ;
+            //        options.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"]
+            //         ?? throw new InvalidOperationException("Connection string 'ClientSecret' not found."); ;
+            //    });
         }
     }
 }

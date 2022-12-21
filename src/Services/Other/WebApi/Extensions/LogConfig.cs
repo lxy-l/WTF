@@ -7,11 +7,13 @@ public static class LogConfig
 {
     public static void AddLogConfig(this IServiceCollection Services, IConfiguration Configuration)
     {
-        #region 日志配置
-        Services.AddLogging(loggingBuilder =>
+        var config = Configuration.GetSection("Seq");
+        if (config.GetChildren().Any())
         {
-            loggingBuilder.AddSeq(Configuration.GetSection("Seq"));
-        });
-        #endregion
+            Services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddSeq(config);
+            });
+        }
     }
 }

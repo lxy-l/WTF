@@ -1,4 +1,5 @@
-﻿using Infrastructure.Context;
+﻿using AuthService.Data;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Extensions;
@@ -10,12 +11,10 @@ public static class DbContextConfig
 {
     public static void AddDbContextConfig(this IServiceCollection Services,IConfiguration Configuration)
     {
-        #region 数据库配置
-        Services.AddDbContextPool<DbContext, UserDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("UserSqlServer"))
-        );
+        Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 
         Services.AddDatabaseDeveloperPageExceptionFilter();
-        #endregion
     }
 }

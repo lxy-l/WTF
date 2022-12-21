@@ -97,7 +97,7 @@ public static class IdentityConfig
             .AddJwtBearer(options =>
             {
                 options.Authority = "https://localhost:7296";
-                options.RequireHttpsMetadata = false;
+                options.RequireHttpsMetadata = true;
                 options.Audience = "WebApi";
                 options.TokenValidationParameters = new TokenValidationParameters
                 {

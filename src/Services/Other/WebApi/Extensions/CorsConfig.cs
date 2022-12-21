@@ -7,7 +7,6 @@ public static class CorsConfig
 {
     public static void AddCorsConfig(this IServiceCollection Services)
     {
-        #region Cors跨域配置
         Services.AddCors(options =>
         {
             options.AddDefaultPolicy(
@@ -19,6 +18,5 @@ public static class CorsConfig
                         .WithMethods("GET", "POST", "PUT", "DELETE");
                 });
         });
-        #endregion
     }
 }
