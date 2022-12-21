@@ -1,4 +1,4 @@
-﻿namespace WebApi.ServicesConfig;
+﻿namespace WebApi.Extensions;
 
 /// <summary>
 /// 日志配置

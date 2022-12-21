@@ -18,7 +18,7 @@ builder.Services.AddAuthentication(options =>
     .AddOpenIdConnect( options =>
     {
         options.Authority = "https://localhost:7296";
-        options.RequireHttpsMetadata = true;
+        options.RequireHttpsMetadata = false;
         options.ClientId = "mvc";
         options.ClientSecret = "secret";
         options.ResponseType = "code";

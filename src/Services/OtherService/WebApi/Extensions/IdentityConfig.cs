@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace WebApi.ServicesConfig;
+namespace WebApi.Extensions;
 
 /// <summary>
 /// 授权认证配置
@@ -97,7 +97,7 @@ public static class IdentityConfig
             .AddJwtBearer(options =>
             {
                 options.Authority = "https://localhost:7296";
-                options.RequireHttpsMetadata = true;
+                options.RequireHttpsMetadata = false;
                 options.Audience = "WebApi";
                 options.TokenValidationParameters = new TokenValidationParameters
                 {

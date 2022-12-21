@@ -1,4 +1,4 @@
-﻿namespace WebApi.ServicesConfig;
+﻿namespace WebApi.Extensions;
 
 /// <summary>
 /// 跨域配置

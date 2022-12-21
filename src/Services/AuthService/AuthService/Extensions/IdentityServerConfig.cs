@@ -13,15 +13,18 @@ namespace AuthService.Extensions
     /// </summary>
     public static class IdentityServerConfig
     {
-        public static void AddIdentityServerConfig(this IServiceCollection services,string connectionStr) 
+        public static void AddIdentityServerConfig(this IServiceCollection Services, IConfiguration Configuration)
         {
-            services
+            var connectionString = Configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+            Services
                 .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Identity≈‰÷√£∫https://learn.microsoft.com/zh-cn/aspnet/core/security/authentication/identity-configuration?view=aspnetcore-7.0
-            services.Configure<IdentityOptions>(options =>
+            Services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 3;
@@ -29,16 +32,16 @@ namespace AuthService.Extensions
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
 
-                options.Lockout.DefaultLockoutTimeSpan= TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts= 5;
-                options.Lockout.AllowedForNewUsers= true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
 
-                options.SignIn.RequireConfirmedEmail=true;
+                options.SignIn.RequireConfirmedEmail = true;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
             });
 
             //Cookies≈‰÷√£∫https://learn.microsoft.com/zh-cn/dotnet/api/microsoft.aspnetcore.authentication.cookies.cookieauthenticationoptions?view=aspnetcore-7.0
-            services.ConfigureApplicationCookie(options =>
+            Services.ConfigureApplicationCookie(options =>
             {
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 //options.Cookie.Name = "YourAppCookieName";
@@ -51,12 +54,10 @@ namespace AuthService.Extensions
                 options.SlidingExpiration = true;
             });
 
-
-
             //IdentityServer≈‰÷√
             var migrationsAssembly = typeof(ApplicationDbContext).Assembly.GetName().Name;
 
-            var builder = services
+            var builder = Services
                 .AddIdentityServer(options =>
                 {
                     options.Events.RaiseErrorEvents = true;
@@ -68,13 +69,13 @@ namespace AuthService.Extensions
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionStr,
+                        builder.UseSqlServer(connectionString,
                             sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionStr, sql =>
+                        builder.UseSqlServer(connectionString, sql =>
                             sql.MigrationsAssembly(migrationsAssembly));
                     options.EnableTokenCleanup = true;
                     options.TokenCleanupInterval = 3600;
@@ -82,6 +83,16 @@ namespace AuthService.Extensions
                 .AddAspNetIdentity<IdentityUser>();
 
             builder.AddDeveloperSigningCredential();
+
+            builder.Services
+                .AddAuthentication()
+                .AddMicrosoftAccount(options =>
+                {
+                    options.ClientId = Configuration["Authentication:Microsoft:ClientId"] 
+                    ?? throw new InvalidOperationException("Connection string 'ClientId' not found."); ;
+                    options.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"]
+                     ?? throw new InvalidOperationException("Connection string 'ClientSecret' not found."); ;
+                });
         }
     }
 }

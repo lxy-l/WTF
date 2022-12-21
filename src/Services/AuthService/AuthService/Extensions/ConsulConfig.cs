@@ -1,7 +1,7 @@
 ﻿using Consul;
 using Consul.AspNetCore;
 
-namespace WebApi.ServicesConfig;
+namespace AuthService.Extensions;
 
 /// <summary>
 /// Consul网关配置
@@ -38,7 +38,6 @@ public static class ConsulConfig
                     : TimeSpan.FromSeconds(20),
 
                 HTTP = service["HTTP"],
-
                 Timeout = service["Timeout"] is not null
                     ? TimeSpan.FromSeconds(
                         double.Parse(

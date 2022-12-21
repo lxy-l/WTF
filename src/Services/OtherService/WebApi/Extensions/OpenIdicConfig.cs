@@ -1,7 +1,7 @@
 ﻿using System.Security.Principal;
 using Microsoft.AspNetCore.Authentication;
 
-namespace WebApi.ServicesConfig;
+namespace WebApi.Extensions;
 
 public static class OpenIdicConfig
 {

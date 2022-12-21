@@ -1,27 +1,25 @@
-using AuthService.Data;
 using AuthService.Extensions;
 using AuthService.Seed;
 
-using Microsoft.EntityFrameworkCore;
+using HealthChecks.UI.Client;
+
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+
+using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+//DbContext≈‰÷√
+builder.Services.AddDbContextConfig(builder.Configuration);
+//Ω°øµºÏ≤È≈‰÷√
+builder.Services.AddHealthCheckConfig(builder.Configuration);
+//Log≈‰÷√
+builder.Services.AddLogConfig(builder.Configuration);
+//Consul≈‰÷√
+builder.Services.AddConsulConfig(builder.Configuration);
+//IdentityServer≈‰÷√
+builder.Services.AddIdentityServerConfig(builder.Configuration);
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddIdentityServerConfig(connectionString);
-builder.Services
-    .AddAuthentication()
-    .AddMicrosoftAccount(options =>
-    {
-        options.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
-        options.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
-    });
 builder.Services.AddControllersWithViews();
 //builder.Services.AddRazorPages();
 
@@ -40,6 +38,12 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseHealthChecks("/hc", new HealthCheckOptions
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.UseRouting();
 
