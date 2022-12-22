@@ -6,10 +6,11 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-@*<partial name="_StatusMessage" for="StatusMessage" />*@
+<p>    
+<a asp-action="Index">Back to List</a>
+    </p>
 <div class="row">
-    <form id="profile-form" asp-action="Edit" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+    <div id="profile-form">
         <div class="form-floating mb-3">
             <input asp-for="UserName" class="form-control" placeholder="Please choose your username." disabled />
             <label asp-for="UserName" class="form-label"></label>
@@ -19,22 +20,26 @@
             <label asp-for="Email" class="form-label"></label>
         </div>
         <div class="form-floating mb-3">
+            <input asp-for="PhoneNumber" class="form-control" placeholder="Please enter your phone number." disabled />
+            <label asp-for="PhoneNumber" class="form-label"></label>
+        </div>
+        <div class="form-floating mb-3">
             <input asp-for="LockoutEnd" class="form-control" placeholder="Please choose your username." disabled />
             <label asp-for="LockoutEnd" class="form-label"></label>
         </div>
         <div class="form-floating mb-3">
-            <input asp-for="TwoFactorEnabled" class="form-control" placeholder="Please choose your username." disabled />
+            <input asp-for="TwoFactorEnabled" class="form-control" disabled />
             <label asp-for="TwoFactorEnabled" class="form-label"></label>
         </div>
         <div class="form-floating mb-3">
-            <input asp-for="PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
-            <label asp-for="PhoneNumber" class="form-label"></label>
-            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            <input asp-for="AccessFailedCount" class="form-control" placeholder="Please choose your username." disabled />
+            <label asp-for="AccessFailedCount" class="form-label"></label>
         </div>
-        <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-    </form>
+    </div>
 </div>
 
 @section Scripts {
-    @*<partial name="_ValidationScriptsPartial" />*@
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

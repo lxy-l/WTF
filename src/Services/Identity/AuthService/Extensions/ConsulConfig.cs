@@ -1,9 +1,4 @@
-﻿using System.Configuration;
-
-using Consul;
-using Consul.AspNetCore;
-
-using static System.Collections.Specialized.BitVector32;
+﻿using Consul.AspNetCore;
 
 namespace AuthService.Extensions;
 

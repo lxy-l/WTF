@@ -42,6 +42,7 @@ namespace AuthService.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAsync(RegisterModel Input)
         {
             if (ModelState.IsValid)
@@ -61,7 +62,7 @@ namespace AuthService.Controllers
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                     pageHandler: null,
-                        values: new { area = "Identity", userId, code,  },
+                        values: new { area = "Identity", userId, code, },
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
@@ -73,41 +74,114 @@ namespace AuthService.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-           return View(Input);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> EditAsync(IdentityUser model)
-        {
-            var user = await _userManager.FindByIdAsync(model.Id);
-            if (user==null)
-            {
-                return NotFound();
-            }
-            return RedirectToAction("Details",routeValues:user.Id);
+            return View(Input);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(string id) 
+        public async Task<IActionResult> Edit(string id)
         {
-            var model= await _userManager.FindByIdAsync(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var model = await _userManager.FindByIdAsync(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAsync(string id,IdentityUser model)
+        {
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                var result = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
             return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(string id) 
+        public async Task<IActionResult> Details(string id)
         {
-            var user=await _userManager.FindByIdAsync(id);
-            var result= await _userManager.DeleteAsync(user);
-            if (result.Succeeded)
+            if (id == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
-            foreach (var error in result.Errors)
+
+            var model = await _userManager.FindByIdAsync(id);
+            if (model == null)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                return NotFound();
             }
-            return View();
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null || _userManager.Users == null)
+            {
+                return NotFound();
+            }
+            var movie = await _userManager.Users
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            return View(movie);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            if (_userManager.Users == null)
+            {
+                return Problem("Entity set 'User'  is null.");
+            }
+            var user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                var result=await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+            return NotFound();
         }
     }
 }
