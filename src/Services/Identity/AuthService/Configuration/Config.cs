@@ -7,15 +7,14 @@ namespace AuthService.Configuration
 {
     public static class Config
     {
-        public static IEnumerable<IdentityResource> IdentityResources =>
-            new IdentityResource[]
-            {
+        public static IEnumerable<IdentityResource> IdentityResources => new IdentityResource[]
+        {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Address(),
                 new IdentityResources.Email(),
                 new IdentityResources.Phone(),
-            };
+        };
 
         public static IEnumerable<ApiResource> ApiResources => new[]
         {
@@ -27,14 +26,14 @@ namespace AuthService.Configuration
             }
         };
         public static IEnumerable<ApiScope> ApiScopes => new List<ApiScope>
-            {
+        {
                new ApiScope(name: "read",    displayName: "读取"),
                new ApiScope(name: "write", displayName: "写入"),
                new ApiScope(name: "api1", displayName: "WebApi资源"),
-            };
+        };
 
         public static IEnumerable<Client> Clients => new Client[]
-            {
+        {
                 new Client
                 {
                     ClientId = "Client",
@@ -100,8 +99,7 @@ namespace AuthService.Configuration
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                     }
-                },
-
-            };
+                }
+        };
     }
 }
