@@ -9,15 +9,15 @@ using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//DbContextÅäÖÃ
+//DbContexté…ç½®
 builder.Services.AddDbContextConfig(builder.Configuration);
-//½¡¿µ¼ì²éÅäÖÃ
+//å¥åº·æ£€æŸ¥é…ç½®
 builder.Services.AddHealthCheckConfig(builder.Configuration);
-//LogÅäÖÃ
+//Logé…ç½®
 builder.Services.AddLogConfig(builder.Configuration);
-//ConsulÅäÖÃ
+//Consulé…ç½®
 builder.Services.AddConsulConfig(builder.Configuration);
-//IdentityServerÅäÖÃ
+//IdentityServeré…ç½®
 builder.Services.AddIdentityServerConfig(builder.Configuration);
 
 builder.Services.AddControllersWithViews();
