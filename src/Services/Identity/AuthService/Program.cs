@@ -28,7 +28,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
-    app.EnsureSeedData().ConfigureAwait(false);
+    await app.EnsureSeedData();
 }
 else
 {
@@ -53,4 +53,4 @@ app.UseAuthorization();
 app.MapDefaultControllerRoute();
 app.MapRazorPages();
 
-app.Run();
+await app.RunAsync();
