@@ -109,7 +109,7 @@ namespace AuthService.Controllers
                     return NotFound();
                 }
                 var result = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
-                if (result.Succeeded)
+                if (result.Succeeded) 
                 {
                     return RedirectToAction(nameof(Index));
                 }
