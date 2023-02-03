@@ -1,4 +1,2 @@
-unset http_proxy;
-unset https_proxy;
-unset no_proxy;
+unset http_proxy https_proxy no_proxy;
 env |grep -i proxy;
