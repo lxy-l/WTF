@@ -1,0 +1,33 @@
+# 步骤
+1. 开启防火墙开放22端口
+2. 固定服务器IP
+3. 修改/etc/hosts文件
+4. 设置代理
+5. 执行安装脚本
+
+# 节点必要端口
+1. master节点需要开启22,443,2379,2380,6443，179，5473端口
+2. node节点需要开启22，443，10250，179，5473端口
+
+## 可选端口
+1. dashboard 需要暴露svc端口
+
+# 遇到的坑
+1. 需要在init之前手动翻墙拉取registry.k8s.io里面的相关镜像
+2. registry.k8s.io/pause:3.6需要手动拉取，推荐的registry.k8s.io/pause:3.9使用不了，不然会报错
+3. flannel.yml文件中的Network要与kubeadm-config.yaml文件中的podSubnet一致最好使用默认10.244.0.0/16
+4. calico 需要开启179和5473端口，需要修改默认用户配置的pod network CIDR,需要配置/etc/NetworkManager/conf.d/calico.conf 
+   https://projectcalico.docs.tigera.io/maintenance/troubleshoot/troubleshooting
+5. istio 安装需要metrics-server,镜像需要代理拉取，此外需要关闭防火墙
+   kube-apiserver.yaml 开启--enable-aggregator-routing=true，关闭env中的代理
+
+
+# 常用命令
+kubectl create -f *.yaml #创建
+kubectl delete ns name #删除命名空间
+kubectl get namespaces --show-labels #获取命名空间
+
+kubectl create deployment snowflake --image=registry.k8s.io/serve_hostname  -n=development --replicas=2 #创建一个副本个 数为 2 的 Deployment
+kubectl delete -n dev deployment snowflake #删除deployment
+
+kubectl describe node <节点名称> #查询节点详细信息
