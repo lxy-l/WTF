@@ -20,6 +20,7 @@
    https://projectcalico.docs.tigera.io/maintenance/troubleshoot/troubleshooting
 5. istio 安装需要metrics-server,镜像需要代理拉取，此外需要关闭防火墙
    kube-apiserver.yaml 开启--enable-aggregator-routing=true，关闭env中的代理
+6. 需要创建GateWay，VirtualService，DestinationRule等服务才能使用istio-ingressgateway
 
 
 # 常用命令
