@@ -38,7 +38,6 @@ static class StringExt
     {
         return System.Text.Encoding.Unicode.GetByteCount(str);
     }
-
     public static string ToUnicode(this string str)
     {
         byte[] bytes =System.Text.Encoding.Unicode.GetBytes(str);
