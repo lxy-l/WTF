@@ -7,7 +7,7 @@ namespace Domain.Entities
 
     public class AnnualLeave : AggregateRoot<int>
     {
-        public AnnualLeave(string no, string name, int annually, DateTime? joinTime, DateTime? startTime, int annualLeaveCount, bool isRetired, int id = default) : this(id)
+        public AnnualLeave(string no, string name, int annually,string gender, DateTime birthday,DateTime? retireTime, DateTime? joinTime, DateTime? startTime, int annualLeaveCount, bool isRetired, int id = default) : this(id)
         {
             No = no ?? throw new ArgumentNullException(nameof(no));
             Name = name ?? throw new ArgumentNullException(nameof(name));
@@ -16,6 +16,9 @@ namespace Domain.Entities
             StartTime = startTime;
             AnnualLeaveCount = annualLeaveCount;
             IsRetired = isRetired;
+            Birthday = birthday;
+            RetireTime = retireTime;
+            Gender=gender;
         }
 
         private AnnualLeave(int id) : base(id)
@@ -33,6 +36,16 @@ namespace Domain.Entities
         /// </summary>
         [StringLength(255)]
         public string Name { get; set; }
+
+        /// <summary>
+        /// 出生日期
+        /// </summary>
+        public DateTime Birthday { get; set; }
+
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public string Gender { get; set; }
 
         /// <summary>
         /// 年度
@@ -58,5 +71,10 @@ namespace Domain.Entities
         /// 是否退休
         /// </summary>
         public bool IsRetired { get; set; }
+
+        /// <summary>
+        /// 退休时间
+        /// </summary>
+        public DateTime? RetireTime { get; set; }
     }
 }

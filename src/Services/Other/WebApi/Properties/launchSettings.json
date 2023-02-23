@@ -30,7 +30,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5000",
+      "applicationUrl": "http://172.16.93.154:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Staging"
       }
