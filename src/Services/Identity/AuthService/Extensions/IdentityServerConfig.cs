@@ -1,4 +1,4 @@
-using AuthService.Data;
+Ôªøusing AuthService.Data;
 
 using IdentityServer7.EntityFramework;
 
@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace AuthService.Extensions
 {
     /// <summary>
-    /// »œ÷§≈‰÷√
+    /// ËÆ§ËØÅÈÖçÁΩÆ
     /// </summary>
     public static class IdentityServerConfig
     {
@@ -23,7 +23,7 @@ namespace AuthService.Extensions
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            // Identity≈‰÷√£∫https://learn.microsoft.com/zh-cn/aspnet/core/security/authentication/identity-configuration?view=aspnetcore-7.0
+            // IdentityÈÖçÁΩÆÔºöhttps://learn.microsoft.com/zh-cn/aspnet/core/security/authentication/identity-configuration?view=aspnetcore-7.0
             Services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 6;
@@ -40,7 +40,7 @@ namespace AuthService.Extensions
                 options.SignIn.RequireConfirmedPhoneNumber = false;
             });
 
-            //Cookies≈‰÷√£∫https://learn.microsoft.com/zh-cn/dotnet/api/microsoft.aspnetcore.authentication.cookies.cookieauthenticationoptions?view=aspnetcore-7.0
+            //CookiesÈÖçÁΩÆÔºöhttps://learn.microsoft.com/zh-cn/dotnet/api/microsoft.aspnetcore.authentication.cookies.cookieauthenticationoptions?view=aspnetcore-7.0
             Services.ConfigureApplicationCookie(options =>
             {
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
@@ -54,7 +54,7 @@ namespace AuthService.Extensions
                 options.SlidingExpiration = true;
             });
 
-            //IdentityServer≈‰÷√
+            //IdentityServerÈÖçÁΩÆ
             var migrationsAssembly = typeof(ApplicationDbContext).Assembly.GetName().Name;
 
             var builder = Services
