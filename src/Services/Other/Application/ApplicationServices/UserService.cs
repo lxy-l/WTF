@@ -19,18 +19,18 @@ public class UserService : BaseService<User, int>, IUserService
 
     protected override string[] Table => new[]{"UserInfo"};
 
-    public async Task<PagedResult<User>> GetUserAndInfo(SearchParams search, CancellationToken cancellationToken = default)
+    public PagedResult<User> GetUserAndInfo(SearchParams search, CancellationToken cancellationToken = default)
     {
         /*
          *  前提是遵循EFCore框架的导航属性设计
             Include会自动生成 LEFT JOIN语句
          */
 
-        var list = (await BaseRep.GetQueryIncludeAsync(
+        var list = BaseRep.GetQueryInclude(
              x => 
              x.Include(i => i.UserInfo)
              .Include(z=>z.Pets)
-             .Include(y=>y.Cars)))
+             .Include(y=>y.Cars))
             .PageResult(search.Page,search.PageSize);
 
         return list;

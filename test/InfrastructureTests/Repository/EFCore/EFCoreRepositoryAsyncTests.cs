@@ -37,8 +37,8 @@ public class EFCoreRepositoryAsyncTests:IDisposable
         IEfCoreRepositoryAsync<Test, int> _repositoryAsync = new EfCoreRepositoryAsync<Test, int>(DbContext);
         var count = _repositoryAsync.CountAsync().Result;
         Assert.IsTrue(count != 0);
-        var list = _repositoryAsync.GetDynamicQueryAsync(exp1,sort1).Result.ToList();
-        var list2 = _repositoryAsync.GetDynamicQueryAsync(exp2,sort2).Result.ToList();
+        var list = _repositoryAsync.GetDynamicQuery(exp1,sort1).ToList();
+        var list2 = _repositoryAsync.GetDynamicQuery(exp2, sort2).ToList();
         Assert.AreEqual(2, list.Count);
         Assert.AreEqual(4, list2.Count);
         var before = list.ToList()[0];

@@ -2,7 +2,9 @@
 
 using Application.Core.ApplicationServices;
 using Application.Core.DTO;
+
 using Domain.Core.Models;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Core.BaseController;
@@ -38,14 +40,9 @@ public class BaseApiController<TEntity,TKey> : ControllerBase
     /// </summary>
     /// <remarks>支持动态排序，动态筛选</remarks>
     /// <param name="searchParams">通用查询参数</param>
-    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<PagedResult<dynamic>> Get([FromQuery] SearchParams searchParams, CancellationToken cancellationToken = default)
-    {
-        var list = await Service.GetPagedResult(searchParams);
-        return list;
-    }
+    public PagedResult<dynamic> Get([FromQuery] SearchParams searchParams) => Service.GetPagedResult(searchParams);
 
     /// <summary>
     /// 根据主键获取
@@ -54,10 +51,7 @@ public class BaseApiController<TEntity,TKey> : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet("GetModelById")]
-    public async Task<TEntity?> GetModelById(TKey id, CancellationToken cancellationToken = default)
-    {
-        return await Service.GetModelById(id);
-    }
+    public async Task<TEntity?> GetModelById(TKey id, CancellationToken cancellationToken = default) => await Service.GetModelById(id, cancellationToken);
 
     /// <summary>
     /// 新增
@@ -66,10 +60,19 @@ public class BaseApiController<TEntity,TKey> : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> Post(TEntity model , CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Post(TEntity model, CancellationToken cancellationToken = default) => Ok(await Service.AddEntity(model, cancellationToken));
+
+    /// <summary>
+    /// 新增
+    /// </summary>
+    /// <param name="models">模型列表</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost("BulkAdd")]
+    public async Task<IActionResult> BulkAdd(List<TEntity> models, CancellationToken cancellationToken = default)
     {
-        var user = await Service.AddEntity(model);
-        return Ok(user);
+        await Service.BulkAddEntity(models, cancellationToken);
+        return Ok();
     }
 
     /// <summary>
@@ -79,10 +82,7 @@ public class BaseApiController<TEntity,TKey> : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPut]
-    public async Task<IActionResult> Put(TEntity model, CancellationToken cancellationToken = default)
-    {
-        return Ok(await Service.EditEntity(model));
-    }
+    public async Task<IActionResult> Put(TEntity model, CancellationToken cancellationToken = default) => Ok(await Service.EditEntity(model, cancellationToken));
     /// <summary>
     /// 删除
     /// </summary>
@@ -90,8 +90,5 @@ public class BaseApiController<TEntity,TKey> : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpDelete]
-    public async Task<IActionResult> Delete(TKey id, CancellationToken cancellationToken = default)
-    {
-        return Ok(await Service.DeleteEntity(id));
-    }
+    public async Task<IActionResult> Delete(TKey id, CancellationToken cancellationToken = default) => Ok(await Service.DeleteEntity(id, cancellationToken));
 }

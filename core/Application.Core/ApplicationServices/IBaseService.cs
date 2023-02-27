@@ -1,6 +1,7 @@
 ﻿using System.Linq.Dynamic.Core;
 
 using Application.Core.DTO;
+
 using Domain.Core.Models;
 
 namespace Application.Core.ApplicationServices;
@@ -19,33 +20,45 @@ public interface IBaseService<TEntity, in TKey>
     /// </summary>
     /// <param name="searchParams">筛选条件模型</param>
     /// <returns></returns>
-    Task<PagedResult<dynamic>> GetPagedResult(SearchParams searchParams);
+    PagedResult<dynamic> GetPagedResult(SearchParams searchParams);
 
     /// <summary>
     /// 根据主键获取单个实体
     /// </summary>
     /// <param name="id">主键</param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<TEntity?> GetModelById(TKey id);
+    Task<TEntity?> GetModelById(TKey id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 新增
     /// </summary>
     /// <param name="model">实体模型</param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<TEntity> AddEntity(TEntity model);
+    Task<TEntity> AddEntity(TEntity model, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 批量新增
+    /// </summary>
+    /// <param name="models"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task BulkAddEntity(List<TEntity> models, CancellationToken cancellationToken=default);
 
     /// <summary>
     /// 删除
     /// </summary>
     /// <param name="id">主键</param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<TEntity> DeleteEntity(TKey id);
+    Task<TEntity> DeleteEntity(TKey id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 修改
     /// </summary>
     /// <param name="model">实体模型</param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<TEntity> EditEntity(TEntity model);
+    Task<TEntity> EditEntity(TEntity model, CancellationToken cancellationToken = default);
 }

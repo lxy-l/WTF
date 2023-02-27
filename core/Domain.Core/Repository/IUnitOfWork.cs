@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Domain.Core.Repository;
@@ -11,8 +12,14 @@ public interface IUnitOfWork
     /// <summary>
     /// 提交更改
     /// </summary>
-    /// <param name="Enable">是否开启批量提交</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<int> CommitAsync(CancellationToken cancellationToken = default, bool Enable = false);
+    Task<int> CommitAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 批量提交
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task BulkCommitAsync(CancellationToken cancellationToken = default);
 }

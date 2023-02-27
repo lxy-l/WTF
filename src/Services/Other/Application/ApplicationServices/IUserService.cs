@@ -16,5 +16,5 @@ public interface IUserService:IBaseService<User,int>
     /// 获取全部用户包含用户信息
     /// </summary>
     /// <returns></returns>
-    Task<PagedResult<User>> GetUserAndInfo(SearchParams search, CancellationToken cancellationToken = default);
+    PagedResult<User> GetUserAndInfo(SearchParams search, CancellationToken cancellationToken = default);
 }

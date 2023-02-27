@@ -5,6 +5,7 @@ using Application.Core.MyException;
 
 using Domain.Core.Models;
 using Domain.Core.Repository;
+
 using Infrastructure.Core.Repository.EFCore;
 
 namespace Application.Core.ApplicationServices;
@@ -22,48 +23,53 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
         UnitOfWork = unitOfWork;
     }
 
-    public async Task<TEntity> AddEntity(TEntity model)
+    public async Task<TEntity> AddEntity(TEntity model, CancellationToken cancellationToken = default)
     {
-        await BaseRep.InsertAsync(model).ConfigureAwait(false);
+        await BaseRep.InsertAsync(model,cancellationToken).ConfigureAwait(false);
         await UnitOfWork.CommitAsync().ConfigureAwait(false);
         return model;
     }
 
-    public async Task<TEntity> DeleteEntity(TKey id)
+    public async Task BulkAddEntity(List<TEntity> models, CancellationToken cancellationToken)
     {
-        TEntity? model = await BaseRep.FindByIdAsync(id).ConfigureAwait(false);
+        await BaseRep.BulkInsertAsync(models,cancellationToken:cancellationToken).ConfigureAwait(false);
+        await UnitOfWork.BulkCommitAsync(cancellationToken);
+    }
+
+    public async Task<TEntity> DeleteEntity(TKey id, CancellationToken cancellationToken = default)
+    {
+        TEntity? model = await BaseRep.FindByIdAsync(id,cancellationToken).ConfigureAwait(false);
         if (model is null)
         {
             throw new NotFoundException("未找到实体信息！");
         }
-        await BaseRep.DeleteAsync(model).ConfigureAwait(false);
-        await UnitOfWork.CommitAsync().ConfigureAwait(false);
+        BaseRep.Delete(model);
+        await UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
         return model;
     }
 
-    public async Task<TEntity> EditEntity(TEntity model)
+    public async Task<TEntity> EditEntity(TEntity model, CancellationToken cancellationToken = default)
     {
         if (default(TKey).Equals(model.Id))
         {
             throw new NotFoundException("主键错误！");
         }
         bool isExist = await BaseRep
-            .AnyAsync(x => x.Id.Equals(model.Id))
+            .AnyAsync(x => x.Id.Equals(model.Id),cancellationToken)
             .ConfigureAwait(false);
         if (!isExist)
         {
             throw new NotFoundException("未找到实体信息！");
         }
-        await BaseRep.UpdateAsync(model).ConfigureAwait(false);
-
+        BaseRep.Update(model);
         //TODO 多对多关系编辑的时候会报错（关系表执行insert报主键重复）
-        await UnitOfWork.CommitAsync().ConfigureAwait(false);
+        await UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
         return model;
     }
 
-    public async Task<TEntity?> GetModelById(TKey id)
+    public async Task<TEntity?> GetModelById(TKey id, CancellationToken cancellationToken = default)
     {
-        var entity = await BaseRep.FindByIdAsync(id).ConfigureAwait(false);
+        var entity = await BaseRep.FindByIdAsync(id, cancellationToken).ConfigureAwait(false);
         if (entity is null)
         {
             throw new NotFoundException("未找到实体信息！");
@@ -71,7 +77,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
         return entity;
     }
 
-    public async Task<PagedResult<dynamic>> GetPagedResult(SearchParams searchParams)
+    public PagedResult<dynamic> GetPagedResult(SearchParams searchParams)
     {
         /*
          * 动态查询，根据SearchParams参数进行筛选排序
@@ -80,9 +86,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
         {
             Table = searchParams.Includes.Split(',');
         }
-        var query = await BaseRep
-            .GetDynamicQueryAsync(searchParams.Filters,searchParams.Sort,Table)
-            .ConfigureAwait(false);
+        var query = BaseRep.GetDynamicQuery(searchParams.Filters, searchParams.Sort, Table);
         return query.PageResult<dynamic>(searchParams.Page, searchParams.PageSize);
     }
 }
