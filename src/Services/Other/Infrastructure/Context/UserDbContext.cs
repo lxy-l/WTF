@@ -15,6 +15,7 @@ public class UserDbContext:DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("Chinese_Simplified_Pinyin_100_CI_AI_SC_UTF8");
         var types = EfEntityInfo.GetEntityTypes(typeof(Domain.Register).Assembly);
         foreach (var entityType in types)
         {
