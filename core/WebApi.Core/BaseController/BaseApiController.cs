@@ -24,7 +24,7 @@ public class BaseApiController<TEntity,TKey> : ControllerBase
     /// <summary>
     /// 通用泛型服务
     /// </summary>
-    protected readonly IBaseService<TEntity,TKey> Service;
+    protected IBaseService<TEntity, TKey> Service { get; }
 
     /// <summary>
     /// 构造

@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
@@ -26,7 +27,7 @@ public class JwtTokenService : IJwtTokenService
         var reds = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
             SecurityAlgorithms.HmacSha256);
-        double expireSeconds = double.Parse(_configuration["JwtSettings:ExpireSeconds"] ?? "3600");
+        double expireSeconds = double.Parse(_configuration["JwtSettings:ExpireSeconds"] ?? "3600", CultureInfo.InvariantCulture);
 
         var token = new JwtSecurityToken
         (
@@ -47,7 +48,8 @@ public class JwtTokenService : IJwtTokenService
 
     public ValueTask<JwtTokenViewModel> CreateJwtTokenAsync(string id, string name)
     {
-        List<Claim> claims=new List<Claim> {
+        List<Claim> claims=new()
+        {
             new Claim(ClaimTypes.Name,name),
             new Claim(JwtRegisteredClaimNames.Jti, id),
             new Claim(ClaimTypes.SerialNumber, id)
@@ -57,7 +59,7 @@ public class JwtTokenService : IJwtTokenService
         var credentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
             SecurityAlgorithms.HmacSha256);
-        double expireSeconds = double.Parse(_configuration["JwtSettings:ExpireSeconds"] ?? "3600");
+        double expireSeconds = double.Parse(_configuration["JwtSettings:ExpireSeconds"] ?? "3600",CultureInfo.InvariantCulture);
 
         var token = new JwtSecurityToken
         (

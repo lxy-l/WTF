@@ -14,8 +14,8 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
     where TEntity : AggregateRoot<TKey>
     where TKey : struct
 {
-    protected readonly IUnitOfWork UnitOfWork;
-    protected readonly IEfCoreRepositoryAsync<TEntity, TKey> BaseRep;
+    protected IUnitOfWork UnitOfWork { get; }
+    protected IEfCoreRepositoryAsync<TEntity, TKey> BaseRep { get; }
 
     public BaseService(IEfCoreRepositoryAsync<TEntity, TKey> userRep, IUnitOfWork unitOfWork)
     {
@@ -26,7 +26,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
     public async Task<TEntity> AddEntity(TEntity model, CancellationToken cancellationToken = default)
     {
         await BaseRep.InsertAsync(model,cancellationToken).ConfigureAwait(false);
-        await UnitOfWork.CommitAsync().ConfigureAwait(false);
+        await UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
         return model;
     }
 
@@ -38,11 +38,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
     public async Task<TEntity> DeleteEntity(TKey id, CancellationToken cancellationToken = default)
     {
-        TEntity? model = await BaseRep.FindByIdAsync(id,cancellationToken).ConfigureAwait(false);
-        if (model is null)
-        {
-            throw new NotFoundException("未找到实体信息！");
-        }
+        TEntity? model = await BaseRep.FindByIdAsync(id,cancellationToken).ConfigureAwait(false) ?? throw new NotFoundException("未找到实体信息！");
         BaseRep.Delete(model);
         await UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
         return model;
@@ -69,11 +65,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
     public async Task<TEntity?> GetModelById(TKey id, CancellationToken cancellationToken = default)
     {
-        var entity = await BaseRep.FindByIdAsync(id, cancellationToken).ConfigureAwait(false);
-        if (entity is null)
-        {
-            throw new NotFoundException("未找到实体信息！");
-        }
+        var entity = await BaseRep.FindByIdAsync(id, cancellationToken).ConfigureAwait(false) ?? throw new NotFoundException("未找到实体信息！");
         return entity;
     }
 
