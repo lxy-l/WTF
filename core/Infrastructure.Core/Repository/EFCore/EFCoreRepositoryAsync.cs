@@ -52,7 +52,7 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
             query = query.IgnoreQueryFilters();
         }
 
-        return orderBy != null ? orderBy(query) : query;
+        return orderBy != null ? orderBy(query) : query.OrderBy(o=>o.Id);
     }
 
     public IQueryable<TEntity> GetQueryInclude(
@@ -71,7 +71,7 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
             query = query.IgnoreQueryFilters();
         }
 
-        return orderBy != null ? orderBy(query) : query;
+        return orderBy != null ? orderBy(query) : query.OrderBy(x=>x.Id);
     }
 
     public IQueryable<TEntity> GetDynamicQuery(string? filter = null, string? sort = null, string[]? include = null)
@@ -96,7 +96,9 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
         return query;
     }
 
-    public async Task<TEntity?> FindByIdAsync(TKey id, CancellationToken cancellationToken=default) => await DbSet.FindAsync(id, cancellationToken).ConfigureAwait(false);
+    public async ValueTask<TEntity?> FindByIdsAsync(object[] ids, CancellationToken cancellationToken = default) => await DbSet.FindAsync(ids, cancellationToken: cancellationToken).ConfigureAwait(false);
+
+    public async ValueTask<TEntity?> FindByIdAsync(TKey id) => await DbSet.FindAsync(id).ConfigureAwait(false);
 
     public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken cancellationToken = default) => predicate switch
     {

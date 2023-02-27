@@ -38,7 +38,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
     public async Task<TEntity> DeleteEntity(TKey id, CancellationToken cancellationToken = default)
     {
-        TEntity? model = await BaseRep.FindByIdAsync(id,cancellationToken).ConfigureAwait(false) ?? throw new NotFoundException("未找到实体信息！");
+        TEntity? model = await BaseRep.FindByIdAsync(id).ConfigureAwait(false) ?? throw new NotFoundException("未找到实体信息！");
         BaseRep.Delete(model);
         await UnitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
         return model;
@@ -65,7 +65,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
     public async Task<TEntity?> GetModelById(TKey id, CancellationToken cancellationToken = default)
     {
-        var entity = await BaseRep.FindByIdAsync(id, cancellationToken).ConfigureAwait(false) ?? throw new NotFoundException("未找到实体信息！");
+        var entity = await BaseRep.FindByIdAsync(id).ConfigureAwait(false) ?? throw new NotFoundException("未找到实体信息！");
         return entity;
     }
 

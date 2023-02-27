@@ -51,9 +51,16 @@ public interface IRepositoryAsync<TEntity, in TKey>
     /// 根据主键查询
     /// </summary>
     /// <param name="id">主键</param>
+    /// <returns></returns>
+    ValueTask<TEntity?> FindByIdAsync(TKey id);
+
+    /// <summary>
+    /// 根据主键查询
+    /// </summary>
+    /// <param name="ids">主键列表</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<TEntity?> FindByIdAsync(TKey id, CancellationToken cancellationToken = default);
+    ValueTask<TEntity?> FindByIdsAsync(object[] ids, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 查询单个实体信息
