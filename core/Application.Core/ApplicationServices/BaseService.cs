@@ -7,6 +7,8 @@ using Application.Core.MyException;
 using Domain.Core.Models;
 using Domain.Core.Repository;
 
+using EFCore.BulkExtensions;
+
 using Infrastructure.Core.Repository.EFCore;
 
 namespace Application.Core.ApplicationServices;
@@ -33,7 +35,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
     public async Task BulkAddEntity(List<TEntity> models, CancellationToken cancellationToken)
     {
-        await BaseRep.BulkInsertAsync(models,cancellationToken:cancellationToken);
+        await BaseRep.BulkInsertAsync(models, cancellationToken:cancellationToken);
         await UnitOfWork.BulkCommitAsync(cancellationToken);
     }
 

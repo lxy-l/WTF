@@ -2,7 +2,7 @@
 using Application.Core.DTO;
 
 using Domain.Entities;
-using Domain.ValueObject;
+using Domain.ValueObjects;
 
 using Microsoft.AspNetCore.Mvc;
 

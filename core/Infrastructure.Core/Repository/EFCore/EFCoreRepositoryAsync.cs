@@ -52,7 +52,7 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
             query = query.IgnoreQueryFilters();
         }
 
-        return orderBy != null ? orderBy(query) : query.OrderBy(o=>o.Id);
+        return orderBy != null ? orderBy(query) : query.OrderBy(o => o.Id);
     }
 
     public IQueryable<TEntity> GetQueryInclude(
@@ -71,7 +71,7 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
             query = query.IgnoreQueryFilters();
         }
 
-        return orderBy != null ? orderBy(query) : query.OrderBy(x=>x.Id);
+        return orderBy != null ? orderBy(query) : query.OrderBy(x => x.Id);
     }
 
     public IQueryable<TEntity> GetDynamicQuery(string? filter = null, string? sort = null, string[]? include = null)

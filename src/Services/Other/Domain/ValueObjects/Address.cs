@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 using Domain.Core.Models;
 
-namespace Domain.ValueObject;
+namespace Domain.ValueObjects;
 
 /// <summary>
 /// 地址
 /// </summary>
-public record Address : ValueObject<Address>
+public record Address : ValueObject
 {
     /// <summary>
     /// 街道
@@ -38,5 +39,16 @@ public record Address : ValueObject<Address>
         Country = country;
         City = city;
         Street = street;
+    }
+
+    /// <summary>
+    /// 可以更加细化控制值比较
+    /// </summary>
+    /// <returns></returns>
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Country;
+        yield return City;
+        yield return Street;
     }
 }
