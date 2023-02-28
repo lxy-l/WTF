@@ -2,6 +2,7 @@
 using Application.Core.DTO;
 
 using Domain.Entities;
+using Domain.ValueObject;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +31,23 @@ public class UsersController : BaseApiController<User, int>
     {
         var list = UserService.GetUserAndInfo(search);
         return Ok(list);
+    }
+
+    /// <summary>
+    /// 批量添加
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost("BulkAddUser")]
+    public async Task<IActionResult> BulkAddUserAsync()
+    {
+        List<User> users = new();
+        long j = await UserService.Count();
+        for (long i=j; i < j+5000000; i++)
+        {
+            users.Add(new User($"User{i}", $"password{i}", null, null, null, new Address("country" + i, "city" + i, "street" + i)));
+        }
+        await UserService.BulkAddEntity(users);
+        return Ok();
     }
 
 }

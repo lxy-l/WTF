@@ -132,7 +132,10 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
     public async Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default) => await DbSet.AddAsync(entity, cancellationToken).ConfigureAwait(false);
 
     public async Task BulkInsertAsync(IList<TEntity> entities, BulkConfig? bulkConfig = null, CancellationToken cancellationToken = default)
-        => await _dbContext.BulkInsertAsync(entities, bulkConfig, cancellationToken: cancellationToken).ConfigureAwait(false);
+    {
+        //TODO 替换EFCore.BulkExtensions;
+        await _dbContext.BulkInsertAsync(entities);
+    }
 
     #endregion
 

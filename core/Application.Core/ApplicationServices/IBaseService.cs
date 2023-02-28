@@ -1,4 +1,5 @@
 ﻿using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 
 using Application.Core.DTO;
 
@@ -21,6 +22,14 @@ public interface IBaseService<TEntity, in TKey>
     /// <param name="searchParams">筛选条件模型</param>
     /// <returns></returns>
     PagedResult<dynamic> GetPagedResult(SearchParams searchParams);
+
+    /// <summary>
+    /// 查询数据条数
+    /// </summary>
+    /// <param name="expression">条件表达式</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<long> Count(Expression<Func<TEntity, bool>>? expression = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 根据主键获取单个实体

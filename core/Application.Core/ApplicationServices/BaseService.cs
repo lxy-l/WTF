@@ -1,4 +1,5 @@
 ﻿using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 
 using Application.Core.DTO;
 using Application.Core.MyException;
@@ -32,7 +33,7 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
 
     public async Task BulkAddEntity(List<TEntity> models, CancellationToken cancellationToken)
     {
-        await BaseRep.BulkInsertAsync(models,cancellationToken:cancellationToken).ConfigureAwait(false);
+        await BaseRep.BulkInsertAsync(models,cancellationToken:cancellationToken);
         await UnitOfWork.BulkCommitAsync(cancellationToken);
     }
 
@@ -80,5 +81,10 @@ public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKe
         }
         var query = BaseRep.GetDynamicQuery(searchParams.Filters, searchParams.Sort, Table);
         return query.PageResult<dynamic>(searchParams.Page, searchParams.PageSize);
+    }
+
+    public async Task<long> Count(Expression<Func<TEntity, bool>>? expression = null, CancellationToken cancellationToken = default)
+    {
+       return await BaseRep.CountAsync(expression,cancellationToken);
     }
 }

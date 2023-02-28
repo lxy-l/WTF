@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
 
@@ -8,14 +7,14 @@ namespace WebApi.Controllers;
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+//[Authorize]
 public class TaskController : ControllerBase
 {
-    private readonly ILogger<TaskController> _logger;
+    private ILogger<TaskController> Logger { get; }
 
     public TaskController(ILogger<TaskController> logger)
     {
-        _logger = logger;
+        Logger = logger;
     }
 
     /// <summary>
@@ -40,11 +39,11 @@ public class TaskController : ControllerBase
 
                 if (x.IsCanceled)
                 {
-                    _logger.LogInformation("取消了");
+                    Logger.LogInformation("取消了");
                 }
                 else if(x.IsCompletedSuccessfully)
                 {
-                    _logger.LogInformation("5秒后：执行了");
+                    Logger.LogInformation("5秒后：执行了");
                 }
 
             }, cancellationToken);

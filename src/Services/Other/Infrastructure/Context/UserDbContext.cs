@@ -29,9 +29,4 @@ public class UserDbContext:DbContext
     {
         base.OnConfiguring(optionsBuilder);
     }
-
-    public override ValueTask DisposeAsync()
-    {
-        return base.DisposeAsync();
-    }
 }

@@ -1,23 +1,27 @@
 ﻿using System.Linq.Dynamic.Core;
 
-using Application.Core.DTO;
-
 using Application.Core.ApplicationServices;
+using Application.Core.DTO;
 
 using Domain.Core.Repository;
 using Domain.Entities;
+
 using Infrastructure.Core.Repository.EFCore;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.ApplicationServices;
 
 public class UserService : BaseService<User, int>, IUserService
 {
+
     public UserService(IEfCoreRepositoryAsync<User, int> userRep, IUnitOfWork unitOfWork) : base(userRep, unitOfWork)
     {
     }
 
+    //TODO 考虑更好的解决方案
     protected override string[] Table => new[]{"UserInfo"};
+
 
     public PagedResult<User> GetUserAndInfo(SearchParams search, CancellationToken cancellationToken = default)
     {
