@@ -7,7 +7,7 @@ namespace Domain.ValueObjects;
 /// <summary>
 /// 地址
 /// </summary>
-public record Address : ValueObject
+public class Address : ValueObject
 {
     /// <summary>
     /// 街道
