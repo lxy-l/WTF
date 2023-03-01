@@ -8,11 +8,14 @@ using Domain.Core.Models;
 
 namespace Domain.Core.Repository;
 
+/*
+ * where TEntity : IEntity<TKey> 应该约束为AggregateRoot
+ */
 /// <summary>
 /// 基础仓储接口
 /// </summary>
 public interface IRepositoryAsync<TEntity, in TKey>
-    where TEntity : AggregateRoot<TKey>
+    where TEntity : IEntity<TKey>
     where TKey : struct
 {
 

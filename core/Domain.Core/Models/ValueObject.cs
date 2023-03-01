@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Domain.Core.Models;
@@ -19,6 +20,7 @@ namespace Domain.Core.Models;
 /// <summary>
 /// 值对象(基于Class实现)
 /// </summary>
+[Serializable]
 public abstract class ValueObject
 {
     protected static bool EqualOperator(ValueObject left, ValueObject right)

@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Core.Models;
+
 /// <summary>
 /// 实体
 /// </summary>

@@ -52,7 +52,7 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
             query = query.IgnoreQueryFilters();
         }
 
-        return orderBy != null ? orderBy(query) : query.OrderBy(o => o.Id);
+        return orderBy != null ? orderBy(query) : query.OrderBy(x => x.Id);
     }
 
     public IQueryable<TEntity> GetQueryInclude(
@@ -71,7 +71,7 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
             query = query.IgnoreQueryFilters();
         }
 
-        return orderBy != null ? orderBy(query) : query.OrderBy(x => x.Id);
+        return orderBy != null ? orderBy(query) : query.OrderBy(x=>x.Id);
     }
 
     public IQueryable<TEntity> GetDynamicQuery(string? filter = null, string? sort = null, string[]? include = null)
@@ -89,7 +89,11 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
             var lambda = LinqExtend.BuildFilterLambda<TEntity>(filter);
             query = query.Where(lambda);
         }
-        if (!string.IsNullOrWhiteSpace(sort))
+        if (string.IsNullOrWhiteSpace(sort))
+        {
+            query.OrderBy(nameof(IEntity<TKey>.Id));
+        }
+        else
         {
             query = query.OrderBy(sort);
         }
@@ -134,7 +138,7 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
     public async Task BulkInsertAsync(IList<TEntity> entities, BulkConfig? bulkConfig = null, CancellationToken cancellationToken = default)
     {
         //TODO 替换EFCore.BulkExtensions;
-        await _dbContext.BulkInsertAsync(entities);
+        await _dbContext.BulkInsertAsync(entities,cancellationToken:cancellationToken);
     }
 
     #endregion

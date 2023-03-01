@@ -30,9 +30,17 @@ public class EFCoreRepositoryAsyncTests:IDisposable
 
     }
 
-    [DataRow("""Name="string" && TestInfos.Count>0""", "DateTime DESC", """Name="string"&&TestInfos.Count=0""", "DateTime ASC")]
+    /// <summary>
+    /// 动态查询测试
+    /// </summary>
+    /// <remarks>属性名为DateTime时OrderBy排序会出错</remarks>
+    /// <param name="exp1"></param>
+    /// <param name="sort1"></param>
+    /// <param name="exp2"></param>
+    /// <param name="sort2"></param>
+    [DataRow("""Name="string" && TestInfos.Count>0""", "Time DESC", """Name="string"&&TestInfos.Count=0""", "Time ASC")]
     [TestMethod()]
-    public void GetDynamicQueryAsyncTest(string exp1,string sort1, string exp2,string sort2)
+    public void GetDynamicQueryTest(string exp1,string sort1, string exp2,string sort2)
     {
         IEfCoreRepositoryAsync<Test, int> _repositoryAsync = new EfCoreRepositoryAsync<Test, int>(DbContext);
         var count = _repositoryAsync.CountAsync().Result;
@@ -43,11 +51,11 @@ public class EFCoreRepositoryAsyncTests:IDisposable
         Assert.AreEqual(4, list2.Count);
         var before = list.ToList()[0];
         var after = list.ToList()[1];
-        Assert.IsTrue(before.DateTime > after.DateTime);
+        Assert.IsTrue(before.Time > after.Time);
 
         before = list2.ToList()[0];
         after = list2.ToList()[1];
-        Assert.IsTrue(before.DateTime < after.DateTime);
+        Assert.IsTrue(before.Time < after.Time);
     }
 
     protected virtual void Dispose(bool disposing)

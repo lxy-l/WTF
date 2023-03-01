@@ -20,7 +20,7 @@ public class SearchParams
     /// <summary>
     /// 排序条件(Name ASC,Id DESC)
     /// </summary>
-    [RegularExpression(@"(\w*\s[ASC|DESC]+,*){1,100}", ErrorMessage ="排序参数有误！")]
+    [RegularExpression(@"(\w*\s[ASC|DESC]+,*){1,100}", ErrorMessage = "排序参数有误！")]
     public string? Sort { get; set; }
 
     /// <summary>
