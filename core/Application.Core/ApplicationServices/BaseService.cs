@@ -7,8 +7,6 @@ using Application.Core.MyException;
 using Domain.Core.Models;
 using Domain.Core.Repository;
 
-using EFCore.BulkExtensions;
-
 using Infrastructure.Core.Repository.EFCore;
 
 namespace Application.Core.ApplicationServices;

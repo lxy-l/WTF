@@ -7,7 +7,7 @@ namespace Domain.Core.Repository;
 /// <summary>
 /// 工作单元接口
 /// </summary>
-public interface IUnitOfWork
+public interface IUnitOfWork:IDisposable
 {
     /// <summary>
     /// 提交更改

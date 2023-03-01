@@ -1,4 +1,5 @@
 ﻿using Application.ApplicationServices;
+using Application.Core.ApplicationServices;
 using Application.Core.DTO;
 
 using Domain.Entities;
@@ -15,8 +16,9 @@ namespace WebApi.Controllers;
 /// </summary>
 public class UsersController : BaseApiController<User, int>
 {
+
     private IUserService UserService { get; }
-    public UsersController(IUserService userService) : base(userService)
+    public UsersController(IUserService userService, IBaseService<User, int> service) : base(service)
     {
         UserService = userService;
     }
@@ -41,12 +43,12 @@ public class UsersController : BaseApiController<User, int>
     public async Task<IActionResult> BulkAddUserAsync()
     {
         List<User> users = new();
-        long j = await UserService.Count();
+        long j = await BaseService.Count();
         for (long i=j; i < j+5000000; i++)
         {
             users.Add(new User($"User{i}", $"password{i}", null, null, null, new Address("country" + i, "city" + i, "street" + i)));
         }
-        await UserService.BulkAddEntity(users);
+        await BaseService.BulkAddEntity(users);
         return Ok();
     }
 

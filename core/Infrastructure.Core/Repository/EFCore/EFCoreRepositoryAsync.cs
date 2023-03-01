@@ -19,20 +19,11 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
     where TEntity : AggregateRoot<TKey>
     where TKey : struct
 {
-    /// <summary>
-    /// 数据上下文
-    /// </summary>
     private readonly DbContext _dbContext;
-
-    /// <summary>
-    /// DbSet
-    /// </summary>
     private DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
+    //public IUnitOfWork UnitOfWork => (IUnitOfWork)_dbContext;
 
-    public EfCoreRepositoryAsync(DbContext context)
-    {
-        _dbContext = context;
-    }
+    public EfCoreRepositoryAsync(DbContext context) => _dbContext = context;
 
     #region 查询
 
@@ -45,7 +36,7 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool ignoreQueryFilters = false)
     {
-        IQueryable<TEntity> query = GetQueryable().AsNoTracking();
+        IQueryable<TEntity> query = DbSet.AsNoTracking();
         query = query.WhereIf(expression != null, expression);
         if (ignoreQueryFilters)
         {
@@ -61,7 +52,7 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool ignoreQueryFilters = false)
     {
-        IQueryable<TEntity> query = GetQueryable().AsNoTracking();
+        IQueryable<TEntity> query = DbSet.AsNoTracking();
 
         query = include(query);
         query = query.WhereIf(expression != null, expression);
@@ -71,12 +62,34 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
             query = query.IgnoreQueryFilters();
         }
 
-        return orderBy != null ? orderBy(query) : query.OrderBy(x=>x.Id);
+        return orderBy != null ? orderBy(query) : query.OrderBy(x => x.Id);
+    }
+
+    public IQueryable<TEntity> GetQueryInclude(string includeProperties, Expression<Func<TEntity, bool>>? expression = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, bool ignoreQueryFilters = false)
+    {
+        IQueryable<TEntity> query = DbSet.AsNoTracking();
+
+        query = query.WhereIf(expression != null, expression);
+
+        foreach (var includeProperty in includeProperties.Split
+            (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            query = query.Include(includeProperty);
+        }
+
+        if (orderBy != null)
+        {
+            return orderBy(query);
+        }
+        else
+        {
+            return query.OrderBy(x => x.Id);
+        }
     }
 
     public IQueryable<TEntity> GetDynamicQuery(string? filter = null, string? sort = null, string[]? include = null)
     {
-        IQueryable<TEntity> query = GetQueryable().AsNoTracking();
+        IQueryable<TEntity> query = DbSet.AsNoTracking();
         if (include?.Any() ?? false)
         {
             foreach (var table in include)
@@ -89,15 +102,7 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
             var lambda = LinqExtend.BuildFilterLambda<TEntity>(filter);
             query = query.Where(lambda);
         }
-        if (string.IsNullOrWhiteSpace(sort))
-        {
-            query.OrderBy(nameof(IEntity<TKey>.Id));
-        }
-        else
-        {
-            query = query.OrderBy(sort);
-        }
-        return query;
+        return string.IsNullOrWhiteSpace(sort) ? query.OrderBy(nameof(IEntity<TKey>.Id)) : query.OrderBy(sort);
     }
 
     public async ValueTask<TEntity?> FindByIdsAsync(object[] ids, CancellationToken cancellationToken = default) => await DbSet.FindAsync(ids, cancellationToken: cancellationToken).ConfigureAwait(false);
@@ -106,20 +111,20 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
 
     public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken cancellationToken = default) => predicate switch
     {
-        null => await GetQueryable().AsNoTracking().AnyAsync(cancellationToken).ConfigureAwait(false),
-        _ => await GetQueryable().AsNoTracking().AnyAsync(predicate, cancellationToken).ConfigureAwait(false)
+        null => await DbSet.AsNoTracking().AnyAsync(cancellationToken).ConfigureAwait(false),
+        _ => await DbSet.AsNoTracking().AnyAsync(predicate, cancellationToken).ConfigureAwait(false)
     };
 
     public async Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>>? expression, CancellationToken cancellationToken = default) => expression switch
     {
-        null => await GetQueryable().SingleAsync(cancellationToken).ConfigureAwait(false),
-        _ => await GetQueryable().SingleAsync(expression, cancellationToken).ConfigureAwait(false)
+        null => await DbSet.SingleAsync(cancellationToken).ConfigureAwait(false),
+        _ => await DbSet.SingleAsync(expression, cancellationToken).ConfigureAwait(false)
     };
 
     public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>>? expression = null, CancellationToken cancellationToken = default) => expression switch
     {
-        null => await GetQueryable().FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false),
-        _ => await GetQueryable().FirstOrDefaultAsync(expression, cancellationToken).ConfigureAwait(false)
+        null => await DbSet.FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false),
+        _ => await DbSet.FirstOrDefaultAsync(expression, cancellationToken).ConfigureAwait(false)
     };
 
     public async Task<long> CountAsync(Expression<Func<TEntity, bool>>? expression = null, CancellationToken cancellationToken = default) => expression switch
@@ -138,7 +143,7 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
     public async Task BulkInsertAsync(IList<TEntity> entities, BulkConfig? bulkConfig = null, CancellationToken cancellationToken = default)
     {
         //TODO 替换EFCore.BulkExtensions;
-        await _dbContext.BulkInsertAsync(entities,cancellationToken:cancellationToken);
+        await _dbContext.BulkInsertAsync(entities, cancellationToken: cancellationToken);
     }
 
     #endregion
@@ -170,6 +175,5 @@ public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEnti
     {
         _dbContext.RemoveRange(entities);
     }
-
     #endregion
 }

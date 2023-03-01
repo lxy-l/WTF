@@ -12,6 +12,7 @@ namespace Infrastructure.Core.UnitOfWork;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly DbContext _dbContext;
+    private bool disposedValue;
 
     public UnitOfWork(DbContext context)
     {
@@ -26,5 +27,35 @@ public class UnitOfWork : IUnitOfWork
     public async Task BulkCommitAsync(CancellationToken cancellationToken = default)
     {
         await _dbContext.BulkSaveChangesAsync(cancellationToken: cancellationToken);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                // TODO: 释放托管状态(托管对象)
+                 _dbContext.Dispose();
+            }
+
+            // TODO: 释放未托管的资源(未托管的对象)并重写终结器
+            // TODO: 将大型字段设置为 null
+            disposedValue = true;
+        }
+    }
+
+    // // TODO: 仅当“Dispose(bool disposing)”拥有用于释放未托管资源的代码时才替代终结器
+    // ~UnitOfWork()
+    // {
+    //     // 不要更改此代码。请将清理代码放入“Dispose(bool disposing)”方法中
+    //     Dispose(disposing: false);
+    // }
+
+    public void Dispose()
+    {
+        // 不要更改此代码。请将清理代码放入“Dispose(bool disposing)”方法中
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

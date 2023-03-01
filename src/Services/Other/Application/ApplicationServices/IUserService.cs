@@ -10,7 +10,7 @@ namespace Application.ApplicationServices;
 /// <summary>
 /// 自定义用户信息查询
 /// </summary>
-public interface IUserService:IBaseService<User,int>
+public interface IUserService
 {
     /// <summary>
     /// 获取全部用户包含用户信息

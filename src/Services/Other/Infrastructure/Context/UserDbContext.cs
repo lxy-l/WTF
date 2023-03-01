@@ -7,7 +7,7 @@ namespace Infrastructure.Context;
 /// <summary>
 /// 第一次启动慢的优化方案：https://learn.microsoft.com/zh-cn/ef/core/performance/advanced-performance-topics?tabs=with-di%2Cwith-constant#compiled-models
 /// </summary>
-public class UserDbContext:DbContext
+public class UserDbContext: DbContext
 {
     public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
     {
