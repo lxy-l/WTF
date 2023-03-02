@@ -23,3 +23,21 @@ public interface IUnitOfWork:IDisposable
     /// <returns></returns>
     Task BulkCommitAsync(CancellationToken cancellationToken = default);
 }
+
+public interface IUnitOfWork<TContext,T> : IDisposable
+{
+    /// <summary>
+    /// 提交更改
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<int> CommitAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 批量提交
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task BulkCommitAsync(CancellationToken cancellationToken = default);
+}
+

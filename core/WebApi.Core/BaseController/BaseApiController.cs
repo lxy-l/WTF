@@ -18,7 +18,7 @@ namespace WebApi.Core.BaseController;
 [Route("api/[controller]")]
 [ApiController]
 public class BaseApiController<TEntity,TKey> : ControllerBase 
-    where TEntity : AggregateRoot<TKey>
+    where TEntity : IAggregateRoot
     where TKey : struct
 {
     /// <summary>

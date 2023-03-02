@@ -12,7 +12,7 @@ using Infrastructure.Core.Repository.EFCore;
 namespace Application.Core.ApplicationServices;
 
 public class BaseService<TEntity, TKey> : BaseInclude, IBaseService<TEntity, TKey>
-    where TEntity : AggregateRoot<TKey>
+    where TEntity : Entity<TKey>, IAggregateRoot
     where TKey : struct
 {
     protected IUnitOfWork UnitOfWork { get; }

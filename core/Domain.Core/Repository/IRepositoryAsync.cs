@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -9,7 +11,7 @@ using Domain.Core.Models;
 namespace Domain.Core.Repository;
 
 /*
- * where TEntity : IEntity<TKey> 应该约束为AggregateRoot
+ * where TEntity : IEntity<TKey> 应该约束为IAggregateRoot
  * https://learn.microsoft.com/zh-cn/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design#define-one-repository-per-aggregate
  * 对于每个聚合或聚合根，应创建一个存储库类。 你也许能够利用 C# 泛型来减少需要维护的具体类的总数（如本章后面所示）。 在基于域驱动设计 (DDD) 模式的微服务中，唯一应该用于更新数据库的渠道应是存储库。 这是因为它们与聚合根具有一对一的关系，聚合根控制着聚合的不变量和事务一致性。 可以通过其他渠道查询数据库（就像使用 CQRS 方法时一样），因为查询不会更改数据库的状态。 但是，事务区域（即更新）必须始终由存储库和聚合根控制。
  * 
@@ -21,7 +23,7 @@ namespace Domain.Core.Repository;
 /// 基础仓储接口
 /// </summary>
 public interface IRepositoryAsync<TEntity, in TKey>
-    where TEntity : IEntity<TKey>
+    where TEntity : IAggregateRoot
     where TKey : struct
 {
     //TODO 考虑优化工作单元实现方法

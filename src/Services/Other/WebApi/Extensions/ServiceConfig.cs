@@ -19,7 +19,7 @@ public static class ServiceConfig
 
         //TODO 可以考虑改用AutoFac注入
 
-        Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
         Services.AddTransient(typeof(IEfCoreRepositoryAsync<,>), typeof(EfCoreRepositoryAsync<,>));
 

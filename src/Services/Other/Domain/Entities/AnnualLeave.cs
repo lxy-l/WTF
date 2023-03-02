@@ -5,7 +5,7 @@ using Domain.Core.Models;
 namespace Domain.Entities
 {
 
-    public class AnnualLeave : AggregateRoot<int>
+    public class AnnualLeave : Entity<int>,IAggregateRoot
     {
         public AnnualLeave(string no, string name, int annually,string gender, DateTime birthday,DateTime? retireTime, DateTime? joinTime, DateTime? startTime, int annualLeaveCount, bool isRetired, int id = default) : this(id)
         {

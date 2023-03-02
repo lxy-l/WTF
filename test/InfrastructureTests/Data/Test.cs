@@ -2,7 +2,7 @@
 
 namespace InfrastructureTests.Data;
 
-public class Test:AggregateRoot<int>
+public class Test:Entity<int>,IAggregateRoot
 {
     public Test(int id) : base(id)
     {

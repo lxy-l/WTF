@@ -16,7 +16,7 @@ namespace Infrastructure.Core.Repository.EFCore;
 /// 基础仓储实现
 /// </summary>
 public class EfCoreRepositoryAsync<TEntity, TKey> : IEfCoreRepositoryAsync<TEntity, TKey>
-    where TEntity : AggregateRoot<TKey>
+    where TEntity : Entity<TKey> , IAggregateRoot
     where TKey : struct
 {
     private readonly DbContext _dbContext;

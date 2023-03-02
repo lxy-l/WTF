@@ -11,7 +11,7 @@ namespace Infrastructure.Core.Repository.EFCore;
 /// EFCore通用仓储接口
 /// </summary>
 public interface IEfCoreRepositoryAsync<TEntity, in TKey> : IRepositoryAsync<TEntity, TKey> 
-    where TEntity : AggregateRoot<TKey>
+    where TEntity : IAggregateRoot
     where TKey : struct
 {
     /// <summary>

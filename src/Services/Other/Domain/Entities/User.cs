@@ -7,7 +7,7 @@ namespace Domain.Entities;
 /// <summary>
 /// 用户类
 /// </summary>
-public class User : AggregateRoot<int>
+public class User : Entity<int>, IAggregateRoot
 {
     /// <summary>
     /// 用户名
