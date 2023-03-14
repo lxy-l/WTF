@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using Domain.Core.Models;
+using Crafty.Domain.Core.Models;
 
 namespace Domain.Entities
 {

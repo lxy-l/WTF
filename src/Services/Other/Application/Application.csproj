@@ -16,11 +16,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Crafty.Application.Core" Version="1.0.0" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\core\Application.Core\Application.Core.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 

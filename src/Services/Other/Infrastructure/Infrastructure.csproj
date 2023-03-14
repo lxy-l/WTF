@@ -4,10 +4,14 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <!--<GenerateDocumentationFile>True</GenerateDocumentationFile>-->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EFCore.BulkExtensions" Version="7.0.1" />
+	  <PackageReference Include="Crafty.Infrastructure.EFCore" Version="1.0.0">
+		  <!--必须要添加这个swagger才有文字注释--><!--
+		  <CopyToOutputDirectory>lib\net7.0\*.xml</CopyToOutputDirectory>-->
+	  </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="7.0.3" />
@@ -23,12 +27,17 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.25" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\core\Infrastructure.Core\Infrastructure.Core.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
-
+	<!--必须要添加这个swagger才有文字注释-->
+	<!--<Target Name="AfterTargetsBuild" AfterTargets="Build">
+		<ItemGroup>
+			<PackageReferenceFiles Condition="%(PackageReference.CopyToOutputDirectory) != ''" Include="$(NugetPackageRoot)\%(PackageReference.Identity)\%(PackageReference.Version)\%(PackageReference.CopyToOutputDirectory)" />
+		</ItemGroup>
+		<Copy SourceFiles="@(PackageReferenceFiles)" DestinationFolder="$(OutDir)" />
+	</Target>-->
+	<!--必须要添加这个swagger才有文字注释-->
 </Project>

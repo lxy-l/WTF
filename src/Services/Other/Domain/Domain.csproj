@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\core\Domain.Core\Domain.Core.csproj" />
+    <PackageReference Include="Crafty.Domain.Core" Version="1.0.3" />
   </ItemGroup>
 
 </Project>

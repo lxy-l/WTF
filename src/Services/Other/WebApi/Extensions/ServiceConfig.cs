@@ -1,7 +1,9 @@
-﻿using Application.Core.ApplicationServices;
-using Domain.Core.Repository;
-using Infrastructure.Core.Repository.EFCore;
-using Infrastructure.Core.UnitOfWork;
+﻿using Crafty.Application.Core;
+using Crafty.Application.Core.ApplicationServices;
+using Crafty.Domain.Core.UnitOfWork;
+using Crafty.Infrastructure.EFCore.Repository;
+using Crafty.Infrastructure.EFCore.UnitOfWork;
+
 using Scrutor;
 
 namespace WebApi.Extensions;
@@ -19,14 +21,15 @@ public static class ServiceConfig
 
         //TODO 可以考虑改用AutoFac注入
 
-        Services.AddScoped<IUnitOfWork,UnitOfWork>();
+        Services.AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
 
-        Services.AddTransient(typeof(IEfCoreRepositoryAsync<,>), typeof(EfCoreRepositoryAsync<,>));
+        Services.AddTransient(typeof(IEfCoreRepository<,>), typeof(EfCoreRepository<,>));
 
         Services.AddTransient(typeof(IBaseService<,>), typeof(BaseService<,>));
+        Services.AddTransient(typeof(IBaseService<,,>), typeof(BaseService<,,>));
 
         Services.Scan(scan => scan
-            .FromAssembliesOf(typeof(Application.Register), typeof(Application.Core.Register))
+            .FromAssembliesOf(typeof(Application.Register), typeof(Register))
             .AddClasses(classes => classes.Where(c => c.Name.EndsWith("Service")))
             .UsingRegistrationStrategy(RegistrationStrategy.Throw)
             .AsImplementedInterfaces()

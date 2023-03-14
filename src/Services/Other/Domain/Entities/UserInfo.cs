@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Domain.Core.Models;
+using Crafty.Domain.Core.Models;
 using Domain.ValueObjects;
 
 namespace Domain.Entities;

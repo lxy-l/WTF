@@ -1,5 +1,4 @@
-﻿using Infrastructure.Core.Extend;
-
+﻿using Crafty.Infrastructure.EFCore.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Context;
@@ -16,7 +15,7 @@ public class UserDbContext: DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Chinese_Simplified_Pinyin_100_CI_AI_SC_UTF8");
-        var types = EfEntityInfo.GetEntityTypes(typeof(Domain.Register).Assembly);
+        var types = EFCoreExtension.GetEntityTypes(typeof(Domain.Register).Assembly);
         foreach (var entityType in types)
         {
             modelBuilder.Entity(entityType);

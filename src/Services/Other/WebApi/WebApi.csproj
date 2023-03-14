@@ -19,6 +19,10 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
     <PackageReference Include="Consul" Version="1.6.10.8" />
     <PackageReference Include="Consul.AspNetCore" Version="1.6.10.8" />
+	  <PackageReference Include="Crafty.WebApi.Core" Version="1.0.4">
+		  <!--必须要添加这个swagger才有文字注释-->
+		  <CopyToOutputDirectory>lib\net7.0\*.xml</CopyToOutputDirectory>
+	  </PackageReference>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0-beta1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.3" />
@@ -41,8 +45,14 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.6" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\core\WebApi.Core\WebApi.Core.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
-  
+	<!--必须要添加这个swagger才有文字注释-->
+	<Target Name="AfterTargetsBuild" AfterTargets="Build">
+		<ItemGroup>
+			<PackageReferenceFiles Condition="%(PackageReference.CopyToOutputDirectory) != ''" Include="$(NugetPackageRoot)\%(PackageReference.Identity)\%(PackageReference.Version)\%(PackageReference.CopyToOutputDirectory)" />
+		</ItemGroup>
+		<Copy SourceFiles="@(PackageReferenceFiles)" DestinationFolder="$(OutDir)" />
+	</Target>
+	<!--必须要添加这个swagger才有文字注释-->
 </Project>

@@ -1,11 +1,11 @@
-﻿using AutoMapper;
+﻿//using AutoMapper;
 
-namespace Application.Mappings;
+//namespace Application.Mappings;
 
-public class DomainToDtoMappingProfile : Profile
-{
-    public DomainToDtoMappingProfile()
-    {
+//public class DomainToDtoMappingProfile : Profile
+//{
+//    public DomainToDtoMappingProfile()
+//    {
 
-    }
-}
+//    }
+//}

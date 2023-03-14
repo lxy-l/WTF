@@ -1,8 +1,7 @@
-﻿using Application.Core.ApplicationServices;
+﻿using Crafty.Application.Core.ApplicationServices;
+using Crafty.WebApi.Core.BaseController;
 
 using Domain.Entities;
-
-using WebApi.Core.BaseController;
 
 namespace WebApi.Controllers
 {
