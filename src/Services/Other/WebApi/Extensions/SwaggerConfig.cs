@@ -1,6 +1,6 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Crafty.WebApi.Core.Extensions;
 
-using Swashbuckle.AspNetCore.Filters;
+using Microsoft.OpenApi.Models;
 
 namespace WebApi.Extensions;
 
@@ -9,21 +9,26 @@ namespace WebApi.Extensions;
 /// </summary>
 public static class SwaggerConfig
 {
-    public static void AddSwaggerConfig(this IServiceCollection Services)
+    /// <summary>
+    /// 添加Swagger配置
+    /// </summary>
+    /// <param name="Services"></param>
+    public static void AddSwaggerService(this IServiceCollection Services)
     {
         var basePath = AppDomain.CurrentDomain.BaseDirectory;
+        Services.AddSwaggerConfig();
         Services.AddSwaggerGen(config =>
         {
-            #region XML文档
-            string[] xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml");
-            foreach (var xmlFile in xmlFiles)
-            {
-                config.IncludeXmlComments(xmlFile, true);
-            }
-            config.OperationFilter<AddResponseHeadersFilter>();
-            config.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
-            config.OperationFilter<SecurityRequirementsOperationFilter>();
-            #endregion
+            //#region XML文档
+            //string[] xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml");
+            //foreach (var xmlFile in xmlFiles)
+            //{
+            //    config.IncludeXmlComments(xmlFile, true);
+            //}
+            //config.OperationFilter<AddResponseHeadersFilter>();
+            //config.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+            //config.OperationFilter<SecurityRequirementsOperationFilter>();
+            //#endregion
 
             #region Swagger授权认证
             config.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme

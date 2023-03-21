@@ -1,44 +1,33 @@
-﻿//using System.Linq.Dynamic.Core;
+﻿using Crafty.Application.Core.ApplicationServices;
+using Crafty.Application.Core.DTO;
+using Crafty.Domain.Core.Models;
+using Crafty.Domain.Core.Repository;
+using Crafty.Domain.Core.UnitOfWork;
 
-//using Application.Core.ApplicationServices;
-//using Application.Core.DTO;
+using Domain.Entities;
 
-//using Domain.Core.Repository;
-//using Domain.Entities;
+namespace Application.ApplicationServices;
 
-//using Infrastructure.Core.Repository.EFCore;
+public class UserService : BaseService<User,int>,IUserService
+{
+    public UserService(IUnitOfWork unitOfWork, IRepository<User> baseRep) : base(unitOfWork, baseRep)
+    {
+    }
 
-//using Microsoft.EntityFrameworkCore;
+    //private readonly IEfCoreRepository<User> _userRep;
+    //private readonly IUnitOfWork _unitOfWork;
 
-//namespace Application.ApplicationServices;
+    //public UserService(IEfCoreRepository<User> userRep)
+    //{
+    //    _userRep = userRep;
+    //}
 
-//public class UserService : IUserService
-//{
-//    IEfCoreRepositoryAsync<User, int> _userRep { get; }
-
-//    public UserService(IEfCoreRepositoryAsync<User, int> userRep)
-//    {
-//        _userRep = userRep;
-//    }
-
-//    ////TODO 考虑更好的解决方案
-//    //protected override string[] Table => new[]{"UserInfo"};
+    ////TODO 考虑更好的解决方案
+    //protected override string[] Table => new[]{"UserInfo"};
 
 
-//    public PagedResult<User> GetUserAndInfo(SearchParams search, CancellationToken cancellationToken = default)
-//    {
-//        /*
-//         *  前提是遵循EFCore框架的导航属性设计
-//            Include会自动生成 LEFT JOIN语句
-//         */
-
-//        var list = _userRep.GetQueryInclude(
-//             x => 
-//             x.Include(i => i.UserInfo)
-//             .Include(z=>z.Pets)
-//             .Include(y=>y.Cars))
-//            .PageResult(search.Page,search.PageSize);
-
-//        return list;
-//    }
-//}
+    public Task<IPagedList<User>> GetUserAndInfo(SearchParams search, CancellationToken cancellationToken = default)
+    {
+        return null;
+    }
+}

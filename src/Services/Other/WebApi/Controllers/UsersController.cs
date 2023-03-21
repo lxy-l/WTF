@@ -3,12 +3,14 @@ using Crafty.WebApi.Core.BaseController;
 
 using Domain.Entities;
 
+using Infrastructure.Context;
+
 namespace WebApi.Controllers;
 
 /// <summary>
 /// 用户管理接口
 /// </summary>
-public class UsersController : BaseApiController<User, int>
+public class UsersController : BaseApiController<UserDbContext, User, int>
 {
 
     //private IUserService UserService { get; }
@@ -45,7 +47,7 @@ public class UsersController : BaseApiController<User, int>
     //    await BaseService.BulkAddEntity(users);
     //    return Ok();
     //}
-    public UsersController(IBaseService<User, int> service) : base(service)
+    public UsersController(IBaseService<UserDbContext, User, int> baseService) : base(baseService)
     {
     }
 }

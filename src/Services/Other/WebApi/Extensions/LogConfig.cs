@@ -5,7 +5,12 @@
 /// </summary>
 public static class LogConfig
 {
-    public static void AddLogConfig(this IServiceCollection Services, IConfiguration Configuration)
+    /// <summary>
+    /// 添加Seq
+    /// </summary>
+    /// <param name="Services"></param>
+    /// <param name="Configuration"></param>
+    public static void AddSeqLogConfig(this IServiceCollection Services, IConfiguration Configuration)
     {
         var config = Configuration.GetSection("Seq");
         if (config.GetChildren().Any())

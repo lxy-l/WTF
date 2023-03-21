@@ -12,55 +12,6 @@ public static class IdentityConfig
 {
     public static void AddIdentityConfig(this IServiceCollection Services, IConfiguration Configuration)
     {
-
-        #region OpenIddict认证配置
-        //Services.AddOpenIddict()
-        //    .AddCore(options =>
-        //    {
-        //        options.UseEntityFrameworkCore()
-        //               .UseDbContext<ApplicationDbContext>();
-        //    }).AddServer(options =>
-        //    {
-        //        options.SetAuthorizationEndpointUris("/connect/authorize", "/connect/authorize/callback")
-        //        .SetDeviceEndpointUris("/device")
-        //        .SetIntrospectionEndpointUris("/connect/introspect")
-        //        .SetLogoutEndpointUris("/connect/logout")
-        //        .SetRevocationEndpointUris("/connect/revocat")
-        //        .SetTokenEndpointUris("/connect/token")
-        //        .SetUserinfoEndpointUris("/connect/userinfo")
-        //        .SetVerificationEndpointUris("/connect/verify");
-        //        //options.AllowAuthorizationCodeFlow();
-        //        options.AllowAuthorizationCodeFlow()
-        //        .AllowHybridFlow()
-        //        .AllowImplicitFlow()
-        //        .AllowPasswordFlow()
-        //        .AllowClientCredentialsFlow()
-        //        .AllowRefreshTokenFlow()
-        //        .AllowDeviceCodeFlow()
-        //        .AllowNoneFlow();
-        //        options.RegisterScopes("openid", "email", "profile", "phone", "roles", "address", "offline_access");
-        //        options.AddEncryptionKey(new SymmetricSecurityKey(
-        //            Convert.FromBase64String("DRjd/GnduI3Efzen9V9BvbNUfc/VKgXltV7Kbk9sMkY=")));
-        //        options.AddDevelopmentSigningCertificate();
-        //        options.UseAspNetCore()
-        //            .EnableAuthorizationEndpointPassthrough()
-        //            .EnableTokenEndpointPassthrough()
-        //            .EnableUserinfoEndpointPassthrough()
-        //            .EnableLogoutEndpointPassthrough()
-        //            .EnableVerificationEndpointPassthrough()
-        //            .EnableStatusCodePagesIntegration()
-        //            .DisableTransportSecurityRequirement();
-        //    }).AddValidation(options =>
-        //    {
-        //        options.AddAudiences("Roy");
-        //        options.UseLocalServer();
-        //        options.UseAspNetCore();
-        //    });
-        //Services.AddAuthorization();
-        #endregion
-
-        #region 微软自带Jwt认证&IdentityServer7认证
-
         //Services.AddIdentity<IdentityUser, IdentityRole>()
         //    .AddEntityFrameworkStores<ApplicationDbContext>()
         //    .AddDefaultTokenProviders();
@@ -105,6 +56,5 @@ public static class IdentityConfig
                     ValidateIssuer = true
                 };
             });
-        #endregion
     }
 }
