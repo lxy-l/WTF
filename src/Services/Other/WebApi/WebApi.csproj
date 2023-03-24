@@ -17,7 +17,7 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
     <PackageReference Include="Consul" Version="1.6.10.8" />
     <PackageReference Include="Consul.AspNetCore" Version="1.6.10.8" />
-	  <PackageReference Include="Crafty.WebApi.Core" Version="1.1.1">
+	  <PackageReference Include="Crafty.WebApi.Core" Version="1.1.2">
 		  <!--必须要添加这个swagger才有文字注释-->
 		  <CopyToOutputDirectory>lib\net7.0\*.xml</CopyToOutputDirectory>
 	  </PackageReference>

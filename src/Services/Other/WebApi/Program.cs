@@ -1,5 +1,10 @@
+using System.Text.Json.Serialization;
+
+using Application.ApplicationServices;
+
+using Crafty.Application.Core.DependencyInjection;
 using Crafty.Infrastructure.EFCore.DependencyInjection;
-using Crafty.WebApi.Core.Extensions;
+using Crafty.WebApi.Core.DependencyInjection;
 
 using HealthChecks.UI.Client;
 
@@ -7,8 +12,6 @@ using Infrastructure.Context;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
-
-using System.Text.Json.Serialization;
 
 using WebApi.Extend;
 using WebApi.Extensions;
@@ -40,6 +43,9 @@ builder.Services.AddConsulConfig(builder.Configuration);
 builder.Services.AddEfCoreRepository();
 //基础服务配置
 builder.Services.AddBaseServices();
+//其他服务
+//builder.Services.AddOtherServices(new Type[]{ typeof(Application.Register) });
+builder.Services.AddTransient<IUserService,UserService >();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

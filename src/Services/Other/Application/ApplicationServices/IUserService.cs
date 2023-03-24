@@ -1,18 +1,14 @@
-﻿using Crafty.Application.Core.DTO;
-using Crafty.Domain.Core.Models;
+﻿using Crafty.Application.Core.ApplicationServices;
 
 using Domain.Entities;
+
+using Infrastructure.Context;
 
 namespace Application.ApplicationServices;
 
 /// <summary>
 /// 自定义用户信息查询
 /// </summary>
-public interface IUserService
+public interface IUserService:IBaseService<UserDbContext,User,int>
 {
-    /// <summary>
-    /// 获取全部用户包含用户信息
-    /// </summary>
-    /// <returns></returns>
-    Task<IPagedList<User>> GetUserAndInfo(SearchParams search, CancellationToken cancellationToken = default);
 }
