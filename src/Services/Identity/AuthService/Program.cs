@@ -19,7 +19,6 @@ builder.Services.AddLogConfig(builder.Configuration);
 builder.Services.AddConsulConfig(builder.Configuration);
 //IdentityServer配置
 builder.Services.AddIdentityServerConfig(builder.Configuration);
-
 builder.Services.AddControllersWithViews();
 //builder.Services.AddRazorPages();
 
