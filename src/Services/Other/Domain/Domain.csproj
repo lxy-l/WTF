@@ -8,11 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DomainService\" />
-    <Folder Include="Entities\Bank\" />
-    <Folder Include="Factories\" />
-    <Folder Include="Specification\" />
-    <Folder Include="DomainEvent\" />
+    <Compile Remove="DomainEvent\**" />
+    <Compile Remove="DomainService\**" />
+    <Compile Remove="Entities\Bank\**" />
+    <Compile Remove="Factories\**" />
+    <Compile Remove="Specification\**" />
+    <EmbeddedResource Remove="DomainEvent\**" />
+    <EmbeddedResource Remove="DomainService\**" />
+    <EmbeddedResource Remove="Entities\Bank\**" />
+    <EmbeddedResource Remove="Factories\**" />
+    <EmbeddedResource Remove="Specification\**" />
+    <None Remove="DomainEvent\**" />
+    <None Remove="DomainService\**" />
+    <None Remove="Entities\Bank\**" />
+    <None Remove="Factories\**" />
+    <None Remove="Specification\**" />
   </ItemGroup>
 
   <ItemGroup>
